@@ -7,7 +7,7 @@
 | :--------------------- | :---------------------------------- |
 | navigationBarTitleText | 首页                                |
 | enablePullDownRefresh  | true                                |
-| searchInput            | <a href="docs/index?id=obj">obj</a> |
+| searchInput            | <a href="#obj">obj</a> |
 
 
 # 1
