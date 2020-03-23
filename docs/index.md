@@ -1,66 +1,13 @@
 # 首页详情
-
+![](../client/static/docs/index.jpg)
 ## 页面主要内容
-+ 
-## 页面参数
-| name                   | value                               |
-| :--------------------- | :---------------------------------- |
-| navigationBarTitleText | 首页                                |
-| enablePullDownRefresh  | true                                |
-| searchInput            | <a href="#obj">obj</a> |
++ 搜索帖子/用户/标题
++ 最近发布的内容
+## style 
+| name                   | value  |
+| :--------------------- | :----: |
+| navigationBarTitleText |  首页  |
+| enablePullDownRefresh  |  true  |
+| navigationStyle        | custom |
 
-
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-# 1
-### <p id="obj">obj</p>
++ Tips: *组件提供的搜索框没有合适的，只能自己写。*

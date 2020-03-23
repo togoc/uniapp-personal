@@ -1,16 +1,61 @@
 {
-    "pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-        {
-            "path": "pages/index/index",
-            "style": {
-                "navigationBarTitleText": "首页",
-                "enablePullDownRefresh": true
-            }
+    "pages": [{
+        "path": "pages/index/index",
+        "style": {
+            "navigationBarTitleText": "首页",
+            "enablePullDownRefresh": true,
+            "navigationStyle": "custom"
         }
-    ],
+    }, {
+        "path": "pages/editor/editor",
+        "style": {
+            "navigationBarTitleText": "写帖子"
+        }
+    }, {
+        "path": "pages/message/message",
+        "style": {
+            "navigationBarTitleText": "消息"
+        }
+    }, {
+        "path": "pages/myhome/myhome",
+        "style": {
+            "navigationBarTitleText": "我的"
+        }
+    }],
+    "tabBar": {
+        "color": "#515151",
+        "selectedColor": "#d81e06",
+        "backgroundColor": "",
+        "position": "bottom",
+        "borderStyle": "white",
+        "list": [{
+                "pagePath": "pages/index/index",
+                "text": "首页",
+                "iconPath": "static/tabbar/_home.png",
+                "selectedIconPath": "static/tabbar/home.png"
+            }, {
+                "pagePath": "pages/editor/editor",
+                "text": "写帖子",
+                "iconPath": "static/tabbar/_editor.png",
+                "selectedIconPath": "static/tabbar/editor.png"
+            },
+            {
+                "pagePath": "pages/message/message",
+                "text": "消息",
+                "iconPath": "static/tabbar/_message.png",
+                "selectedIconPath": "static/tabbar/message.png"
+            },
+            {
+                "pagePath": "pages/myhome/myhome",
+                "text": "我的",
+                "iconPath": "static/tabbar/_my.png",
+                "selectedIconPath": "static/tabbar/my.png"
+            }
+        ]
+    },
     "globalStyle": {
         "navigationBarTextStyle": "black",
-        "navigationBarTitleText": "uni-app",
+        "navigationBarTitleText": "博客",
         "navigationBarBackgroundColor": "#F8F8F8",
         "backgroundColor": "#F8F8F8"
     }

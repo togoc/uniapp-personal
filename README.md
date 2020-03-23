@@ -22,12 +22,12 @@
 <pre v-pre="" data-lang="">
     <code class="lang-" style="padding:0">
 ┌─tabar 
-│    ├─index:首页页 <a href="docs/index.md">详情</a>
-│    ├─
+│    ├─index:首页 <a href="docs/index.md">详情</a>
+│    ├─editor:写博客页面 <a href="docs/editor.md">详情</a>
 │    ├─message:消息页 <a href="docs/message.md">详情</a>
 │    └─myhome:我的页 <a href="docs/myhome.md">详情</a>
 ├─search:搜索页 <a href="docs/search.md">详情</a>
-├─editor:写博客页面 <a href="docs/editor.md">详情</a>
-└─
+├─:搜索页 <a href="docs/.md">详情</a>
+└─myblog:我的信息 <a href="docs/myblog.md">详情</a>
     </code>
 </pre>
