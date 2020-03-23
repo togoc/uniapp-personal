@@ -1,5 +1,4 @@
 # 首页详情
-<img style="max-width:360px;height:auto;border:'1px solid #ccc'" src="../client/static/docs/index.jpg">
 
 
 ## 页面主要内容
