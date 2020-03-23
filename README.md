@@ -21,8 +21,8 @@
 ## 页面结构
 <pre v-pre="" data-lang="">
 	<code class="lang-" style="padding:0">
-┌─tabar──index //<a href="docs/index.md">参数详情</a>
-│           └─home [test](docs/index.md)
+┌─tabar──index <a href="docs/index.md">参数详情</a>
+│           └─home 
 ├─
 └─
 	</code>
