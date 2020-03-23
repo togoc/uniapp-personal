@@ -1,5 +1,7 @@
 <template>
-    <view class="content"> </view>
+    <view class="content">
+        <image src="/static/docs/index.jpg" mode="" />
+    </view>
 </template>
 
 <script>
