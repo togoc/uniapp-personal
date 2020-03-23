@@ -1,5 +1,5 @@
 ## 目录结构
-+ *注：主要目录结构由uniapp自动生成，结合需求构建成目录结构。*
++ *注：主要由uniapp自动生成，结合需求构建成目录结构。*
 ```
 ┌─components            uni-app组件目录
 ├─hybrid                存放本地网页的目录
@@ -22,7 +22,7 @@
 <pre v-pre="" data-lang="">
 	<code class="lang-" style="padding:0">
 ┌─tabar──index <a href="docs/index.md">参数详情</a>
-│           └─
+│           └─home [test](docs/index.md)
 ├─
 └─
 	</code>
