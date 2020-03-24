@@ -1,0 +1,1 @@
+<view class="blog-item"><view class="title f2">{{item.title}}</view><view class="detail f2">{{item.detail}}</view><view class="nav"><text data-type="user">{{item.userName}}</text><text class="last2 iconfont icon-zan" data-type="like">{{item.commont_count}}</text><text class="last2 iconfont icon-pinglun" data-type="commont">{{item.support}}</text></view></view>

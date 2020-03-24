@@ -4,12 +4,23 @@
         "style": {
             "navigationBarTitleText": "首页",
             "enablePullDownRefresh": true,
-            "navigationStyle": "custom"
+            "app-plus": {
+                "navigationStyle": "custom",
+                "titleNView": {
+                    "type": "transparent",
+                    "searchInput": {
+                        "backgroundColor": "#f8f8f8",
+                        "borderRadius": "6px",
+                        "placeholder": "搜索帖子/标题/用户",
+                        "disabled": true
+                    }
+                }
+            }
         }
     }, {
         "path": "pages/editor/editor",
         "style": {
-            "navigationBarTitleText": "写帖子"
+            "navigationBarTitleText": "写文章"
         }
     }, {
         "path": "pages/message/message",
@@ -20,6 +31,27 @@
         "path": "pages/myhome/myhome",
         "style": {
             "navigationBarTitleText": "我的"
+        }
+    }, {
+        "path": "pages/search/search",
+        "style": {
+            "navigationStyle": "custom",
+            "app-plus": {
+                "titleNView": {
+                    "type": "transparent",
+                    "searchInput": {
+                        "backgroundColor": "#f8f8f8",
+                        "borderRadius": "6px",
+                        "placeholder": "搜索帖子/标题/用户",
+                        "autoFocus": true
+                    }
+                }
+            }
+        }
+    }, {
+        "path": "pages/myblog/myblog",
+        "style": {
+            "navigationBarTitleText": "我的文章"
         }
     }],
     "tabBar": {
@@ -34,8 +66,8 @@
                 "iconPath": "static/tabbar/_home.png",
                 "selectedIconPath": "static/tabbar/home.png"
             }, {
-                "pagePath": "pages/editor/editor",
-                "text": "写帖子",
+                "pagePath": "pages/myblog/myblog",
+                "text": "我的博文",
                 "iconPath": "static/tabbar/_editor.png",
                 "selectedIconPath": "static/tabbar/editor.png"
             },

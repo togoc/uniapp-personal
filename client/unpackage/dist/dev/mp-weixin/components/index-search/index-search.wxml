@@ -1,0 +1,1 @@
+<view class="nav-bar"><view class="nav-bar-inner"><view class="nav-item nav-bar-left"><slot name="left"></slot></view><view class="nav-item nav-bar-middle nav-item"><slot></slot></view><view class="nav-item nav-bar-right nav-item"><slot name="right"></slot></view></view></view>

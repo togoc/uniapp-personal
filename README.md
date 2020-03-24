@@ -27,7 +27,7 @@
 │    ├─message:消息页 <a href="docs/message.md">详情</a>
 │    └─myhome:我的页 <a href="docs/myhome.md">详情</a>
 ├─search:搜索页 <a href="docs/search.md">详情</a>
-├─:搜索页 <a href="docs/.md">详情</a>
-└─myblog:我的信息 <a href="docs/myblog.md">详情</a>
+├─myinfo:我的信息 <a href="docs/myinfo.md">详情</a>
+└─myblog:我的发布的博文 <a href="docs/myblog.md">详情</a>
     </code>
 </pre>
