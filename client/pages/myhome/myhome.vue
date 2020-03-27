@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view class="my-home">
 		
 	</view>
 </template>

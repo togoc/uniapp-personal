@@ -39,7 +39,7 @@ export default {
         },
         setTitle(event) {
             let { value } = event.detail;
-            this.$emit("setTitle", value);
+            this.$emit("setTitle", value.trim());
         }
     }
 };

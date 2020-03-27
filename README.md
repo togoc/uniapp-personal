@@ -1,4 +1,4 @@
-## 目录结构
+## 前端目录结构
 + *注：主要由uniapp自动生成，结合需求构建成目录结构。*
 ```
 ┌─components            uni-app组件目录
@@ -14,11 +14,10 @@
 ├─manifest.json         配置应用名称、appid、logo、版本等打包信息
 └─pages.json            配置页面路由、导航条、选项卡等页面类信息
 
-
 ```
 
 
-## 页面结构
+## 前端页面结构
 <pre v-pre="" data-lang="">
     <code class="lang-" style="padding:0">
 ┌─tabar 
@@ -31,3 +30,22 @@
 └─myblog:我的发布的博文 <a href="docs/myblog.md">详情</a>
     </code>
 </pre>
+
+
+## 后端目录结构
+```
+┌─bin                    存放运行入口文件
+├─db                     数据库连接配置目录
+├─models                 数据库模型目录
+├─enviroment             获取变量目录(key,url)
+├─config                 初始化项目存放配置目录
+├─controllers            存放路由控制目录
+├─services               存放业务逻辑的目录
+├─middleware             中间件目录
+├─routers                路由目录
+├─public                 静态文件存放的目录
+├─views                  存放页面(类似public)
+├─utils                  工具目录
+└─app.js                 配置页面路由、导航条、选项卡等页面类信息
+
+```
