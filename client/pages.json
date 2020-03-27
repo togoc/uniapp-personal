@@ -53,7 +53,13 @@
         "style": {
             "navigationBarTitleText": "我的文章"
         }
-    }],
+    }    ,{
+            "path" : "pages/login/login",
+            "style" : {
+                "navigationBarTitleText": "登录/注册" 
+            }
+        }
+    ],
     "tabBar": {
         "color": "#515151",
         "selectedColor": "#d81e06",
