@@ -12,19 +12,45 @@
             </view>
         </view>
         <view class="content">
-            <view class="login-type-btn">
-                <view
-                    class="icon-item"
-                    v-for="(item, index) in quickLoginOptions"
-                    :key="index"
-                    @click.stop="handleOptions(item.handleClickMethod)"
-                >
-                    <text :class="['iconfont', item.icon]"></text>
+            <template v-if="!isLogin">
+                <view class="login-type-btn">
+                    <view
+                        class="icon-item"
+                        v-for="(item, index) in quickLoginOptions"
+                        :key="index"
+                        @click.stop="handleOptions(item.handleClickMethod)"
+                    >
+                        <text :class="['iconfont', item.icon]"></text>
+                    </view>
                 </view>
-            </view>
-            <view @click.stop="userMethod" class="login-btn">
-                <text>登录/注册</text>
-            </view>
+                <view @click.stop="userMethod" class="login-btn">
+                    <text>登录/注册</text>
+                </view>
+            </template>
+            <template v-else>
+                <view class="user">
+                    <view class="user-name-img">
+                        <image src="/static/default.png" />
+                        <view class="user-name-data">
+                            <view class="username">
+                                {{ user.email || "togoc" }}
+                            </view>
+                            <text>注册时间:{{ user.data | date }}</text>
+                        </view>
+                    </view>
+                    <view class="user-favorite-info">
+                        <view
+                            class="info-nav-item"
+                            v-for="(item, index) in favoriteIfo"
+                            :key="index"
+                        >
+                            <text class="count">{{ item.count }}</text>
+                            <text class="title">{{ item.title }}</text>
+                        </view>
+                        <text class="iconfont icon-jiantouarrow487">主页</text>
+                    </view>
+                </view>
+            </template>
         </view>
     </view>
 </template>
@@ -33,17 +59,24 @@
 export default {
     props: {
         header: Boolean,
-        quickLoginOptions: Array
+        quickLoginOptions: Array,
+        user: Object,
+        favoriteIfo: Array
     },
     data() {
         return {};
+    },
+    computed: {
+        isLogin() {
+            return Object.keys(this.user).length > 0;
+        }
     },
     methods: {
         handleOptions(e) {
             // #ifndef APP-PLUS
             this.$parent.$parent[e]();
             // #endif
-            
+
             // #ifdef APP-PLUS
             this.$parent[e]();
             // #endif
@@ -60,7 +93,7 @@ export default {
     width: 750rpx;
     height: 100%;
     flex-direction: column;
-    background-color: #efebe8;
+    background-color: #e9e9eb;
     display: flex;
     margin-bottom: 0.5rem;
 
@@ -76,7 +109,7 @@ export default {
         }
     }
     view.content {
-        background-color: rgb(235, 179, 179);
+        background-color: #fff;
         width: calc(750rpx - 2rem);
         height: 75%;
         box-sizing: border-box;
@@ -115,6 +148,67 @@ export default {
             padding: calc((2.25rem - 1.333rem) / 2);
             font-weight: bold;
             color: #fff;
+        }
+        .user {
+            width: 100%;
+            height: 100%;
+            padding: 1rem;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            .user-name-img {
+                height: 2.5rem;
+                image {
+                    border-radius: 50%;
+                    width: 2.5rem;
+                    height: 2.5rem;
+                }
+
+                .user-name-data {
+                    width: 12.9rem;
+                    height: 2.5rem;
+                    float: right;
+                    .username {
+                        font-weight: bold;
+                        line-height: 1.33rem;
+                    }
+
+                    text {
+                        font-size: 0.75rem;
+                        line-height: 1.33rem;
+                        color: #8f91a2;
+                    }
+                }
+            }
+            .user-favorite-info {
+                height: 2.5rem;
+                box-sizing: border-box;
+                display: flex;
+                flex-direction: row;
+                align-items: flex-end;
+
+                .info-nav-item {
+                    display: flex;
+                    flex-direction: column;
+                    width: 3.33rem;
+                    .count {
+                        font-weight: bold;
+                    }
+
+                    .title {
+                        font-size: 0.75rem;
+                        line-height: 1.33rem;
+                        color: #8f91a2;
+                    }
+                }
+
+                & > text {
+                    font-size: 0.75rem;
+                    line-height: 1.33rem;
+                    color: #8f91a2;
+                }
+            }
         }
     }
 }

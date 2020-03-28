@@ -25,13 +25,45 @@ class UserController {
 
         } catch (e) {
 
-            const code = 500;
-            res.status(code).send(e);
+            res.status(500).send(e.toString());
+
         }
     }
 
     async logout(req, res) {
-        
+        try {
+            if (!req.user) {
+                throw new Error('Not A User')
+            }
+
+            const user = req.user
+            const token = req.token
+
+            await userServices.logout(user, token);
+
+            res.send('token已删除');
+
+        } catch (e) {
+            res.status(500).send(e.toString());
+        }
+
+    }
+
+    async logoutAll(req, res) {
+        try {
+            if (!req.user) {
+                throw new Error('Not A User')
+            }
+
+            const user = req.user
+
+            await userServices.logoutAll(user);
+
+            res.send('token已删除');
+
+        } catch (e) {
+            res.status(500).send(e.toString());
+        }
 
     }
 
@@ -46,11 +78,24 @@ class UserController {
 
         } catch (e) {
 
-            const code = 500;
-            res.status(code).json(e);
+            res.status(500).send('请使用其他用户名' + '(' + e.toString() + ')');
+
         }
     }
 
+    async getUser(req, res) {
+
+        const user = req.user
+        user.tokens = undefined;
+        user.password = undefined;
+
+        res.status(200).send(user);
+
+    }
+
+    async changePassword(req,res){
+        
+    }
 }
 
 

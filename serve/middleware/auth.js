@@ -10,18 +10,16 @@ const auth = async (req, res, next) => {
 
         const decoded = await jwt.verify(token, env.password);
 
-        const iv = decoded.iv;
 
         const user = await User.findOne({ _id: decoded._id });
-        const encrpytionKey = user.getEncryptionKey();
-        const encryptedToken = user.encryptToken(token, encrpytionKey, iv);
+
 
         let tokenFound = false;
         for (let i = 0; i < user.tokens.length; i++) {
 
             const currentToken = user.tokens[i].token;
 
-            if (currentToken === encryptedToken) {
+            if (currentToken === token) {
                 tokenFound = true;
                 break;
             }
@@ -34,15 +32,15 @@ const auth = async (req, res, next) => {
         } else {
 
             req.token = token;
-            req.encryptedToken = encryptedToken
             req.user = user;
+
             next();
 
         }
 
     } catch (e) {
         console.log(e);
-        res.status(401).send({ error: "Error Authenticating" })
+        res.status(401).send("用户信息无效(Error Authenticating)!")
     }
 }
 

@@ -1,13 +1,10 @@
 <template>
     <view class="container">
-        <view class="title">
-            <text>登录/注册</text>
-        </view>
         <view class="desc">
             <view>本示例为简易登录示例</view>
         </view>
         <view class="login-form">
-            <input type="text" value="" placeholder="邮箱" v-model="name" />
+            <input type="text" value="" placeholder="邮箱" v-model="email" />
             <input
                 type="text"
                 value=""
@@ -15,34 +12,59 @@
                 password="true"
                 v-model="password"
             />
-            <button type="warn" @click="signUp">注册</button>
-            <button type="warn" @click="signIn">登录</button>
+            <button type="warn" @click.stop="signUp">注册</button>
+            <button type="warn" @click.stop="signIn">登录</button>
             <!-- #ifdef MP-WEIXIN -->
-            <button type="warn" @click="loginMp">微信登录</button>
+            <button type="warn" @click.stop="loginMp">微信登录</button>
             <!-- #endif -->
-            <button type="warn" @click="validateToken">token验证</button>
+            <!-- <button type="warn" @click="validateToken">token验证</button> -->
         </view>
     </view>
 </template>
 
 
 <script>
-// 由于作者有多个服务空间，已在main.js内执行初始化操作，如果你只有一个服务空间可以直接使用uniCloud.callFunction
 export default {
     data() {
         return {
-            name: "",
-            password: ""
+            email: "togoc@xx.com",
+            password: "123456"
         };
     },
     methods: {
-        signUp() {
-           
-       
+        async signUp() {
+            try {
+                let body = { email: this.email, password: this.password };
+                let res = await this.$http("/user-service/create-user", "POST", body);
+
+                let { user, token } = res.data;
+
+                uni.setStorageSync("BLOG_TOKEN", token);
+                await this.$store.commit("SETUSER", user);
+
+                uni.switchTab({
+                    url: "../myhome/myhome"
+                });
+            } catch (error) {
+                throw new Error(error);
+            }
         },
-        signIn() {
-        
-          
+        async signIn() {
+            try {
+                let body = { email: this.email, password: this.password };
+                let res = await this.$http("/user-service/login", "POST", body);
+
+                let { user, token } = res.data;
+
+                uni.setStorageSync("BLOG_TOKEN", token);
+                await this.$store.commit("SETUSER", user);
+
+                uni.switchTab({
+                    url: "../myhome/myhome"
+                });
+            } catch (error) {
+                throw new Error(error);
+            }
         },
         // #ifdef MP-WEIXIN
         loginMp() {
@@ -96,14 +118,8 @@ export default {
                     }
                 });
             });
-        },
-        // #endif
-        validateToken() {
-            uni.showLoading({
-                title: "加载中...",
-                mask: true
-            });
         }
+        // #endif
     }
 };
 </script>
@@ -111,12 +127,6 @@ export default {
 <style>
 .container {
     padding: 30px;
-}
-
-.title {
-    text-align: center;
-    font-size: 20px;
-    padding: 20px 0px;
 }
 
 .desc {

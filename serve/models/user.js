@@ -42,6 +42,11 @@ const userSchema = mongoose.Schema({
         }
     }],
 
+    date: {
+        type: Number,
+        default: Date.now
+    }
+
 })
 
 userSchema.pre('save', async function (next) {
@@ -57,14 +62,13 @@ userSchema.statics.findUser = async (password, email) => {
     const user = await User.findOne({ email })
 
     if (!user) {
-        throw new Error("User not found")
+        throw new Error("用户不存在(User not found)!")
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-        console.log("incorrect password")
-        throw new Error("Incorrect password");
+        throw new Error("密码错误(Incorrect password)!");
     }
 
     return user;

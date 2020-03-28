@@ -7,13 +7,30 @@ class UserServices {
     }
 
     async login(body) {
-        console.log('login: ' + body.name)
+        console.log('login')
 
         const user = await User.findUser(body.password, body.email)
 
         const token = await user.createToken()
 
         return { user, token }
+    }
+
+
+    async logout(user, token) {
+        console.log('logout')
+
+        user.tokens = user.tokens.filter(v => v.token != token)
+
+        await user.save()
+    }
+
+    async logoutAll(user, token) {
+        console.log('logoutAll')
+
+        user.tokens = []
+
+        await user.save()
     }
 
     async createUser(body) {
@@ -30,6 +47,24 @@ class UserServices {
         return { token, user }
     }
 
+
+    async changePassword(user, oldPassword, newPassword) {
+        const isMatch = await bcrypt.compare(oldPassword, user.password);
+
+        if (!isMatch) throw new NotAuthorizedError("Change Passwords Do Not Match Error");
+
+
+        user.password = newPassword;
+
+        user.tokens = [];
+        user.tempTokens = [];
+
+        await user.save();
+
+        const newToken = await user.createToken()
+
+        return newToken;
+    }
 }
 
 module.exports = UserServices

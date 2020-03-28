@@ -30,7 +30,8 @@
     }, {
         "path": "pages/myhome/myhome",
         "style": {
-            "navigationBarTitleText": "我的"
+            "navigationBarTitleText": "我的",
+            "navigationStyle": "custom"
         }
     }, {
         "path": "pages/search/search",
@@ -57,6 +58,12 @@
             "path" : "pages/login/login",
             "style" : {
                 "navigationBarTitleText": "登录/注册" 
+            }
+        }
+        ,{
+            "path" : "pages/setting/setting",
+            "style" : {
+                "navigationBarTitleText": "设置"
             }
         }
     ],

@@ -5,19 +5,20 @@
             :header="true"
             :quickLoginOptions="quickLoginOptions"
             @userMethod="userMethod"
+            :user="user"
+            :favoriteIfo="favoriteIfo"
         >
             <template v-slot:left>
-                <view class="head-top-item left">
+                <view @click.stop="handleAddFriend" class="head-top-item left">
                     <text class="iconfont icon-AddFriend"></text>
                 </view>
             </template>
             <template v-slot:right>
-                <view class="head-top-item right">
+                <view @click.stop="handleSetting" class="head-top-item right">
                     <text class="iconfont icon-setting"></text>
                 </view>
             </template>
         </userHeader>
-        <text>{{ this.name }}</text>
     </view>
 </template>
 
@@ -29,7 +30,7 @@ export default {
         userHeader
     },
     computed: {
-        ...mapState(["name"])
+        ...mapState(["user"])
     },
     data() {
         return {
@@ -46,14 +47,45 @@ export default {
                     icon: "icon-weixin",
                     handleClickMethod: "weixinLogin"
                 }
+            ],
+            favoriteIfo: [
+                {
+                    count: 0,
+                    title: "关注"
+                },
+                {
+                    count: 0,
+                    title: "粉丝"
+                },
+                {
+                    count: 0,
+                    title: "访问"
+                },
+                {
+                    count: "--",
+                    title: "排名"
+                }
             ]
         };
     },
     methods: {
+        handleAddFriend() {
+            uni.showToast({
+                title: "暂不支持",
+                icon: "none",
+                duration: 2000
+            });
+        },
+        handleSetting() {
+            uni.navigateTo({
+                url: "../setting/setting"
+            });
+        },
         qqLogin() {
             console.log("qqLogin");
             uni.showToast({
                 title: "暂不支持",
+                icon: "none",
                 duration: 2000
             });
         },
@@ -61,6 +93,7 @@ export default {
             console.log("weixinLogin");
             uni.showToast({
                 title: "暂不支持",
+                icon: "none",
                 duration: 2000
             });
         },
@@ -68,6 +101,7 @@ export default {
             console.log("phoneLogin");
             uni.showToast({
                 title: "暂不支持",
+                icon: "none",
                 duration: 2000
             });
         },
@@ -84,6 +118,7 @@ export default {
 <style lang="scss">
 .my-home {
     width: 750rpx;
+    background-color: #fafafc;
     .user-header {
         width: 750rpx;
         height: 10rem;
