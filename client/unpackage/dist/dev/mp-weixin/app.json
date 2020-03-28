@@ -5,7 +5,9 @@
     "pages/message/message",
     "pages/myhome/myhome",
     "pages/search/search",
-    "pages/myblog/myblog"
+    "pages/myblog/myblog",
+    "pages/login/login",
+    "pages/setting/setting"
   ],
   "subPackages": [],
   "window": {
@@ -48,5 +50,5 @@
     ]
   },
   "usingComponents": {},
-  "sitemapLocation": "sitemap89.json"
+  "sitemapLocation": "sitemap48.json"
 }

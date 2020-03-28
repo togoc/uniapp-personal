@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "我的文章",
+  "navigationBarTitleText": "我的博客",
   "usingComponents": {
     "list-item": "/components/index-list-item/index-list-item"
   }

@@ -1,0 +1,21 @@
+
+.container {
+    padding: 30px;
+}
+.desc {
+    padding: 10px 0px;
+    font-size: 14px;
+    line-height: 22px;
+    color: #999999;
+}
+.login-form input {
+    height: 40px;
+    border: solid 1px #dddddd;
+    text-indent: 10px;
+}
+.login-form input,
+.login-form button {
+    width: 100%;
+    margin-bottom: 10px;
+}
+

@@ -13,6 +13,7 @@
 
 <script>
 import listItem from "../../components/index-list-item/index-list-item";
+import { mapGetters, mapState } from "vuex";
 export default {
     components: {
         listItem
@@ -31,12 +32,27 @@ export default {
             ]
         };
     },
+    computed: {
+        ...mapGetters(["isLogin"]),
+        ...mapState(["myBlogs"])
+    },
     methods: {
         handleBtn() {
-			uni.navigateTo({
-                url:"../editor/editor"
-			});
+            if (this.isLogin) {
+                uni.navigateTo({
+                    url: "../editor/editor"
+                });
+            } else {
+                uni.showToast({
+                    title: "请先登录!",
+                    duration: 2000,
+                    icon: "none"
+                });
+            }
         }
+    },
+    onShow() {
+        console.log(this.isLogin);
     }
 };
 </script>

@@ -31,7 +31,11 @@
         "path": "pages/myhome/myhome",
         "style": {
             "navigationBarTitleText": "我的",
-            "navigationStyle": "custom"
+            "navigationStyle": "custom",
+            "mp-weixin":{
+                "navigationStyle":"default"
+                
+            }
         }
     }, {
         "path": "pages/search/search",
@@ -52,7 +56,7 @@
     }, {
         "path": "pages/myblog/myblog",
         "style": {
-            "navigationBarTitleText": "我的文章"
+            "navigationBarTitleText": "我的博客"
         }
     }    ,{
             "path" : "pages/login/login",

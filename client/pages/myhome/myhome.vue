@@ -1,5 +1,10 @@
 <template>
     <view class="my-home">
+        <!--  #ifdef APP-PLUS  -->
+        <view class="status_bar">
+            <!-- 这里是状态栏 -->
+        </view>
+        <!--  #endif  -->
         <userHeader
             class="user-header"
             :header="true"
@@ -117,6 +122,13 @@ export default {
 
 <style lang="scss">
 .my-home {
+    /** #ifdef APP-PLUS */
+    .status_bar {
+        height: var(--status-bar-height);
+        width: 100%;
+    }
+    /** #endif */
+
     width: 750rpx;
     background-color: #fafafc;
     .user-header {
