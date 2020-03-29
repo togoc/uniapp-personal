@@ -69,7 +69,8 @@ class UserController {
 
     async createUser(req, res) {
         try {
-            const { user, token } = await userServices.createUser(req.body)
+            //如果name="" name=email
+            const { user, token } = await userServices.createUser({ name: "", ...req.body })
 
             user.tokens = undefined;
             user.password = undefined;
@@ -93,8 +94,8 @@ class UserController {
 
     }
 
-    async changePassword(req,res){
-        
+    async changePassword(req, res) {
+
     }
 }
 

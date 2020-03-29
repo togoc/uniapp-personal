@@ -54,6 +54,11 @@ userSchema.pre('save', async function (next) {
     if (user.isModified('password')) {
         user.password = bcrypt.hashSync(user.password, 8)
     }
+
+    if (user.isModified('name') && (user.name === "")) {
+        user.name = user.email
+    }
+
     next()
 })
 

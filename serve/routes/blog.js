@@ -5,7 +5,7 @@ const BlogController = require('../controllers/blog')
 const auth = require('../middleware/auth')
 const blogController = new BlogController()
 
-router.post('/add-blog', blogController.addBlog);
+router.post('/add-blog', auth, blogController.addBlog);
 
 
 module.exports = router;

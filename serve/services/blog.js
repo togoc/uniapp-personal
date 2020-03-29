@@ -2,8 +2,12 @@
 const Blog = require('../models/blog')
 
 class BlogService {
-    async addBlog() {
+    async addBlog(body) {
 
+        let blog = new Blog(body)
+
+        await blog.save()
+        
     }
 
 }
