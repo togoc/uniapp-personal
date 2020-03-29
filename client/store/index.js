@@ -37,10 +37,21 @@ export default new Vuex.Store({
 
     [types.LOGOUT](state, body) {
 
-      uni.removeStorageSync('BLOG_TOKEN');
+      try {
 
-      state.user = {}
-      state.myBlogs = []
+        uni.removeStorageSync('BLOG_TOKEN');
+        state.user = {}
+        state.myBlogs = []
+
+
+      } catch (error) {
+        uni.showToast({
+          title: error.toString(),
+          duration: 2000,
+          icon: 'none'
+        });
+        throw new Error('退出登录出错:' + error)
+      }
 
     },
 

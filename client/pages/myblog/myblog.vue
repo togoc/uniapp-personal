@@ -28,6 +28,70 @@ export default {
                     userName: "togoc",
                     commont_count: 10,
                     support: 10
+                },
+                {
+                    title: "socket网络编程",
+                    detail:
+                        "我Lorem ipsum dolor sit amet consectetur 我adipisicing elit. Vero earum ratione consectetur ipsa architecto delectus, veritatis eligendi doloremque voluptates laboriosam cum esse tempora corrupti dignissimos unde nisi exercitationem amet illum.",
+                    userName: "togoc",
+                    commont_count: 10,
+                    support: 10
+                },
+                {
+                    title: "socket网络编程",
+                    detail:
+                        "我Lorem ipsum dolor sit amet consectetur 我adipisicing elit. Vero earum ratione consectetur ipsa architecto delectus, veritatis eligendi doloremque voluptates laboriosam cum esse tempora corrupti dignissimos unde nisi exercitationem amet illum.",
+                    userName: "togoc",
+                    commont_count: 10,
+                    support: 10
+                },
+                {
+                    title: "socket网络编程",
+                    detail:
+                        "我Lorem ipsum dolor sit amet consectetur 我adipisicing elit. Vero earum ratione consectetur ipsa architecto delectus, veritatis eligendi doloremque voluptates laboriosam cum esse tempora corrupti dignissimos unde nisi exercitationem amet illum.",
+                    userName: "togoc",
+                    commont_count: 10,
+                    support: 10
+                },
+                {
+                    title: "socket网络编程",
+                    detail:
+                        "我Lorem ipsum dolor sit amet consectetur 我adipisicing elit. Vero earum ratione consectetur ipsa architecto delectus, veritatis eligendi doloremque voluptates laboriosam cum esse tempora corrupti dignissimos unde nisi exercitationem amet illum.",
+                    userName: "togoc",
+                    commont_count: 10,
+                    support: 10
+                },
+                {
+                    title: "socket网络编程",
+                    detail:
+                        "我Lorem ipsum dolor sit amet consectetur 我adipisicing elit. Vero earum ratione consectetur ipsa architecto delectus, veritatis eligendi doloremque voluptates laboriosam cum esse tempora corrupti dignissimos unde nisi exercitationem amet illum.",
+                    userName: "togoc",
+                    commont_count: 10,
+                    support: 10
+                },
+                {
+                    title: "socket网络编程",
+                    detail:
+                        "我Lorem ipsum dolor sit amet consectetur 我adipisicing elit. Vero earum ratione consectetur ipsa architecto delectus, veritatis eligendi doloremque voluptates laboriosam cum esse tempora corrupti dignissimos unde nisi exercitationem amet illum.",
+                    userName: "togoc",
+                    commont_count: 10,
+                    support: 10
+                },
+                {
+                    title: "socket网络编程",
+                    detail:
+                        "我Lorem ipsum dolor sit amet consectetur 我adipisicing elit. Vero earum ratione consectetur ipsa architecto delectus, veritatis eligendi doloremque voluptates laboriosam cum esse tempora corrupti dignissimos unde nisi exercitationem amet illum.",
+                    userName: "togoc",
+                    commont_count: 10,
+                    support: 10
+                },
+                {
+                    title: "socket网络编程",
+                    detail:
+                        "我Lorem ipsum dolor sit amet consectetur 我adipisicing elit. Vero earum ratione consectetur ipsa architecto delectus, veritatis eligendi doloremque voluptates laboriosam cum esse tempora corrupti dignissimos unde nisi exercitationem amet illum.",
+                    userName: "togoc",
+                    commont_count: 10,
+                    support: 10
                 }
             ]
         };
@@ -40,7 +104,7 @@ export default {
         handleBtn() {
             if (this.isLogin) {
                 uni.navigateTo({
-                    url: "../editor/editor"
+                    url: "../editor/editor?type=add"
                 });
             } else {
                 uni.showToast({
@@ -49,10 +113,20 @@ export default {
                     icon: "none"
                 });
             }
+        },
+        getBlogs() {
+            console.log("加载数据");
         }
     },
+    onLoad(options) {
+        this.getBlogs();
+    },
     onShow() {
-        console.log(this.isLogin);
+        // console.log(this.isLogin);
+    },
+    onReachBottom() {
+        this.getBlogs();
+        console.log("到底了");
     }
 };
 </script>

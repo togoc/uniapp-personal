@@ -344,7 +344,7 @@ export default {
             fontSizeRange: [10, 12, 14, 16, 18, 24, 32],
             showPreview: false,
             htmlData: "",
-            title: " "
+            title: ""
         };
     },
     mounted: function() {
@@ -362,7 +362,7 @@ export default {
     },
     methods: {
         setTitle(value) {
-            this.title = value;
+            this.title = value === "" ? this.$filter(Date.now()) : value;
         },
         openColor(e) {
             var name = e.currentTarget.dataset.name;

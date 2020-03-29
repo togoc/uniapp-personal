@@ -9,9 +9,8 @@
         <view class="title">
             <input
                 class="input"
-                :value="title"
-                @blur="setTitle"
-                placeholder="标题"
+                v-model.trim="title"
+                :placeholder="Date.now() | date"
             />
         </view>
     </view>
@@ -27,19 +26,20 @@ export default {
         labelConfirm: {
             type: String,
             default: "确定"
-        },
-        title: String
+        }
+    },
+    data() {
+        return {
+            title: ""
+        };
     },
     methods: {
         cancel: function() {
             this.$emit("cancel");
         },
         save: function() {
+            this.$emit("setTitle", this.title);
             this.$emit("save");
-        },
-        setTitle(event) {
-            let { value } = event.detail;
-            this.$emit("setTitle", value.trim());
         }
     }
 };

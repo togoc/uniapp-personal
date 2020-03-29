@@ -6,13 +6,14 @@ import moment from 'moment'
 Vue.config.productionTip = false
 
 Vue.prototype.$http = http
+Vue.prototype.$filter = filter
 
 
-Vue.filter('date', (value) => {
+Vue.filter('date', filter)
+
+function filter(value) {
     return moment(value).format('YYYY/MM/DD')
-})
-
-
+}
 
 App.mpType = 'app'
 
