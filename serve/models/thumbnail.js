@@ -2,11 +2,11 @@ const mongoose = require("mongoose");
 
 const thumbnailSchema = new mongoose.Schema({
 
-    name: {
+    filename: {
         type: String,
         required: true,
     },
-    owner: {
+    ownerID: {
         type: String,
         required: true
     },
@@ -14,6 +14,13 @@ const thumbnailSchema = new mongoose.Schema({
     data: {
         type: Buffer,
         required: true
+    },
+    type: {
+        type: String
+    },
+
+    blogID: {
+        type: String
     }
 
 }, {
@@ -23,3 +30,6 @@ const thumbnailSchema = new mongoose.Schema({
 const Thumbnail = mongoose.model("thumbnails", thumbnailSchema);
 
 module.exports = Thumbnail;
+
+
+

@@ -7,11 +7,12 @@ class BlogController {
     async addBlog(req, res) {
         try {
             let { body, user } = req
-            console.log(user)
+
             let { name, _id } = user
+
             body = { ...body, username: name, userid: _id }
 
-            await blogService.addBlog(body)
+            await blogService.addBlog(body, user)
 
             res.send('保存成功(saved)!');
 

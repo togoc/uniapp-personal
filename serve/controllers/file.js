@@ -5,16 +5,19 @@ const fileService = new FileService()
 
 class FileController {
 
-    async saveBlogImg(req, res) {
+    async upLoad(req, res) {
         try {
             const user = req.user;
             const busboy = req.busboy;
+
             req.pipe(busboy);
 
-            await fileService.saveBlogImg(user, busboy, req)
+            let file = await fileService.upLoad(user, busboy, req)
 
+            res.send(file);
         } catch (error) {
 
+            res.status(500).send(error.toString());
         }
     }
 

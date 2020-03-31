@@ -9,6 +9,9 @@ Vue.prototype.$http = http
 Vue.prototype.$filter = filter
 
 
+
+
+
 Vue.filter('date', filter)
 
 function filter(value) {

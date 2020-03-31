@@ -6,6 +6,6 @@ const auth = require('../middleware/auth')
 const fileController = new FileController()
 
 
-router.post('/blog-img', auth, fileController.saveBlogImg);
+router.post('/upload', auth, fileController.upLoad);
 
 module.exports = router;

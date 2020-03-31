@@ -22,7 +22,8 @@ export default {
     data() {
         return {
             html: "",
-            doType: ""
+            doType: "",
+            tags: []
         };
     },
     onLoad(options) {
@@ -51,37 +52,65 @@ export default {
             this.doType === "edit" && this.editBlog(context);
         },
         async addBlog(context) {
-            if (context.errMsg === "getContents:ok") {
-                delete context.errMsg;
-                let res = await this.$http(
-                    "/blog-service/add-blog",
-                    "POST",
-                    context
-                );
+            delete context.errMsg;
+            let html = context.html.replace(
+                /(?<=src="|src=').*?(?="|')/gi,
+                e => {
+                    for (let i = 0; i < this.tags.length; i++) {
+                        if (this.tags[i].path === e) {
+                            console.log(1);
+                            console.log(this.tags[i].thumbnailID);
+                            return this.tags[i].thumbnailID;
+                        }
+                    }
+                }
+            );
 
-                console.log(res);
-            }
-            console.log(context);
+            context.html = html;
+            let data = { context, tags: this.tags };
+            let res = await this.$http("/blog-service/add-blog", "POST", data);
+            console.log(res);
         },
         async editBlog(context) {
             console.log(context);
         },
         uploadImg(path, fn) {
             let token = uni.getStorageSync("BLOG_TOKEN");
-
             uni.uploadFile({
-                url: "/blog/file-service/blog-img", //仅为示例，非真实的接口地址
+                url: "/blog/file-service/upload?type=blogIMG",
                 filePath: path,
                 name: "file",
-                formData: {
-                    user: "test"
-                },
                 header: {
                     Authorization: token
                 },
-                success: uploadFileRes => {
-                    console.log(uploadFileRes);
+                success: res => {
+                    let thumbnailID = JSON.parse(res.data)._id;
+                    let tag = {
+                        path,
+                        thumbnailID
+                    };
+
+                    this.tags = [...this.tags, tag];
+
                     fn(path);
+                    // function toArrayBuffer(buf) {
+                    //     var ab = new ArrayBuffer(buf.length);
+                    //     var view = new Uint8Array(ab);
+                    //     for (var i = 0; i < buf.length; ++i) {
+                    //         view[i] = buf[i];
+                    //     }
+                    //     return ab;
+                    // }
+
+                    // let blob = new Blob([toArrayBuffer(res.data.data)], {
+                    //     type: "image/*"
+                    // });
+
+                    // let url = URL.createObjectURL(blob);
+                    // if (res.statusCode === 200) {
+                    //     console.log(this)
+                    //     fn(JSON.parse(res.data));
+                    // }
                 }
             });
         }

@@ -51,8 +51,6 @@ var component = Object(_HBuilderX_plugins_uniapp_cli_node_modules_dcloudio_vue_c
   renderjs
 )
 
-/* hot reload */
-if (false) { var api; }
 component.options.__file = "Users/togoc/Desktop/personal/client/pages/editor/editor.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
@@ -131,7 +129,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var myeditor = function myeditor() {return __webpack_require__.e(/*! import() | components/robin-editor/editor */ "components/robin-editor/editor").then(__webpack_require__.bind(null, /*! @/components/robin-editor/editor.vue */ 219));};var _default =
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _regenerator = _interopRequireDefault(__webpack_require__(/*! ./node_modules/@babel/runtime/regenerator */ 17));
 
 
 
@@ -147,25 +145,80 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
+var _vuex = __webpack_require__(/*! vuex */ 12);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}function ownKeys(object, enumerableOnly) {var keys = Object.keys(object);if (Object.getOwnPropertySymbols) {var symbols = Object.getOwnPropertySymbols(object);if (enumerableOnly) symbols = symbols.filter(function (sym) {return Object.getOwnPropertyDescriptor(object, sym).enumerable;});keys.push.apply(keys, symbols);}return keys;}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};if (i % 2) {ownKeys(Object(source), true).forEach(function (key) {_defineProperty(target, key, source[key]);});} else if (Object.getOwnPropertyDescriptors) {Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));} else {ownKeys(Object(source)).forEach(function (key) {Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));});}}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var myeditor = function myeditor() {__webpack_require__.e(/*! require.ensure | components/robin-editor/editor */ "components/robin-editor/editor").then((function () {return resolve(__webpack_require__(/*! @/components/robin-editor/editor.vue */ 217));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};
+'<p>测试</p><p><img src="blob:http://localhost:8080/1deb7ff4-50ec-4c41-a1f0-f17219600d36" alt="图片"></p>';var _default =
 {
   components: {
     myeditor: myeditor },
 
   data: function data() {
     return {
-      html: '' };
+      html: '<p>测试</p><p><img src="http://i2.hdslb.com/bfs/face/d3481aef95179dcc3273f85ff8f5d8b96f28d303.jpg@70w_70h_1c_100q.webp" alt="图片"></p>',
+      doType: "" };
 
+  },
+  onLoad: function onLoad(options) {
+    var type = options.type;
+    this.doType = type;
+  },
+  computed: _objectSpread({},
+  (0, _vuex.mapGetters)(["isLogin"])),
+
+  onShow: function onShow() {var _this = this;
+    var timer = setTimeout(function () {
+      if (!_this.isLogin) {
+        uni.switchTab({
+          url: "../myblog/myblog" });
+
+      }
+      clearTimeout(timer);
+    }, 1000);
   },
   methods: {
     hideEditor: function hideEditor(e) {
       console.log(1);
     },
-    saveEditor: function saveEditor(e) {
-      console.log(e);
+    saveEditor: function saveEditor(context) {
+      this.doType === "add" && this.addBlog(context);
+      this.doType === "edit" && this.editBlog(context);
     },
+    addBlog: function () {var _addBlog = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(context) {return _regenerator.default.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:
+                // if (context.errMsg === "getContents:ok") {
+                //     delete context.errMsg;
+                //     let res = await this.$http(
+                //         "/blog-service/add-blog",
+                //         "POST",
+                //         context
+                //     );
+
+                //     console.log(res);
+                // }
+                console.log(context);case 1:case "end":return _context.stop();}}}, _callee);}));function addBlog(_x) {return _addBlog.apply(this, arguments);}return addBlog;}(),
+
+    editBlog: function () {var _editBlog = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(context) {return _regenerator.default.wrap(function _callee2$(_context2) {while (1) {switch (_context2.prev = _context2.next) {case 0:
+                console.log(context);case 1:case "end":return _context2.stop();}}}, _callee2);}));function editBlog(_x2) {return _editBlog.apply(this, arguments);}return editBlog;}(),
+
     uploadImg: function uploadImg(path, fn) {
+      // let token = uni.getStorageSync("BLOG_TOKEN");
       fn(path);
+
+      // uni.uploadFile({
+      //     url: "/blog/file-service/blog-img", //仅为示例，非真实的接口地址
+      //     filePath: path,
+      //     name: "file",
+      //     formData: {
+      //         user: "test"
+      //     },
+      //     header: {
+      //         Authorization: token
+      //     },
+      //     success: uploadFileRes => {
+      //         console.log(uploadFileRes);
+      //     }
+      // });
+
     } } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ })
 

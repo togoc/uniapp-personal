@@ -41,6 +41,13 @@ const blogSchema = mongoose.Schema({
         type: Object,
         require: true
     },
+    thumbnails: [
+        {
+            thumbnailID: {
+                type: String
+            }
+        }
+    ],
     like: {
         type: Number,
         default: 0

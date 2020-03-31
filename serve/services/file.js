@@ -3,41 +3,118 @@ const mongoose = require('../db/mongoose')
 const conn = mongoose.connection;
 const sharp = require("sharp");
 const concat = require("concat-stream")
+const imageCheck = require('./fileUtils/IMGChecker')
+const removeChunks = require('./fileUtils/removeChunks')
 const Thumbnail = require('../models/thumbnail')
+
+
+
 
 
 class FileService {
 
-    async saveBlogImg(user, busboy, req) {
-        busboy.on('file', function (fieldname, file, filename, encoding, mimetype) {
-            let bucket = new mongoose.mongo.GridFSBucket(conn.db, {
-                chunkSizeBytes: 1024 * 255
+    async upLoad(user, busboy, req) {
+        return new Promise((resolve) => {
+            busboy.on('file', async function (fieldname, file, filename, encoding, mimetype) {
+                let bucket = new mongoose.mongo.GridFSBucket(conn.db, {
+                    chunkSizeBytes: 1024 * 255
+                });
+
+                const user = req.user
+                const type = req.query.type //blogIMG
+
+                const metadata = {
+                    ownerID: user._id,
+                    thumbnailID: "",
+                    blogID: "",
+                    hasThumbnail: false,
+                    type
+                }
+
+
+
+                let bucketStream = bucket.openUploadStream(filename, { metadata })
+
+                bucketStream.on("error", async (e) => {
+                    resolve(file)
+                    throw new Error('SaveBlogImg BucketStream Error')
+                })
+
+                req.on("aborted", async () => {
+
+                    console.log("Upload Request Cancelling...");
+
+                    await removeChunks(bucketStream);
+
+                })
+
+                file.pipe(bucketStream)
+
+                // file:数据库保存后的内容
+                bucketStream.on("finish", async (file) => {
+
+                    console.log(file)
+
+                    if (imageCheck(filename)) {
+
+                        try {
+                            let bucket = new mongoose.mongo.GridFSBucket(conn.db, {
+                                chunkSizeBytes: 1024 * 255
+                            });
+
+                            let readeStream = bucket.openDownloadStreamByName(filename)
+
+                            const imageResize = sharp().resize(300).on("error", (e) => {
+
+                                console.log("resize error", e);
+
+                            })
+
+                            let concatStream = concat(async (imgBuffer) => {
+                                let thumbnail = new Thumbnail({
+                                    filename,
+                                    ownerID: user._id,
+                                    data: imgBuffer,
+                                    type
+                                })
+
+                                await thumbnail.save()
+
+                                await conn.db.collection("fs.files")
+                                    .findOneAndUpdate({ "_id": file._id }, { "$set": { "metadata.hasThumbnail": true, "metadata.thumbnailID": thumbnail._id } })
+
+                                resolve(thumbnail)
+                            })
+
+                            readeStream.pipe(imageResize).pipe(concatStream)
+
+                        } catch (error) {
+                            console.error(error)
+                            resolve(file)
+                        }
+                    } else {
+
+                        resolve(file)
+                    }
+
+
+                })
+
+
             });
-            let bucketStream = bucket.openUploadStream(filename)
+        })
 
-            bucketStream.on("error", async (e) => {
-                throw new Error('SaveBlogImg BucketStream Error')
-            })
-
-            bucketStream.on("finish", async (file) => {
-                console.log(file)
-            })
-
-            file.pipe(bucketStream)
-
-        });
     }
 
 }
-const fs = require('fs')
+
 // setTimeout(() => {
 //     let bucket = new mongoose.mongo.GridFSBucket(conn.db, {
 //         chunkSizeBytes: 1024 * 255
 //     });
 
 //     let readeStream = bucket.openDownloadStreamByName('下载.jpeg')
-//     // let writeStream = fs.createWriteStream('./test.jpg')
-//     // readeStream.pipe(writeStream)
+
 //     const imageResize = sharp().resize(300).on("error", (e) => {
 
 //         console.log("resize error", e);

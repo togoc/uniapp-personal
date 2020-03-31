@@ -46,30 +46,30 @@
   -moz-osx-font-smoothing: grayscale;
 }
 .icon-jiantouarrow487:after {
-  content: "\E6AB";
+  content: "\e6ab";
 }
 .icon-shouji:before {
-  content: "\E623";
+  content: "\e623";
 }
 .icon-bokeyuan:before {
-  content: "\E603";
+  content: "\e603";
 }
 .icon-weixin:before {
-  content: "\E65D";
+  content: "\e65d";
 }
 .icon-setting:before {
-  content: "\E657";
+  content: "\e657";
 }
 .icon-AddFriend:before {
-  content: "\E728";
+  content: "\e728";
 }
 .icon-qq:before {
-  content: "\E65E";
+  content: "\e65e";
 }
 .icon-pinglun:before {
-  content: "\E600";
+  content: "\e600";
 }
 .icon-zan:before {
-  content: "\E607";
+  content: "\e607";
 }
 
