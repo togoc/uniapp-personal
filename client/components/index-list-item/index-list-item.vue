@@ -1,14 +1,14 @@
 <template>
     <view class="blog-item">
-        <view class="title f2">{{ item.title }}</view>
-        <view class="detail f2">{{ item.detail }}</view>
+        <view :data-id="item._id" class="title f2">{{ item.title }}</view>
+        <view :data-id="item._id" class="detail f2">{{ item.text }}</view>
         <view class="nav">
-            <text data-type="user">{{ item.userName }}</text>
+            <text data-type="user">{{ item.username }}</text>
             <text data-type="like" class="last2 iconfont icon-zan">{{
-                item.commont_count
+                item.comments ? item.comments.length : 0
             }}</text>
             <text data-type="commont" class="last2 iconfont icon-pinglun">{{
-                item.support
+                item.like
             }}</text>
         </view>
     </view>
@@ -21,8 +21,6 @@ export default {
     },
     data() {
         return {};
-    },
-    mounted() {
     }
 };
 </script>
@@ -57,6 +55,7 @@ export default {
         line-height: 1rem;
         .last2 {
             margin-left: 1rem;
+            letter-spacing: 5px;
         }
     }
 }

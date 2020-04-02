@@ -21,7 +21,7 @@ export default async function (url, method = 'GET', data) {
         let token = uni.getStorageSync('BLOG_TOKEN')
 
         uni.request({
-            url: baseUrl + url, //仅为示例，并非真实接口地址。
+            url: baseUrl + url, 
 
             data,
 
@@ -52,7 +52,7 @@ export default async function (url, method = 'GET', data) {
                     return reject(res.data)
                 }
 
-                resolve(res)
+                resolve(res.data)
 
             },
 

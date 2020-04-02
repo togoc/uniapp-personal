@@ -5,7 +5,10 @@ Vue.use(Vuex)
 
 const types = {
   SETUSER: "SETUSER",
-  LOGOUT: "LOGOUT"
+  LOGOUT: "LOGOUT",
+  SETMYBLOGS: "SETMYBLOGS",
+  SETBLOGS: "SETBLOGS",
+
 
 }
 
@@ -14,7 +17,8 @@ export default new Vuex.Store({
   state: {
     name: 'togoc',
     user: {},
-    myBlogs: []
+    myBlogs: [],
+    indexBlogs: []
   },
   getters: {
     isLogin: state => Object.keys(state.user).length > 0
@@ -23,12 +27,42 @@ export default new Vuex.Store({
 
     async autoLogin({ commit }) {
 
-      let res = await http("/user-service/user");
-      let data = res.data;
+      let data = await http("/user-service/user");
       commit("SETUSER", data);
+    },
+    async getMyBlog({ commit, state }) {
+      let blogs = await http(
+        "/blog-service/get-my-blog?page=" + state.myBlogs.length,
+        "GET"
+      );
 
+      blogs.length < 1
+        ?
+        uni.showToast({
+          title: "已加载全部",
+          duration: 1000,
+          icon: "none"
+        })
+        :
+        commit("SETMYBLOGS", blogs);
+
+    },
+    async getIndexBlog({ commit, state }) {
+      let blogs = await http(
+        "/blog-service/get-index-blog?page=" + state.indexBlogs.length,
+        "GET"
+      );
+
+      blogs.length < 1
+        ?
+        uni.showToast({
+          title: "已加载全部",
+          duration: 1000,
+          icon: "none"
+        })
+        :
+        commit("SETBLOGS", blogs);
     }
-
   },
   mutations: {
     [types.SETUSER](state, body) {
@@ -42,6 +76,7 @@ export default new Vuex.Store({
         uni.removeStorageSync('BLOG_TOKEN');
         state.user = {}
         state.myBlogs = []
+        state.indexBlogs = []
 
 
       } catch (error) {
@@ -53,6 +88,14 @@ export default new Vuex.Store({
         throw new Error('退出登录出错:' + error)
       }
 
+    },
+
+    [types.SETMYBLOGS](state, blogs) {
+      state.myBlogs = state.myBlogs.concat(blogs).sort((a, b) => b.updatedAt - a.updatedAt)
+    },
+
+    [types.SETBLOGS](state, blogs) {
+      state.indexBlogs = state.indexBlogs.concat(blogs).sort((a, b) => b.updatedAt - a.updatedAt)
     },
 
 

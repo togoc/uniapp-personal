@@ -1,18 +1,19 @@
-import Vue from 'vue'
-import App from './App'
-import store from './store'
-import http from './utils/http'
-import moment from 'moment'
-Vue.config.productionTip = false
+import Vue from 'vue';
+import App from './App';
+import store from './store';
+import http from './utils/http';
+import upload from './utils/upload';
+import moment from 'moment';
+Vue.config.productionTip = false;
 
-Vue.prototype.$http = http
-Vue.prototype.$filter = filter
+Vue.prototype.$http = http;
+Vue.prototype.$upload = upload;
+Vue.prototype.$filter = filter;
 
 
 
 
-
-Vue.filter('date', filter)
+Vue.filter('date', filter);
 
 function filter(value) {
     return moment(value).format('YYYY/MM/DD')

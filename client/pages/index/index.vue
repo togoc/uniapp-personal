@@ -1,11 +1,17 @@
 <template>
-    <view @click.stop="handleClickItem" class="content">
-        <listItem v-for="(item, index) in blogList" :key="index" :item="item" />
+    <view class="content" @click.stop="handleClickItem">
+        <listItem
+            v-for="(item, index) in indexBlogs"
+            :item="item"
+            :key="index"
+            :data-id="item._id"
+        />
     </view>
 </template>
 
 <script>
 import listItem from "../../components/index-list-item/index-list-item";
+import { mapState, mapActions } from "vuex";
 export default {
     components: {
         listItem
@@ -13,67 +19,20 @@ export default {
     data() {
         return {
             title: "Hello",
-            text: "text",
-            blogList: [
-                {
-                    title: "socket网络编程",
-                    detail:
-                        "我Lorem ipsum dolor sit amet consectetur 我adipisicing elit. Vero earum ratione consectetur ipsa architecto delectus, veritatis eligendi doloremque voluptates laboriosam cum esse tempora corrupti dignissimos unde nisi exercitationem amet illum.",
-                    userName: "togoc",
-                    commont_count: 10,
-                    support: 10
-                },
-                {
-                    title: "socket网络编程",
-                    detail:
-                        "我Lorem ipsum dolor sit amet consectetur 我adipisicing elit. Vero earum ratione consectetur ipsa architecto delectus, veritatis eligendi doloremque voluptates laboriosam cum esse tempora corrupti dignissimos unde nisi exercitationem amet illum.",
-                    userName: "togoc",
-                    commont_count: 10,
-                    support: 10
-                },
-                {
-                    title: "socket网络编程",
-                    detail:
-                        "我Lorem ipsum dolor sit amet consectetur 我adipisicing elit. Vero earum ratione consectetur ipsa architecto delectus, veritatis eligendi doloremque voluptates laboriosam cum esse tempora corrupti dignissimos unde nisi exercitationem amet illum.",
-                    userName: "togoc",
-                    commont_count: 10,
-                    support: 10
-                },
-                {
-                    title: "socket网络编程",
-                    detail:
-                        "我Lorem ipsum dolor sit amet consectetur 我adipisicing elit. Vero earum ratione consectetur ipsa architecto delectus, veritatis eligendi doloremque voluptates laboriosam cum esse tempora corrupti dignissimos unde nisi exercitationem amet illum.",
-                    userName: "togoc",
-                    commont_count: 10,
-                    support: 10
-                },
-                {
-                    title: "socket网络编程",
-                    detail:
-                        "我Lorem ipsum dolor sit amet consectetur 我adipisicing elit. Vero earum ratione consectetur ipsa architecto delectus, veritatis eligendi doloremque voluptates laboriosam cum esse tempora corrupti dignissimos unde nisi exercitationem amet illum.",
-                    userName: "togoc",
-                    commont_count: 10,
-                    support: 10
-                },
-                {
-                    title: "socket网络编程",
-                    detail:
-                        "我Lorem ipsum dolor sit amet consectetur 我adipisicing elit. Vero earum ratione consectetur ipsa architecto delectus, veritatis eligendi doloremque voluptates laboriosam cum esse tempora corrupti dignissimos unde nisi exercitationem amet illum.",
-                    userName: "togoc",
-                    commont_count: 10,
-                    support: 10
-                },
-                {
-                    title: "socket网络编程",
-                    detail: "我Lorem ipsum dolor si",
-                    userName: "togoc",
-                    commont_count: 10,
-                    support: 10
-                }
-            ]
+            text: "text"
         };
     },
-    onLoad() {},
+    computed: {
+        ...mapState(["indexBlogs"])
+    },
+    onReady() {
+        this.getIndexBlog();
+    },
+    async onPullDownRefresh() {
+        this.lastPage = false;
+        await this.getIndexBlog();
+        uni.stopPullDownRefresh();
+    },
     onNavigationBarSearchInputClicked() {
         uni.navigateTo({
             url: "../search/search",
@@ -81,10 +40,18 @@ export default {
         });
     },
     methods: {
+        ...mapActions(["getIndexBlog"]),
         handleClickItem(e) {
-            let { type } = e.target.dataset;
-            console.log(type);
+            let { type, id } = e.target.dataset;
+            if (type === undefined && id) {
+                uni.navigateTo({
+                    url: "../blog/blog?blogID=" + id
+                });
+            }
         }
+    },
+    onReachBottom() {
+        this.getIndexBlog();
     }
 };
 </script>

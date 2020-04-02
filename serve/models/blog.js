@@ -76,16 +76,23 @@ const blogSchema = mongoose.Schema({
                 default: Date.now
             }
         }
-    ]
+    ],
+    createdAt: {
+        type: Number
+    },
+    updatedAt: {
+        type: Number
+    },
 }, {
-    timestamps: true
+    timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' }
 })
 
 
 blogSchema.pre('save', async function (next) {
     const blog = this
 
-
+    blog.html = blog.html.replace(/\<img/gi,
+        '<img style="max-width:50%;height:auto"')
 
     next()
 })

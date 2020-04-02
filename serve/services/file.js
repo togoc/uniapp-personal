@@ -24,7 +24,7 @@ class FileService {
                 const type = req.query.type //blogIMG
 
                 const metadata = {
-                    ownerID: user._id,
+                    ownerID: String(user._id),
                     thumbnailID: "",
                     blogID: "",
                     hasThumbnail: false,
@@ -37,6 +37,7 @@ class FileService {
 
                 bucketStream.on("error", async (e) => {
                     resolve(file)
+                    await removeChunks(bucketStream);
                     throw new Error('SaveBlogImg BucketStream Error')
                 })
 
@@ -58,32 +59,37 @@ class FileService {
                     if (imageCheck(filename)) {
 
                         try {
+
                             let bucket = new mongoose.mongo.GridFSBucket(conn.db, {
                                 chunkSizeBytes: 1024 * 255
                             });
 
                             let readeStream = bucket.openDownloadStreamByName(filename)
 
-                            const imageResize = sharp().resize(300).on("error", (e) => {
+                            const imageResize = sharp().resize(100).on("error", (e) => {
 
                                 console.log("resize error", e);
 
                             })
 
                             let concatStream = concat(async (imgBuffer) => {
+                                function BufferToBase64(buffer) {
+                                    return "data:image/*;base64," + buffer.toString('base64');
+                                }
                                 let thumbnail = new Thumbnail({
                                     filename,
-                                    ownerID: user._id,
-                                    data: imgBuffer,
+                                    ownerID: String(user._id),
+                                    data: BufferToBase64(imgBuffer),
                                     type
                                 })
 
                                 await thumbnail.save()
 
                                 await conn.db.collection("fs.files")
-                                    .findOneAndUpdate({ "_id": file._id }, { "$set": { "metadata.hasThumbnail": true, "metadata.thumbnailID": thumbnail._id } })
+                                    .findOneAndUpdate({ "_id": file._id }, { "$set": { "metadata.hasThumbnail": true, "metadata.thumbnailID": String(thumbnail._id) } })
 
                                 resolve(thumbnail)
+
                             })
 
                             readeStream.pipe(imageResize).pipe(concatStream)
@@ -107,6 +113,8 @@ class FileService {
     }
 
 }
+
+
 
 // setTimeout(() => {
 //     let bucket = new mongoose.mongo.GridFSBucket(conn.db, {

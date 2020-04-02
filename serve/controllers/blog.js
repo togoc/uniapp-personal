@@ -8,9 +8,7 @@ class BlogController {
         try {
             let { body, user } = req
 
-            let { name, _id } = user
-
-            body = { ...body, username: name, userid: _id }
+ 
 
             await blogService.addBlog(body, user)
 
@@ -26,6 +24,49 @@ class BlogController {
 
     async editBlog(req, res) {
 
+    }
+    async getMyBlog(req, res) {
+        try {
+
+            let { _id } = req.user
+            let { page } = req.query
+
+            let blogs = await blogService.getMyBlog(_id, page)
+
+            res.status(200).send(blogs);
+
+        } catch (error) {
+            res.status(500).send(error.toString());
+        }
+    }
+
+    async getIndexBlog(req, res) {
+        try {
+            let { page, id } = req.query
+
+            let blogs = await blogService.getIndexBlog(page, id)
+
+            res.status(200).send(blogs);
+
+        } catch (error) {
+            res.status(500).send(error.toString());
+        }
+    }
+
+
+    async getThumbnails(req, res) {
+        try {
+            console.log(req.params)
+            let blogID = req.params.id
+
+            let thumbnails = await blogService.getThumbnails(blogID)
+
+            res.status(200).send(thumbnails);
+
+        } catch (error) {
+
+            res.status(500).send(error.toString());
+        }
     }
 
 }

@@ -34,10 +34,10 @@ export default {
         };
     },
     methods: {
-        cancel: function() {
+        cancel() {
             this.$emit("cancel");
         },
-        save: function() {
+        save() {
             this.$emit("setTitle", this.title);
             this.$emit("save");
         }

@@ -21,7 +21,7 @@ export default {
     },
     data() {
         return {
-            html: "",
+            html: "测试",
             doType: "",
             tags: []
         };
@@ -58,8 +58,6 @@ export default {
                 e => {
                     for (let i = 0; i < this.tags.length; i++) {
                         if (this.tags[i].path === e) {
-                            console.log(1);
-                            console.log(this.tags[i].thumbnailID);
                             return this.tags[i].thumbnailID;
                         }
                     }
@@ -70,49 +68,30 @@ export default {
             let data = { context, tags: this.tags };
             let res = await this.$http("/blog-service/add-blog", "POST", data);
             console.log(res);
+            uni.switchTab({
+                url: "../myblog/myblog"
+            });
         },
         async editBlog(context) {
             console.log(context);
         },
-        uploadImg(path, fn) {
+        async uploadImg(path, fn) {
             let token = uni.getStorageSync("BLOG_TOKEN");
-            uni.uploadFile({
-                url: "/blog/file-service/upload?type=blogIMG",
-                filePath: path,
-                name: "file",
-                header: {
-                    Authorization: token
-                },
-                success: res => {
-                    let thumbnailID = JSON.parse(res.data)._id;
-                    let tag = {
-                        path,
-                        thumbnailID
-                    };
+            let data = await this.$upload(path, "blogIMG");
+            let thumbnailID = data._id;
+            let tag = {
+                path,
+                thumbnailID
+            };
+            // #ifndef MP-WEIXIN
+            this.tags = [...this.tags, tag];
+            // #endif
 
-                    this.tags = [...this.tags, tag];
+            // #ifdef MP-WEIXIN
+            this.$parent.tags.push(tag);
+            // #endif
 
-                    fn(path);
-                    // function toArrayBuffer(buf) {
-                    //     var ab = new ArrayBuffer(buf.length);
-                    //     var view = new Uint8Array(ab);
-                    //     for (var i = 0; i < buf.length; ++i) {
-                    //         view[i] = buf[i];
-                    //     }
-                    //     return ab;
-                    // }
-
-                    // let blob = new Blob([toArrayBuffer(res.data.data)], {
-                    //     type: "image/*"
-                    // });
-
-                    // let url = URL.createObjectURL(blob);
-                    // if (res.statusCode === 200) {
-                    //     console.log(this)
-                    //     fn(JSON.parse(res.data));
-                    // }
-                }
-            });
+            fn(path);
         }
     }
 };

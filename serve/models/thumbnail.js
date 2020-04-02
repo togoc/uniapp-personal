@@ -12,7 +12,7 @@ const thumbnailSchema = new mongoose.Schema({
     },
 
     data: {
-        type: Buffer,
+        type: String,
         required: true
     },
     type: {

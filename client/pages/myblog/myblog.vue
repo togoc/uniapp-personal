@@ -3,97 +3,21 @@
         <button class="btn" @click.stop="handleBtn" plain type="warn">
             + 写博客
         </button>
-        <listItem
-            v-for="(item, index) in myBlogList"
-            :key="index"
-            :item="item"
-        />
+        <listItem v-for="(item, index) in myBlogs" :key="index" :item="item" />
     </view>
 </template>
 
 <script>
 import listItem from "../../components/index-list-item/index-list-item";
-import { mapGetters, mapState } from "vuex";
+import { mapGetters, mapState, mapActions } from "vuex";
 export default {
     components: {
         listItem
     },
     data() {
         return {
-            myBlogList: [
-                {
-                    title: "socket网络编程",
-                    detail:
-                        "我Lorem ipsum dolor sit amet consectetur 我adipisicing elit. Vero earum ratione consectetur ipsa architecto delectus, veritatis eligendi doloremque voluptates laboriosam cum esse tempora corrupti dignissimos unde nisi exercitationem amet illum.",
-                    userName: "togoc",
-                    commont_count: 10,
-                    support: 10
-                },
-                {
-                    title: "socket网络编程",
-                    detail:
-                        "我Lorem ipsum dolor sit amet consectetur 我adipisicing elit. Vero earum ratione consectetur ipsa architecto delectus, veritatis eligendi doloremque voluptates laboriosam cum esse tempora corrupti dignissimos unde nisi exercitationem amet illum.",
-                    userName: "togoc",
-                    commont_count: 10,
-                    support: 10
-                },
-                {
-                    title: "socket网络编程",
-                    detail:
-                        "我Lorem ipsum dolor sit amet consectetur 我adipisicing elit. Vero earum ratione consectetur ipsa architecto delectus, veritatis eligendi doloremque voluptates laboriosam cum esse tempora corrupti dignissimos unde nisi exercitationem amet illum.",
-                    userName: "togoc",
-                    commont_count: 10,
-                    support: 10
-                },
-                {
-                    title: "socket网络编程",
-                    detail:
-                        "我Lorem ipsum dolor sit amet consectetur 我adipisicing elit. Vero earum ratione consectetur ipsa architecto delectus, veritatis eligendi doloremque voluptates laboriosam cum esse tempora corrupti dignissimos unde nisi exercitationem amet illum.",
-                    userName: "togoc",
-                    commont_count: 10,
-                    support: 10
-                },
-                {
-                    title: "socket网络编程",
-                    detail:
-                        "我Lorem ipsum dolor sit amet consectetur 我adipisicing elit. Vero earum ratione consectetur ipsa architecto delectus, veritatis eligendi doloremque voluptates laboriosam cum esse tempora corrupti dignissimos unde nisi exercitationem amet illum.",
-                    userName: "togoc",
-                    commont_count: 10,
-                    support: 10
-                },
-                {
-                    title: "socket网络编程",
-                    detail:
-                        "我Lorem ipsum dolor sit amet consectetur 我adipisicing elit. Vero earum ratione consectetur ipsa architecto delectus, veritatis eligendi doloremque voluptates laboriosam cum esse tempora corrupti dignissimos unde nisi exercitationem amet illum.",
-                    userName: "togoc",
-                    commont_count: 10,
-                    support: 10
-                },
-                {
-                    title: "socket网络编程",
-                    detail:
-                        "我Lorem ipsum dolor sit amet consectetur 我adipisicing elit. Vero earum ratione consectetur ipsa architecto delectus, veritatis eligendi doloremque voluptates laboriosam cum esse tempora corrupti dignissimos unde nisi exercitationem amet illum.",
-                    userName: "togoc",
-                    commont_count: 10,
-                    support: 10
-                },
-                {
-                    title: "socket网络编程",
-                    detail:
-                        "我Lorem ipsum dolor sit amet consectetur 我adipisicing elit. Vero earum ratione consectetur ipsa architecto delectus, veritatis eligendi doloremque voluptates laboriosam cum esse tempora corrupti dignissimos unde nisi exercitationem amet illum.",
-                    userName: "togoc",
-                    commont_count: 10,
-                    support: 10
-                },
-                {
-                    title: "socket网络编程",
-                    detail:
-                        "我Lorem ipsum dolor sit amet consectetur 我adipisicing elit. Vero earum ratione consectetur ipsa architecto delectus, veritatis eligendi doloremque voluptates laboriosam cum esse tempora corrupti dignissimos unde nisi exercitationem amet illum.",
-                    userName: "togoc",
-                    commont_count: 10,
-                    support: 10
-                }
-            ]
+            pageIndex: 0,
+            lastPage: false
         };
     },
     computed: {
@@ -101,6 +25,7 @@ export default {
         ...mapState(["myBlogs"])
     },
     methods: {
+        ...mapActions(["getMyBlog"]),
         handleBtn() {
             if (this.isLogin) {
                 uni.navigateTo({
@@ -113,20 +38,18 @@ export default {
                     icon: "none"
                 });
             }
-        },
-        getBlogs() {
-            console.log("加载数据");
         }
     },
-    onLoad(options) {
-        this.getBlogs();
+    onReady() {
+        this.getMyBlog();
     },
-    onShow() {
-        // console.log(this.isLogin);
+    async onPullDownRefresh() {
+        this.lastPage = false;
+        await this.getMyBlog();
+        uni.stopPullDownRefresh();
     },
     onReachBottom() {
-        this.getBlogs();
-        console.log("到底了");
+        this.getMyBlog();
     }
 };
 </script>

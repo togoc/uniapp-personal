@@ -35,9 +35,13 @@ export default {
         async signUp() {
             try {
                 let body = { email: this.email, password: this.password };
-                let res = await this.$http("/user-service/create-user", "POST", body);
+                let data = await this.$http(
+                    "/user-service/create-user",
+                    "POST",
+                    body
+                );
 
-                let { user, token } = res.data;
+                let { user, token } = data;
 
                 uni.setStorageSync("BLOG_TOKEN", token);
                 await this.$store.commit("SETUSER", user);
@@ -52,9 +56,13 @@ export default {
         async signIn() {
             try {
                 let body = { email: this.email, password: this.password };
-                let res = await this.$http("/user-service/login", "POST", body);
+                let data = await this.$http(
+                    "/user-service/login",
+                    "POST",
+                    body
+                );
 
-                let { user, token } = res.data;
+                let { user, token } = data;
 
                 uni.setStorageSync("BLOG_TOKEN", token);
                 await this.$store.commit("SETUSER", user);

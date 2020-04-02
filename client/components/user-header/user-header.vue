@@ -30,7 +30,7 @@
             <template v-else>
                 <view class="user">
                     <view class="user-name-img">
-                        <image src="/static/default.png" />
+                        <image src="../../static/default.png" />
                         <view class="user-name-data">
                             <view class="username">
                                 {{ user.email || "togoc" }}
