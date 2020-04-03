@@ -523,7 +523,10 @@ export default {
             } else {
                 this.editorCtx.getContents({
                     success: res => {
-                        this.$emit("save", { ...res, title: this.title });
+                        this.$emit("save", {
+                            ...res,
+                            title: this.title || this.$filter(Date.now())
+                        });
                     }
                 });
             }
