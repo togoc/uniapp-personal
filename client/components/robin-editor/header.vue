@@ -6,13 +6,7 @@
         <view class="btn right" @tap="save" v-if="labelConfirm">{{
             labelConfirm
         }}</view>
-        <view class="title">
-            <input
-                class="input"
-                v-model.trim="title"
-                :placeholder="Date.now() | date"
-            />
-        </view>
+        <slot name="title"></slot>
     </view>
 </template>
 
@@ -28,17 +22,11 @@ export default {
             default: "确定"
         }
     },
-    data() {
-        return {
-            title: ""
-        };
-    },
     methods: {
         cancel() {
             this.$emit("cancel");
         },
         save() {
-            this.$emit("setTitle", this.title);
             this.$emit("save");
         }
     }
@@ -66,23 +54,6 @@ export default {
         }
         &.right {
             float: right;
-        }
-    }
-    .title {
-        height: 100%;
-        width: 50%;
-        position: absolute;
-        transform: translateX(50%);
-        text-align: center;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        .input {
-            outline: #666;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            height: 88%;
-            font-size: 1rem;
         }
     }
 }

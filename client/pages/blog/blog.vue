@@ -27,8 +27,7 @@
 export default {
     data() {
         return {
-            blog: {},
-            thumbnails: []
+            blog: {}
         };
     },
     onLoad(options) {
@@ -37,16 +36,7 @@ export default {
     },
     computed: {
         htmlData() {
-            let html = this.blog.html;
-            html && this.thumbnails.length > 0
-                ? this.thumbnails.forEach(v => {
-                      let reg = new RegExp(v._id, "ig");
-                      html = html.replace(reg, e => {
-                          return v.data;
-                      });
-                  })
-                : "";
-            return html;
+            return this.blog.html || "";
         }
     },
     methods: {
@@ -57,15 +47,15 @@ export default {
             );
             this.blog = data;
 
-            if (data.thumbnails.length) {
-                let thumbnails = await this.getThumbnails(data._id);
+            // if (data.thumbnails.length) {
+            //     let thumbnails = await this.getThumbnails(data._id);
 
-                this.thumbnails = thumbnails;
-            }
+            //     this.thumbnails = thumbnails;
+            // }
         },
-        async getThumbnails(id) {
-            return await this.$http("/blog-service/thumbnails/" + id, "GET");
-        },
+        // async getThumbnails(id) {
+        //     return await this.$http("/blog-service/thumbnails/" + id, "GET");
+        // },
         bufferToURL(buf) {
             function toArrayBuffer(buf) {
                 var ab = new ArrayBuffer(buf.length);

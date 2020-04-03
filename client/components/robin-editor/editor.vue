@@ -2,12 +2,21 @@
     <view class="wrapper">
         <topbar
             class="header"
-            @setTitle="setTitle"
             @cancel="cancel"
             @save="save"
             :labelConfirm="labelConfirm"
             :labelCancel="labelCancel"
-        ></topbar>
+        >
+            <template v-slot:title>
+                <view class="title1">
+                    <input
+                        class="input"
+                        v-model.trim="title"
+                        :placeholder="Date.now() | date"
+                    />
+                </view>
+            </template>
+        </topbar>
         <view class="toolbar" @tap="format" v-if="!showPreview">
             <block v-for="(t, i) in tools" :key="i">
                 <view
@@ -321,6 +330,7 @@ export default {
                     "list-ordered",
                     "color",
                     "backgroundColor",
+                    "font",
                     "clear",
                     "preview",
                     "image",
@@ -361,9 +371,6 @@ export default {
         }
     },
     methods: {
-        setTitle(value) {
-            this.title = value === "" ? this.$filter(Date.now()) : value;
-        },
         openColor(e) {
             var name = e.currentTarget.dataset.name;
             var color = this.formats[name];
@@ -623,6 +630,23 @@ export default {
 
     .ql-active {
         color: #06c;
+    }
+    .title1 {
+        height: 100%;
+        width: 50%;
+        position: absolute;
+        transform: translateX(50%);
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .input {
+            outline: #666;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            height: 88%;
+            font-size: 1rem;
+        }
     }
 }
 </style>

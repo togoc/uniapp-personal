@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import http from '../utils//http'
+import http from '../utils/http'
+import { showToast } from '../utils/prompt'
 Vue.use(Vuex)
 
 const types = {
@@ -8,7 +9,8 @@ const types = {
   LOGOUT: "LOGOUT",
   SETMYBLOGS: "SETMYBLOGS",
   SETBLOGS: "SETBLOGS",
-
+  REFRESHBLOGS: "REFRESHBLOGS",
+  REFRESHMYBLOGS: "REFRESHMYBLOGS",
 
 }
 
@@ -38,11 +40,7 @@ export default new Vuex.Store({
 
       blogs.length < 1
         ?
-        uni.showToast({
-          title: "已加载全部",
-          duration: 1000,
-          icon: "none"
-        })
+        showToast("已加载全部")
         :
         commit("SETMYBLOGS", blogs);
 
@@ -55,11 +53,7 @@ export default new Vuex.Store({
 
       blogs.length < 1
         ?
-        uni.showToast({
-          title: "已加载全部",
-          duration: 1000,
-          icon: "none"
-        })
+        showToast("已加载全部")
         :
         commit("SETBLOGS", blogs);
     }
@@ -80,12 +74,11 @@ export default new Vuex.Store({
 
 
       } catch (error) {
-        uni.showToast({
-          title: error.toString(),
-          duration: 2000,
-          icon: 'none'
-        });
+
+        showToast(error.toString());
+
         throw new Error('退出登录出错:' + error)
+
       }
 
     },
@@ -98,7 +91,13 @@ export default new Vuex.Store({
       state.indexBlogs = state.indexBlogs.concat(blogs).sort((a, b) => b.updatedAt - a.updatedAt)
     },
 
+    [types.REFRESHBLOGS](state) {
+      state.indexBlogs = []
+    },
 
+    [types.REFRESHMYBLOGS](state) {
+      state.myBlogs = []
+    },
   },
   modules: {
   }

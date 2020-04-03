@@ -31,8 +31,6 @@ class FileService {
                     type
                 }
 
-
-
                 let bucketStream = bucket.openUploadStream(filename, { metadata })
 
                 bucketStream.on("error", async (e) => {

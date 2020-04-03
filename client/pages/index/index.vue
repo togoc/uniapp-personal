@@ -29,8 +29,13 @@ export default {
         this.getIndexBlog();
     },
     async onPullDownRefresh() {
-        this.lastPage = false;
-        await this.getIndexBlog();
+        try {
+            this.lastPage = false;
+            this.$store.commit("REFRESHBLOGS");
+            await this.getIndexBlog();
+        } catch (error) {
+            this.$showToast("用户信息无效");
+        }
         uni.stopPullDownRefresh();
     },
     onNavigationBarSearchInputClicked() {
@@ -43,6 +48,7 @@ export default {
         ...mapActions(["getIndexBlog"]),
         handleClickItem(e) {
             let { type, id } = e.target.dataset;
+
             if (type === undefined && id) {
                 uni.navigateTo({
                     url: "../blog/blog?blogID=" + id

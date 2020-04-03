@@ -53,21 +53,8 @@ export default {
         },
         async addBlog(context) {
             delete context.errMsg;
-            let html = context.html.replace(
-                /(?<=src="|src=').*?(?="|')/gi,
-                e => {
-                    for (let i = 0; i < this.tags.length; i++) {
-                        if (this.tags[i].path === e) {
-                            return this.tags[i].thumbnailID;
-                        }
-                    }
-                }
-            );
-
-            context.html = html;
             let data = { context, tags: this.tags };
             let res = await this.$http("/blog-service/add-blog", "POST", data);
-            console.log(res);
             uni.switchTab({
                 url: "../myblog/myblog"
             });
@@ -78,11 +65,9 @@ export default {
         async uploadImg(path, fn) {
             let token = uni.getStorageSync("BLOG_TOKEN");
             let data = await this.$upload(path, "blogIMG");
-            let thumbnailID = data._id;
-            let tag = {
-                path,
-                thumbnailID
-            };
+            let { _id: thumbnailID, data: srcData } = data;
+            let tag = { thumbnailID, srcData };
+            
             // #ifndef MP-WEIXIN
             this.tags = [...this.tags, tag];
             // #endif
@@ -91,7 +76,7 @@ export default {
             this.$parent.tags.push(tag);
             // #endif
 
-            fn(path);
+            fn(data.data);
         }
     }
 };

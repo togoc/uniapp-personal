@@ -44,8 +44,13 @@ export default {
         this.getMyBlog();
     },
     async onPullDownRefresh() {
-        this.lastPage = false;
-        await this.getMyBlog();
+        try {
+            this.lastPage = false;
+            this.$store.commit("REFRESHMYBLOGS");
+            await this.getMyBlog();
+        } catch (error) {
+            this.$showToast("用户信息无效");
+        }
         uni.stopPullDownRefresh();
     },
     onReachBottom() {

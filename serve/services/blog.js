@@ -13,13 +13,12 @@ class BlogService {
         let thumbnails = []
 
         tags.forEach(async (v, i) => {
-            if (context.html.indexOf(v.thumbnailID) === -1) {
+            if (context.html.indexOf(v.srcData) === -1) {
                 await Thumbnail.deleteOne({ _id: v.thumbnailID, ownerID: user._id })
                 const file = await conn.db.collection("fs.files").findOne({
                     "metadata.ownerID": String(_id),
                     "metadata.thumbnailID": v.thumbnailID
                 })
-                console.log(file)
                 await conn.db.collection("fs.files").deleteOne({ _id: file._id })
                 await conn.db.collection("fs.chunks").deleteMany({ files_id: file._id })
                 delete tags[i]

@@ -3417,7 +3417,7 @@ var render = function() {
                       { staticClass: _vm._$g(17, "sc"), attrs: { _i: 17 } },
                       [
                         _c("v-uni-image", {
-                          attrs: { src: "../../static/default.png", _i: 18 }
+                          attrs: { src: _vm._$g(18, "a-src"), _i: 18 }
                         }),
                         _c(
                           "v-uni-view",
@@ -4520,7 +4520,7 @@ var render = function() {
                 { staticClass: _vm._$g(5, "sc"), attrs: { _i: 5 } },
                 [
                   _c("v-uni-image", {
-                    attrs: { src: "../../static/default.png", alt: "", _i: 6 }
+                    attrs: { src: _vm._$g(6, "a-src"), alt: "", _i: 6 }
                   })
                 ],
                 1
