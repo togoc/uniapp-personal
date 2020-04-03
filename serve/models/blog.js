@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const nodejieba = require("nodejieba");
 
 
 const blogSchema = mongoose.Schema({
@@ -88,16 +89,20 @@ const blogSchema = mongoose.Schema({
 })
 
 
+
 blogSchema.pre('save', async function (next) {
     const blog = this
 
     blog.html = blog.html.replace(/\<img/gi,
         '<img style="max-width:50%;height:auto"')
 
+    blog.text = nodejieba.cut(blog.title + blog.text, true).join(' ')
+
     next()
 })
 
 
+blogSchema.index({ text: "text" })
 
 const Blog = mongoose.model('blogs', blogSchema)
 
