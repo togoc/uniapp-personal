@@ -2,7 +2,7 @@
     <view class="blog">
         <view class="head">
             <view class="title"> {{ blog.title }}</view>
-            <view class="date">{{ "三天前" }}</view>
+            <view class="date">{{ blog.updatedAt | date1 }}</view>
             <view class="user">
                 <view class="header-img"
                     ><image src="../../static/default.png" alt=""
@@ -46,38 +46,6 @@ export default {
                 "GET"
             );
             this.blog = data;
-
-            // if (data.thumbnails.length) {
-            //     let thumbnails = await this.getThumbnails(data._id);
-
-            //     this.thumbnails = thumbnails;
-            // }
-        },
-        // async getThumbnails(id) {
-        //     return await this.$http("/blog-service/thumbnails/" + id, "GET");
-        // },
-        bufferToURL(buf) {
-            function toArrayBuffer(buf) {
-                var ab = new ArrayBuffer(buf.length);
-                var view = new Uint8Array(ab);
-                for (var i = 0; i < buf.length; ++i) {
-                    view[i] = buf[i];
-                }
-                return ab;
-            }
-            let blob = new Blob([toArrayBuffer(buf.data)], {
-                type: "image/*"
-            });
-            return URL.createObjectURL(blob);
-        },
-        BufferToBase64(buffer) {
-            let bytes = new Uint8Array(buffer.data);
-            let data = "";
-            let len = bytes.byteLength;
-            for (let i = 0; i < len; i++) {
-                data += String.fromCharCode(bytes[i]);
-            }
-            return "data:image/png;base64," + window.btoa(data);
         }
     }
 };
@@ -110,7 +78,6 @@ export default {
             display: flex;
             flex-direction: row;
             box-sizing: border-box;
-            border: 2px solid #fbfbfc;
             align-items: center;
             height: 2.91rem;
             .header-img {
@@ -156,9 +123,9 @@ export default {
     .preview {
         box-sizing: border-box;
         padding: 1rem;
-        text {
-            font-size: 0.875rem;
-        }
+        word-wrap: break-word;
+        letter-spacing: 1px;
+        font-size: 16px;
     }
 }
 </style>

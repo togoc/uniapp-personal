@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const conn = require('../db/mongoose').connection
 const thumbnailSchema = new mongoose.Schema({
 
     filename: {
@@ -27,7 +27,41 @@ const thumbnailSchema = new mongoose.Schema({
     timestamps: true
 })
 
+thumbnailSchema.statics.removeThumbnail = async (tags, context) => {
+    let thumbnails = []
+    
+    tags.forEach(async (v, i) => {
+        if (context.html.indexOf(v.srcData) === -1) {
+            await Thumbnail.deleteOne({ _id: v.thumbnailID })
+            const file = await conn.db.collection("fs.files").findOne({
+                "metadata.thumbnailID": v.thumbnailID
+            })
+            await conn.db.collection("fs.files").deleteOne({ _id: file._id })
+            await conn.db.collection("fs.chunks").deleteMany({ files_id: file._id })
+            delete tags[i]
+        } else {
+            thumbnails.push({
+                thumbnailID: v.thumbnailID
+            })
+        }
+    })
+
+    return { thumbnails, tags }
+}
+
+
+thumbnailSchema.statics.addBlogId = async (tags, blog) => {
+
+    tags.forEach(async (v, i) => {
+        await Thumbnail.updateOne({ _id: v.thumbnailID }, { blogID: blog._id })
+    })
+
+}
+
 const Thumbnail = mongoose.model("thumbnails", thumbnailSchema);
+
+
+
 
 module.exports = Thumbnail;
 

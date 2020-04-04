@@ -1,14 +1,19 @@
 <template>
-    <view class="blog-item">
+    <view class="blog-item" @click.stop="handleClickItem" :data-id="item._id">
         <view :data-id="item._id" class="title f2">{{ item.title }}</view>
-        <view :data-id="item._id" class="detail f2">{{ item.text }}</view>
+        <view :data-id="item._id" class="detail f2">{{
+            item.text.replace(/\s/g, "")
+        }}</view>
         <view class="nav">
             <text data-type="user">{{ item.username }}</text>
             <text data-type="like" class="last2 iconfont icon-zan">{{
-                item.comments ? item.comments.length : 0
+                item.likes ? item.likes.length : 0
             }}</text>
             <text data-type="commont" class="last2 iconfont icon-pinglun">{{
-                item.like
+                item.comments ? item.comments.length : 0
+            }}</text>
+            <text class="last2 iconfont icon-zhiboguankanshu">{{
+                item.views
             }}</text>
         </view>
     </view>
@@ -21,6 +26,34 @@ export default {
     },
     data() {
         return {};
+    },
+    methods: {
+        async handleClickItem(e) {
+            let { type, id } = e.target.dataset;
+            if (type === undefined && id) {
+
+                uni.navigateTo({
+                    url: "../blog/blog?blogID=" + id
+                });
+                
+            } else if (type) {
+                switch (type) {
+                    case "like":
+
+                        let id = this.item._id;
+                        let data = await this.$http(
+                            "/blog-service/toggle-likes?id=" + id,
+                            "GET"
+                        );
+
+                        return this.$store.commit("TOGGLELIKES", id);
+
+                    default:
+                        break;
+                }
+                console.log(type);
+            }
+        }
     }
 };
 </script>
@@ -53,7 +86,9 @@ export default {
         height: 1rem;
         font-size: 0.77rem;
         line-height: 1rem;
+
         .last2 {
+            font-size: 0.77rem;
             margin-left: 1rem;
             letter-spacing: 5px;
         }

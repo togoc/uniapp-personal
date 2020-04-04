@@ -1,8 +1,11 @@
 <template>
     <view class="my-blog">
-        <button class="btn" @click.stop="handleBtn" plain type="warn">
-            + 写博客
-        </button>
+        <view class="btn-container">
+            <button class="btn" @click.stop="handleBtn">
+                <text class="iconfont icon-bianji" />
+                写博客
+            </button>
+        </view>
         <listItem v-for="(item, index) in myBlogs" :key="index" :item="item" />
     </view>
 </template>
@@ -62,9 +65,27 @@ export default {
 <style lang="scss" scope>
 view.my-blog {
     width: 750rpx;
-    .btn {
-        line-height: 2;
-        width: 88%;
+    .btn-container {
+        width: 100%;
+        height: 56px;
+        box-sizing: border-box;
+        padding: 8px 1rem;
+        .btn {
+            width: 100%;
+            height: 100%;
+            line-height: 38px;
+            white-space: nowrap;
+            background-color: #f8f8f8;
+            font-size: 16px;
+            border: none;
+            &::after {
+                border: none;
+            }
+            text {
+                letter-spacing: 3px;
+                font-size: 16px;
+            }
+        }
     }
 }
 </style>

@@ -1,10 +1,9 @@
 <template>
-    <view class="content" @click.stop="handleClickItem">
+    <view class="content" >
         <listItem
             v-for="(item, index) in indexBlogs"
             :item="item"
             :key="index"
-            :data-id="item._id"
         />
     </view>
 </template>
@@ -45,16 +44,7 @@ export default {
         });
     },
     methods: {
-        ...mapActions(["getIndexBlog"]),
-        handleClickItem(e) {
-            let { type, id } = e.target.dataset;
-
-            if (type === undefined && id) {
-                uni.navigateTo({
-                    url: "../blog/blog?blogID=" + id
-                });
-            }
-        }
+        ...mapActions(["getIndexBlog"])
     },
     onReachBottom() {
         this.getIndexBlog();

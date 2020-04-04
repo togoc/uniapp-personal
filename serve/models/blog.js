@@ -49,10 +49,7 @@ const blogSchema = mongoose.Schema({
             }
         }
     ],
-    like: {
-        type: Number,
-        default: 0
-    },
+    likes: [],
     views: {
         type: Number,
         default: 0
@@ -91,15 +88,46 @@ const blogSchema = mongoose.Schema({
 
 
 blogSchema.pre('save', async function (next) {
+
     const blog = this
 
-    blog.html = blog.html.replace(/\<img/gi,
-        '<img style="max-width:50%;height:auto"')
+    if (blog.isModified('html')) {
+        blog.html = blog.html.replace(/\<img/gi,
+            '<img style="max-width:50%;height:auto"').replace(/```.*?```/ig, function (e) {
+                return '<div style="background-color:#f6f8fa;border: 5px solid #f1f8ff;padding: 3px;font-size: 14px;"><code>' + e.replace(/&nbsp;/ig, "").replace(/```|<p.*?>|<\/p>/ig, '').replace(/;/ig, ";<br>") + '</code></div>'
+            })
+    }
 
-    blog.text = nodejieba.cut(blog.title + blog.text, true).join(' ')
+    if (blog.isModified('text')) {
+        blog.text = nodejieba.cut((blog.text.trim().replace(/```/ig, "") + blog.title), true).join(' ')
+    }
 
     next()
 })
+
+
+blogSchema.methods.addViews = async function () {
+
+    this.views = this.views + 1
+
+    await this.save()
+
+}
+
+blogSchema.methods.toggleLikes = async function (userID) {
+
+    let likes = this.likes
+
+    if (likes.includes(userID)) {
+        this.likes.splice(likes.indexOf(userID), 1)
+        return await this.save()
+    } else {
+        this.likes = [...this.likes, userID]
+        return await this.save()
+    }
+
+}
+
 
 
 blogSchema.index({ text: "text" })

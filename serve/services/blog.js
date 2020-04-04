@@ -1,8 +1,6 @@
 
 const Blog = require('../models/blog')
 const Thumbnail = require('../models/thumbnail')
-const mongoose = require('../db/mongoose')
-const conn = mongoose.connection;
 class BlogService {
     async addBlog(body, user) {
         let { context, tags } = body
@@ -10,57 +8,44 @@ class BlogService {
 
         context = { ...context, username: name, userid: _id }
 
-        let thumbnails = []
-
-        tags.forEach(async (v, i) => {
-            if (context.html.indexOf(v.srcData) === -1) {
-                await Thumbnail.deleteOne({ _id: v.thumbnailID, ownerID: user._id })
-                const file = await conn.db.collection("fs.files").findOne({
-                    "metadata.ownerID": String(_id),
-                    "metadata.thumbnailID": v.thumbnailID
-                })
-                await conn.db.collection("fs.files").deleteOne({ _id: file._id })
-                await conn.db.collection("fs.chunks").deleteMany({ files_id: file._id })
-                delete tags[i]
-            } else {
-                thumbnails.push({
-                    thumbnailID: v.thumbnailID
-                })
-            }
-        })
+        let { thumbnails, tags: lastTags } = await Thumbnail.removeThumbnail(tags, context)
 
         let blog = new Blog({ ...context, thumbnails })
 
-        tags.forEach(async (v, i) => {
-            await Thumbnail.updateOne({ _id: v.thumbnailID }, { blogID: blog._id })
-        })
-
-
+        await Thumbnail.addBlogId(lastTags, blog)
 
         await blog.save()
 
     }
 
     async getIndexBlog(page, id) {
-        console.log(page)
         let pageSize = 10
         if (id) {
-            return await Blog.findOne({ _id: id })
+            let targetBlog = await Blog.findOne({ _id: id })
+            await targetBlog.addViews()
+            return await targetBlog
         } else {
-            return await Blog.find({}, ['like', 'comments', 'title', 'username', 'text', 'updatedAt']).skip(Number(page)).limit(pageSize)
+            return await Blog.find({}, ['likes', 'comments', 'title', 'username', 'text', 'views', 'updatedAt']).skip(Number(page)).limit(pageSize)
         }
 
     }
 
     async getMyBlog(userID, page) {
         let pageSize = 10
-        return await Blog.find({ userid: userID }, ['like', 'comments', 'title', 'username', 'text', 'updatedAt']).skip(Number(page)).limit(pageSize)
+        return await Blog.find({ userid: userID }, ['likes', 'comments', 'title', 'username', 'text', 'updatedAt', 'views']).skip(Number(page)).limit(pageSize)
     }
 
+    async search(keyword) {
+        return await Blog.find({ $text: { $search: keyword } }, { score: { $meta: "textScore" } }
+        ).sort({ score: { $meta: "textScore" } }).limit(100)
+    }
 
-    async getThumbnails(blogID) {
-        console.log(blogID)
-        return await Thumbnail.find({ blogID })
+    async toggleLikes(userID, blogID) {
+
+        let blog = await Blog.findOne({ _id: blogID })
+
+        await blog.toggleLikes(userID)
+
     }
 
 }

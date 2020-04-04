@@ -11,6 +11,7 @@ const types = {
   SETBLOGS: "SETBLOGS",
   REFRESHBLOGS: "REFRESHBLOGS",
   REFRESHMYBLOGS: "REFRESHMYBLOGS",
+  TOGGLELIKES: "TOGGLELIKES"
 
 }
 
@@ -32,6 +33,7 @@ export default new Vuex.Store({
       let data = await http("/user-service/user");
       commit("SETUSER", data);
     },
+
     async getMyBlog({ commit, state }) {
       let blogs = await http(
         "/blog-service/get-my-blog?page=" + state.myBlogs.length,
@@ -45,6 +47,7 @@ export default new Vuex.Store({
         commit("SETMYBLOGS", blogs);
 
     },
+
     async getIndexBlog({ commit, state }) {
       let blogs = await http(
         "/blog-service/get-index-blog?page=" + state.indexBlogs.length,
@@ -56,7 +59,9 @@ export default new Vuex.Store({
         showToast("已加载全部")
         :
         commit("SETBLOGS", blogs);
-    }
+    },
+
+
   },
   mutations: {
     [types.SETUSER](state, body) {
@@ -84,11 +89,11 @@ export default new Vuex.Store({
     },
 
     [types.SETMYBLOGS](state, blogs) {
-      state.myBlogs = state.myBlogs.concat(blogs).sort((a, b) => b.updatedAt - a.updatedAt)
+      state.myBlogs = state.myBlogs.concat(blogs)
     },
 
     [types.SETBLOGS](state, blogs) {
-      state.indexBlogs = state.indexBlogs.concat(blogs).sort((a, b) => b.updatedAt - a.updatedAt)
+      state.indexBlogs = state.indexBlogs.concat(blogs)
     },
 
     [types.REFRESHBLOGS](state) {
@@ -98,6 +103,21 @@ export default new Vuex.Store({
     [types.REFRESHMYBLOGS](state) {
       state.myBlogs = []
     },
+
+    [types.TOGGLELIKES](state, blogID) {
+      let userID = state.user._id
+      state.indexBlogs.forEach(v => {
+        if (v._id === blogID) {
+          let likes = v.likes
+          if (likes.includes(userID)) {
+            v.likes.splice(likes.indexOf(userID), 1)
+          } else {
+            v.likes = [...v.likes, userID]
+          }
+        }
+
+      })
+    }
   },
   modules: {
   }

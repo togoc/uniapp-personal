@@ -8,7 +8,7 @@ class BlogController {
         try {
             let { body, user } = req
 
- 
+
 
             await blogService.addBlog(body, user)
 
@@ -25,6 +25,7 @@ class BlogController {
     async editBlog(req, res) {
 
     }
+
     async getMyBlog(req, res) {
         try {
 
@@ -69,6 +70,34 @@ class BlogController {
         }
     }
 
+    async search(req, res) {
+        try {
+
+            let { keyword } = req.query
+
+            let blogs = await blogService.search(keyword.trim())
+
+            res.status(200).send(blogs);
+
+        } catch (error) {
+            res.status(500).send('搜索失败' + error.toString());
+        }
+    }
+
+    async toggleLikes(req, res) {
+        try {
+
+            let userID = req.user._id
+            let blogID = req.query.id
+
+            await blogService.toggleLikes(userID, blogID)
+
+            res.status(200).send('toggleLikesOk');
+
+        } catch (error) {
+            res.status(500).send('点赞失败' + error.toString());
+        }
+    }
 }
 
 

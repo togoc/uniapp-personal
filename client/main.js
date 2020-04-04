@@ -6,6 +6,7 @@ import upload from './utils/upload';
 import { showToast } from './utils/prompt'
 import moment from 'moment';
 Vue.config.productionTip = false;
+moment.locale(['zh-cn'])
 
 
 Vue.prototype.$http = http;
@@ -17,10 +18,19 @@ Vue.prototype.$showToast = showToast;
 
 
 Vue.filter('date', filter);
+Vue.filter('date1', filter1);
+
 
 function filter(value) {
     return moment(value).format('YYYY/MM/DD')
 }
+
+function filter1(value) {
+    return moment(value).format('lll')
+}
+
+let arr = [1, 2, 3, 4, 5]
+
 
 App.mpType = 'app'
 

@@ -4,16 +4,20 @@
         "style": {
             "navigationBarTitleText": "首页",
             "enablePullDownRefresh": true,
+            "navigationStyle": "custom",
             "app-plus": {
-                "navigationStyle": "custom",
                 "titleNView": {
                     "type": "transparent",
                     "searchInput": {
-                        "backgroundColor": "#f8f8f8",
+                        "backgroundColor": "#f7f7fa",
                         "borderRadius": "6px",
                         "placeholder": "搜索帖子/标题/用户",
-                        "disabled": true
+                        "disabled": true,
+                        "placeholderColor": "#5e5e5e"
                     }
+                },
+                "pullToRefresh": {
+                    "offset": "45px"
                 }
             }
         }
@@ -32,9 +36,9 @@
         "style": {
             "navigationBarTitleText": "我的",
             "navigationStyle": "custom",
-            "mp-weixin":{
-                "navigationStyle":"default"
-                
+            "mp-weixin": {
+                "navigationStyle": "default"
+
             }
         }
     }, {
@@ -45,8 +49,9 @@
                 "titleNView": {
                     "type": "transparent",
                     "searchInput": {
-                        "backgroundColor": "#f8f8f8",
+                        "backgroundColor": "#f7f7fa",
                         "borderRadius": "6px",
+                        "placeholderColor": "#5e5e5e",
                         "placeholder": "搜索帖子/标题/用户",
                         "autoFocus": true
                     }
@@ -57,27 +62,27 @@
         "path": "pages/myblog/myblog",
         "style": {
             "navigationBarTitleText": "我的博客",
-            "enablePullDownRefresh": true
-        }
-    }    ,{
-            "path" : "pages/login/login",
-            "style" : {
-                "navigationBarTitleText": "登录/注册" 
+            "enablePullDownRefresh": true,
+            "pullToRefresh": {
+                "offset": "56px"
             }
         }
-        ,{
-            "path" : "pages/setting/setting",
-            "style" : {
-                "navigationBarTitleText": "设置"
-            }
+    }, {
+        "path": "pages/login/login",
+        "style": {
+            "navigationBarTitleText": "登录/注册"
         }
-        ,{
-            "path" : "pages/blog/blog",
-            "style" : {
-                "navigationBarTitleText": ""
-            }
+    }, {
+        "path": "pages/setting/setting",
+        "style": {
+            "navigationBarTitleText": "设置"
         }
-    ],
+    }, {
+        "path": "pages/blog/blog",
+        "style": {
+            "navigationBarTitleText": ""
+        }
+    }],
     "tabBar": {
         "color": "#515151",
         "selectedColor": "#d81e06",
@@ -112,7 +117,8 @@
     "globalStyle": {
         "navigationBarTextStyle": "black",
         "navigationBarTitleText": "博客",
-        "navigationBarBackgroundColor": "#F8F8F8",
+        "navigationBarBackgroundColor": "#f8f8f8",
         "backgroundColor": "#F8F8F8"
+
     }
 }
