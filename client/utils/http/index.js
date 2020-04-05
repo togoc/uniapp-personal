@@ -1,3 +1,5 @@
+
+import { showToast } from '../prompt'
 let baseUrl = null
 // #ifdef H5
 baseUrl = '/blog'
@@ -21,7 +23,7 @@ export default async function (url, method = 'GET', data) {
         let token = uni.getStorageSync('BLOG_TOKEN')
 
         uni.request({
-            url: baseUrl + url, 
+            url: baseUrl + url,
 
             data,
 
@@ -34,21 +36,13 @@ export default async function (url, method = 'GET', data) {
             success: (res) => {
                 // code 500
                 if (res.statusCode === 500) {
-                    uni.showToast({
-                        title: res.data || '请求错误',
-                        duration: 2000,
-                        icon: 'none'
-                    });
+                    showToast(res.data || '请求错误');
                     return reject(res.data)
                 }
 
                 //code 401
                 if (res.statusCode === 401) {
-                    uni.showToast({
-                        title: res.data || '登录信息过期',
-                        duration: 2000,
-                        icon: 'none'
-                    });
+                    showToast(res.data || '登录信息过期');
                     return reject(res.data)
                 }
 
@@ -57,8 +51,9 @@ export default async function (url, method = 'GET', data) {
             },
 
             fail: (e) => {
-                reject(e)
                 end()
+                showToast(e.toString())
+                reject(e)
             },
 
             complete: () => {

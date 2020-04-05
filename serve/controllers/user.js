@@ -86,11 +86,16 @@ class UserController {
 
     async getUser(req, res) {
 
-        const user = req.user
-        user.tokens = undefined;
-        user.password = undefined;
+        try {
+            const { id } = req.query
 
-        res.status(200).send(user);
+            const user = await userServices.getUser(id) || req.user
+
+            res.status(200).send(user);
+
+        } catch (error) {
+            res.status(500).send('获取用户信息失败' + '(' + e.toString() + ')');
+        }
 
     }
 

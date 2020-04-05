@@ -29,7 +29,7 @@
 
 <script>
 import userHeader from "../../components/user-header/user-header";
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 export default {
     components: {
         userHeader

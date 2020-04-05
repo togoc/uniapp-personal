@@ -1,3 +1,4 @@
+import { showToast } from '../prompt'
 let baseUrl = null
 // #ifdef H5
 baseUrl = '/blog/file-service/upload?type='
@@ -32,6 +33,7 @@ export default async function (path, type) {
             },
             fail: (e) => {
                 end();
+                showToast(e.toString())
                 reject(e);
             }
         });

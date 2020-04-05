@@ -42,13 +42,9 @@ const blogSchema = mongoose.Schema({
         type: Object,
         require: true
     },
-    thumbnails: [
-        {
-            thumbnailID: {
-                type: String
-            }
-        }
-    ],
+    thumbnails: {
+        type: Array
+    },
     likes: [],
     views: {
         type: Number,
@@ -130,7 +126,7 @@ blogSchema.methods.toggleLikes = async function (userID) {
 
 
 
-blogSchema.index({ text: "text" })
+blogSchema.index({ title: "text", text: "text" })
 
 const Blog = mongoose.model('blogs', blogSchema)
 

@@ -65,9 +65,9 @@ export default {
         async uploadImg(path, fn) {
             let token = uni.getStorageSync("BLOG_TOKEN");
             let data = await this.$upload(path, "blogIMG");
-            let { _id: thumbnailID, data: srcData } = data;
-            let tag = { thumbnailID, srcData };
-            
+            let { _id, src } = data;
+            let tag = { _id, src };
+
             // #ifndef MP-WEIXIN
             this.tags = [...this.tags, tag];
             // #endif
@@ -76,7 +76,7 @@ export default {
             this.$parent.tags.push(tag);
             // #endif
 
-            fn(data.data);
+            fn(src);
         }
     }
 };

@@ -1,18 +1,17 @@
 
 const Blog = require('../models/blog')
-const Thumbnail = require('../models/thumbnail')
+const removeFile = require('../db/utils/removeFile')
 class BlogService {
     async addBlog(body, user) {
         let { context, tags } = body
-        let { name, _id } = user
 
-        context = { ...context, username: name, userid: _id }
+        let { name: username, _id: userid } = user
 
-        let { thumbnails, tags: lastTags } = await Thumbnail.removeThumbnail(tags, context)
+        let blog = new Blog({ ...context, username, userid })
 
-        let blog = new Blog({ ...context, thumbnails })
+        let thumbnails = await removeFile(context, tags, blog._id)
 
-        await Thumbnail.addBlogId(lastTags, blog)
+        blog.thumbnails = thumbnails
 
         await blog.save()
 

@@ -29,20 +29,16 @@ const thumbnailSchema = new mongoose.Schema({
 
 thumbnailSchema.statics.removeThumbnail = async (tags, context) => {
     let thumbnails = []
-    
+
     tags.forEach(async (v, i) => {
+        const file = await conn.db.collection("fs.files").findOne({
+            "metadata.thumbnailID": v.thumbnailID
+        })
         if (context.html.indexOf(v.srcData) === -1) {
-            await Thumbnail.deleteOne({ _id: v.thumbnailID })
-            const file = await conn.db.collection("fs.files").findOne({
-                "metadata.thumbnailID": v.thumbnailID
-            })
             await conn.db.collection("fs.files").deleteOne({ _id: file._id })
             await conn.db.collection("fs.chunks").deleteMany({ files_id: file._id })
-            delete tags[i]
         } else {
-            thumbnails.push({
-                thumbnailID: v.thumbnailID
-            })
+            file.metadata.blog
         }
     })
 

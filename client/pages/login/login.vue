@@ -31,6 +31,9 @@ export default {
             password: "123456"
         };
     },
+    onShow() {
+        this.$store.commit("LOGOUT");
+    },
     methods: {
         async signUp() {
             try {

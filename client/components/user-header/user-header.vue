@@ -30,10 +30,13 @@
             <template v-else>
                 <view class="user">
                     <view class="user-name-img">
-                        <image src="../../static/default.png" />
+                        <image
+                            @tap.stop="changeAvatar"
+                            :src="user.avatar + '?w=70&h=70'"
+                        />
                         <view class="user-name-data">
                             <view class="username">
-                                {{ user.email || "togoc" }}
+                                {{ user.name || "togoc" }}
                             </view>
                             <text>注册时间:{{ user.data | date }}</text>
                         </view>
@@ -83,6 +86,17 @@ export default {
         },
         userMethod() {
             this.$emit("userMethod");
+        },
+        changeAvatar() {
+            uni.chooseImage({
+                count: 1,
+                success: res => {
+                    res.tempFilePaths.map(async path => {
+                        let data = await this.$upload(path, "avatar");
+                        this.user.avatar = data.src;
+                    });
+                }
+            });
         }
     }
 };

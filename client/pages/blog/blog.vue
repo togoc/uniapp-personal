@@ -5,11 +5,13 @@
             <view class="date">{{ blog.updatedAt | date1 }}</view>
             <view class="user">
                 <view class="header-img"
-                    ><image src="../../static/default.png" alt=""
+                    ><image
+                        :src="headIMGSrc"
+                        alt="头像"
                 /></view>
                 <view class="user-name">
-                    <text>{{ blog.username }}</text>
-                    <text>{{ blog.username }}</text>
+                    <text>{{ auth.name || blog.username }}</text>
+                    <text>{{ auth.name || blog.name }}</text>
                 </view>
                 <view class="focus">
                     <text>私信</text>
@@ -27,7 +29,8 @@
 export default {
     data() {
         return {
-            blog: {}
+            blog: {},
+            auth: {}
         };
     },
     onLoad(options) {
@@ -37,6 +40,9 @@ export default {
     computed: {
         htmlData() {
             return this.blog.html || "";
+        },
+        headIMGSrc() {
+            return this.auth.avatar ? this.auth.avatar + "?w=50&h=50" : "../../static/default.png";
         }
     },
     methods: {
@@ -46,6 +52,9 @@ export default {
                 "GET"
             );
             this.blog = data;
+            this.auth = await this.$http(
+                "/user-service/user?id=" + data.userid
+            );
         }
     }
 };
@@ -54,6 +63,7 @@ export default {
 <style lang="scss">
 .blog {
     width: 750rpx;
+    user-select: text;
     .head {
         width: 750rpx;
         padding: 1rem;

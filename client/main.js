@@ -29,7 +29,6 @@ function filter1(value) {
     return moment(value).format('lll')
 }
 
-let arr = [1, 2, 3, 4, 5]
 
 
 App.mpType = 'app'

@@ -39,7 +39,6 @@ export default {
             } else if (type) {
                 switch (type) {
                     case "like":
-
                         let id = this.item._id;
                         let data = await this.$http(
                             "/blog-service/toggle-likes?id=" + id,
@@ -90,7 +89,7 @@ export default {
         .last2 {
             font-size: 0.77rem;
             margin-left: 1rem;
-            letter-spacing: 5px;
+            letter-spacing: 1px;
         }
     }
 }

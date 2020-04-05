@@ -52,7 +52,7 @@ const initServer = async () => {
             + "URL=" + serverURL + "\n"
             + "FULLURL=" + serverFullURL + "\n"
 
-        await fs.writeFile(path.resolve(__dirname, "../config/prod.env"), fullServerInfo, (err) => {
+        await fs.writeFile(path.resolve(__dirname, "../config/dev.env"), fullServerInfo, (err) => {
             if (err) {
                 console.log("Error", err);
                 process.exit();

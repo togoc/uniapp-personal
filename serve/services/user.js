@@ -1,4 +1,4 @@
-
+const ObjectID = require('mongodb').ObjectID
 const User = require('../models/user')
 
 class UserServices {
@@ -45,6 +45,12 @@ class UserServices {
         if (!user || !token) throw new InternalServerError("Could Not Create New User Error");
 
         return { token, user }
+    }
+
+    async getUser(id) {
+
+        return await User.findOne({ _id: ObjectID(id) })
+
     }
 
 

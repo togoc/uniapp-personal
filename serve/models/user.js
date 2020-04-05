@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt')
 const crypto = require('crypto')
 const jwt = require('jsonwebtoken')
 const env = require('../enviroment/env')
+
 const userSchema = mongoose.Schema({
 
     name: {
@@ -24,6 +25,10 @@ const userSchema = mongoose.Schema({
         }
     },
 
+    avatar: {
+        type: String,
+        default: env.fullUrl + "/public/images/default.png"
+    },
 
     password: {
         type: String,
@@ -50,7 +55,7 @@ const userSchema = mongoose.Schema({
 })
 
 userSchema.pre('save', async function (next) {
-    
+
     const user = this;
 
     if (user.isModified('password')) {
@@ -97,6 +102,6 @@ userSchema.methods.createToken = async function () {
 }
 
 
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model("users", userSchema);
 
 module.exports = User;
