@@ -36,46 +36,14 @@ export default {
     },
     methods: {
         async signUp() {
-            try {
-                let body = { email: this.email, password: this.password };
-                let data = await this.$http(
-                    "/user-service/create-user",
-                    "POST",
-                    body
-                );
+            let body = { email: this.email, password: this.password };
 
-                let { user, token } = data;
-
-                uni.setStorageSync("BLOG_TOKEN", token);
-                await this.$store.commit("SETUSER", user);
-
-                uni.switchTab({
-                    url: "../myhome/myhome"
-                });
-            } catch (error) {
-                throw new Error(error);
-            }
+            this.$store.dispatch("signUp", body);
         },
         async signIn() {
-            try {
-                let body = { email: this.email, password: this.password };
-                let data = await this.$http(
-                    "/user-service/login",
-                    "POST",
-                    body
-                );
+            let body = { email: this.email, password: this.password };
 
-                let { user, token } = data;
-
-                uni.setStorageSync("BLOG_TOKEN", token);
-                await this.$store.commit("SETUSER", user);
-
-                uni.switchTab({
-                    url: "../myhome/myhome"
-                });
-            } catch (error) {
-                throw new Error(error);
-            }
+            this.$store.dispatch("signIn", body);
         },
         // #ifdef MP-WEIXIN
         loginMp() {

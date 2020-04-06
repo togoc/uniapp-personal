@@ -10,6 +10,7 @@
             :header="true"
             :quickLoginOptions="quickLoginOptions"
             @userMethod="userMethod"
+            @changeAvatar="changeAvatar"
             :user="user"
             :favoriteIfo="favoriteIfo"
         >
@@ -74,6 +75,9 @@ export default {
         };
     },
     methods: {
+        changeAvatar() {
+            this.$store.dispatch("changeAvatar");
+        },
         handleAddFriend() {
             uni.showToast({
                 title: "暂不支持",

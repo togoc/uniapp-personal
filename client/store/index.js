@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import http from '../utils/http'
+import upload from '../utils/upload'
 import { showToast } from '../utils/prompt'
 Vue.use(Vuex)
 
@@ -9,10 +10,7 @@ const types = {
   LOGOUT: "LOGOUT",
   SETMYBLOGS: "SETMYBLOGS",
   SETBLOGS: "SETBLOGS",
-  REFRESHBLOGS: "REFRESHBLOGS",
-  REFRESHMYBLOGS: "REFRESHMYBLOGS",
   TOGGLELIKES: "TOGGLELIKES"
-
 }
 
 
@@ -28,17 +26,27 @@ export default new Vuex.Store({
   },
   actions: {
 
-    async autoLogin({ commit }) {
+    async getUser({ state }, id) {
 
-      let data = await http("/user-service/user");
-      commit("SETUSER", data);
+      if (id) {
+
+        let url = "/user-service/user?id=" + id
+        return await http(url, "GET");
+
+      } else {
+        state.user = await http("/user-service/user");
+      }
+
     },
 
-    async getMyBlog({ commit, state }) {
-      let blogs = await http(
-        "/blog-service/get-my-blog?page=" + state.myBlogs.length,
-        "GET"
-      );
+    async getMyBlog({ commit, state }, type) {
+
+      if (type === 'REFRESHMYBLOGS') {
+        state.myBlogs = []
+      }
+
+      let url = "/blog-service/get-my-blog?page=" + state.myBlogs.length
+      let blogs = await http(url, "GET");
 
       blogs.length < 1
         ?
@@ -48,11 +56,14 @@ export default new Vuex.Store({
 
     },
 
-    async getIndexBlog({ commit, state }) {
-      let blogs = await http(
-        "/blog-service/get-index-blog?page=" + state.indexBlogs.length,
-        "GET"
-      );
+    async getIndexBlog({ commit, state }, type) {
+
+      if (type === "REFRESHBLOGS") {
+        state.indexBlogs = []
+      }
+
+      let url = "/blog-service/get-index-blog?page=" + state.indexBlogs.length
+      let blogs = await http(url, "GET");
 
       blogs.length < 1
         ?
@@ -61,7 +72,86 @@ export default new Vuex.Store({
         commit("SETBLOGS", blogs);
     },
 
+    async getItemBlogByID({ state }, id) {
+      let url = "/blog-service/get-index-blog?id=" + id
+      return await http(url, "GET");
+    },
 
+    async signIn({ state }, body) {
+      try {
+
+        let data = await http("/user-service/login", "POST", body);
+
+        let { user, token } = data;
+
+        uni.setStorageSync("BLOG_TOKEN", token);
+
+        state.user = user
+
+        uni.switchTab({
+          url: "../myhome/myhome"
+        });
+
+      } catch (error) {
+        showToast('登录错误:' + error.toString())
+      }
+    },
+
+    async signUp({ state }, body) {
+      try {
+
+        let data = await http("/user-service/create-user", "POST", body);
+
+        let { user, token } = data;
+
+        uni.setStorageSync("BLOG_TOKEN", token);
+
+        state.user = user
+
+        uni.switchTab({
+          url: "../myhome/myhome"
+        });
+      } catch (error) {
+        showToast('注册错误:' + error.toString())
+      }
+    },
+
+    async changeAvatar({ state }) {
+      try {
+        uni.chooseImage({
+          count: 1,
+          success: res => {
+            res.tempFilePaths.map(async path => {
+              let data = await upload(path, "avatar");
+              state.user.avatar = data.src;
+            });
+          },
+          fail: e => {
+            throw new Error(e)
+          }
+        });
+      } catch (error) {
+        showToast(error.toString())
+      }
+    },
+
+    async addBlog({ state }, body) {
+
+      await http("/blog-service/add-blog", "POST", body);
+
+      uni.switchTab({
+        url: "../myblog/myblog"
+      });
+
+    },
+
+    async uploadImg({ state }, path) {
+      try {
+        return await upload(path, "blogIMG");
+      } catch (error) {
+        showToast(error.toString())
+      }
+    }
   },
   mutations: {
     [types.SETUSER](state, body) {
@@ -96,14 +186,6 @@ export default new Vuex.Store({
       state.indexBlogs = state.indexBlogs.concat(blogs)
     },
 
-    [types.REFRESHBLOGS](state) {
-      state.indexBlogs = []
-    },
-
-    [types.REFRESHMYBLOGS](state) {
-      state.myBlogs = []
-    },
-
     [types.TOGGLELIKES](state, blogID) {
       let userID = state.user._id
       state.indexBlogs.forEach(v => {
@@ -120,5 +202,6 @@ export default new Vuex.Store({
     }
   },
   modules: {
+
   }
 })

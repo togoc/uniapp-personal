@@ -94,8 +94,8 @@ class FileService {
             let readeStream = bucket.openDownloadStream(ObjectID(id))
 
             if (!(w && h)) {
-                w = 100
-                h = 100
+                w = 300
+                h = 300
             }
 
             const imageResize = sharp().resize(Number(w), Number(h)).on("error", (e) => {

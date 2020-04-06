@@ -263,7 +263,7 @@
             v-show="!showPreview"
             id="editor"
             class="ql-container"
-            placeholder="开始输入..."
+            placeholder="输入内容..."
             showImgSize
             showImgToolbar
             showImgResize

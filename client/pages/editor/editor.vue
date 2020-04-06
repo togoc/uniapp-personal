@@ -21,7 +21,7 @@ export default {
     },
     data() {
         return {
-            html: "测试",
+            html: "",
             doType: "",
             tags: []
         };
@@ -47,24 +47,19 @@ export default {
         hideEditor(e) {
             console.log(1);
         },
-        saveEditor(context) {
-            this.doType === "add" && this.addBlog(context);
+        async saveEditor(context) {
+            let body = { context, tags: this.tags };
+            this.doType === "add" &&
+                (await this.$store.dispatch("addBlog", body));
+
             this.doType === "edit" && this.editBlog(context);
-        },
-        async addBlog(context) {
-            delete context.errMsg;
-            let data = { context, tags: this.tags };
-            let res = await this.$http("/blog-service/add-blog", "POST", data);
-            uni.switchTab({
-                url: "../myblog/myblog"
-            });
         },
         async editBlog(context) {
             console.log(context);
         },
         async uploadImg(path, fn) {
-            let token = uni.getStorageSync("BLOG_TOKEN");
-            let data = await this.$upload(path, "blogIMG");
+            let data = await this.$store.dispatch("uploadImg", path);
+
             let { _id, src } = data;
             let tag = { _id, src };
 

@@ -88,15 +88,7 @@ export default {
             this.$emit("userMethod");
         },
         changeAvatar() {
-            uni.chooseImage({
-                count: 1,
-                success: res => {
-                    res.tempFilePaths.map(async path => {
-                        let data = await this.$upload(path, "avatar");
-                        this.user.avatar = data.src;
-                    });
-                }
-            });
+            this.$emit("changeAvatar");
         }
     }
 };

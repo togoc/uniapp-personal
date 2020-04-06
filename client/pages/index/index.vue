@@ -1,5 +1,5 @@
 <template>
-    <view class="content" >
+    <view class="content">
         <listItem
             v-for="(item, index) in indexBlogs"
             :item="item"
@@ -10,7 +10,7 @@
 
 <script>
 import listItem from "../../components/index-list-item/index-list-item";
-import { mapState, mapActions } from "vuex";
+import { mapState } from "vuex";
 export default {
     components: {
         listItem
@@ -25,16 +25,11 @@ export default {
         ...mapState(["indexBlogs"])
     },
     onReady() {
-        this.getIndexBlog();
+        this.$store.dispatch("getIndexBlog");
     },
     async onPullDownRefresh() {
-        try {
-            this.lastPage = false;
-            this.$store.commit("REFRESHBLOGS");
-            await this.getIndexBlog();
-        } catch (error) {
-            this.$showToast("用户信息无效");
-        }
+        this.lastPage = false;
+        await this.$store.dispatch("getIndexBlog");
         uni.stopPullDownRefresh();
     },
     onNavigationBarSearchInputClicked() {
@@ -43,11 +38,8 @@ export default {
             animationType: "fade-in"
         });
     },
-    methods: {
-        ...mapActions(["getIndexBlog"])
-    },
     onReachBottom() {
-        this.getIndexBlog();
+        this.$store.dispatch("getIndexBlog");
     }
 };
 </script>

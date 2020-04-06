@@ -35,29 +35,22 @@ export default {
                     url: "../editor/editor?type=add"
                 });
             } else {
-                uni.showToast({
-                    title: "请先登录!",
-                    duration: 2000,
-                    icon: "none"
-                });
+                this.showToast("请先登录!");
             }
         }
     },
     onReady() {
-        this.getMyBlog();
+        this.$store.dispatch("getMyBlog");
     },
     async onPullDownRefresh() {
-        try {
-            this.lastPage = false;
-            this.$store.commit("REFRESHMYBLOGS");
-            await this.getMyBlog();
-        } catch (error) {
-            this.$showToast("用户信息无效");
-        }
+        this.lastPage = false;
+
+        await this.$store.dispatch("getMyBlog", "REFRESHMYBLOGS");
+
         uni.stopPullDownRefresh();
     },
     onReachBottom() {
-        this.getMyBlog();
+        this.$store.dispatch("getMyBlog");
     }
 };
 </script>
