@@ -7,6 +7,6 @@ const fileController = new FileController()
 
 
 router.post('/upload', auth, fileController.upLoad);
-router.get('/img/*', fileController.img);
+router.get('/img/:id', fileController.img);
 
 module.exports = router;

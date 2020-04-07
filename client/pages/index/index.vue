@@ -1,6 +1,7 @@
 <template>
     <view class="content">
-        <listItem
+        <index-list-item
+            @handleClickItem="handleClickItem"
             v-for="(item, index) in indexBlogs"
             :item="item"
             :key="index"
@@ -9,12 +10,8 @@
 </template>
 
 <script>
-import listItem from "../../components/index-list-item/index-list-item";
 import { mapState } from "vuex";
 export default {
-    components: {
-        listItem
-    },
     data() {
         return {
             title: "Hello",
@@ -40,6 +37,24 @@ export default {
     },
     onReachBottom() {
         this.$store.dispatch("getIndexBlog");
+    },
+    methods: {
+        async handleClickItem(e) {
+            let { type, id } = e.target.dataset;
+            if (type === undefined && id) {
+                uni.navigateTo({
+                    url: "../blog/blog?blogID=" + id
+                });
+            } else if (type) {
+                switch (type) {
+                    case "like":
+                        let data = await this.$store.dispatch("toggleLike", id);
+                    default:
+                        break;
+                }
+                console.log(type);
+            }
+        }
     }
 };
 </script>

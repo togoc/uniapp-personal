@@ -54,7 +54,6 @@ class BlogController {
         }
     }
 
-
     async getThumbnails(req, res) {
         try {
             console.log(req.params)
@@ -97,6 +96,21 @@ class BlogController {
         } catch (error) {
             res.status(500).send('点赞失败' + error.toString());
         }
+    }
+
+    async addComment(req, res) {
+        try {
+            let { name: username, _id: userid } = req.user
+            let { context, blogID } = req.body
+
+            let comment = await blogService.addComment({ context, username, userid }, blogID)
+
+            res.status(200).send(comment);
+
+        } catch (error) {
+            res.status(500).send('留言失败' + error.toString());
+        }
+
     }
 }
 

@@ -13,10 +13,11 @@ const types = {
   TOGGLELIKES: "TOGGLELIKES"
 }
 
-
+console.log(process.env)
 export default new Vuex.Store({
   state: {
     name: 'togoc',
+    baseAvatarURL: process.env.baseAvatarURL || 'http://192.168.3.3:3000/blog/file-service/img/',
     user: {},
     myBlogs: [],
     indexBlogs: []
@@ -151,6 +152,20 @@ export default new Vuex.Store({
       } catch (error) {
         showToast(error.toString())
       }
+    },
+    /**
+     *
+     * @param {Object} body  { context , blogID }
+     */
+    async addComment({ state }, body) {
+      let url = "/blog-service/add-comment"
+      return await http(url, "POST", body)
+    },
+
+    async toggleLike({ commit }, blogID) {
+      let url = "/blog-service/toggle-likes?id=" + blogID
+      await http(url, "GET");
+      commit("TOGGLELIKES", blogID)
     }
   },
   mutations: {
@@ -165,7 +180,6 @@ export default new Vuex.Store({
         uni.removeStorageSync('BLOG_TOKEN');
         state.user = {}
         state.myBlogs = []
-        state.indexBlogs = []
 
 
       } catch (error) {

@@ -15,7 +15,7 @@ baseUrl = 'http://192.168.3.3:3000/blog'
  * @param {String} method 
  * @param {Object} data 
  */
-export default async function (url, method = 'GET', data) {
+export default async function (url, method = 'GET', data = {}) {
     start()
 
     return new Promise((resolve, reject) => {

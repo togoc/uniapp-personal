@@ -1,5 +1,6 @@
 
 const Blog = require('../models/blog')
+const ObjectID = require('mongodb').ObjectID
 const removeFile = require('../db/utils/removeFile')
 class BlogService {
     async addBlog(body, user) {
@@ -47,6 +48,12 @@ class BlogService {
 
     }
 
+    async addComment(context, id) {
+        let blog = await Blog.findOne(ObjectID(id))
+
+        return await blog.addComment(context)
+
+    }
 }
 
 

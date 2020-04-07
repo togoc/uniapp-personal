@@ -124,6 +124,16 @@ blogSchema.methods.toggleLikes = async function (userID) {
 
 }
 
+blogSchema.methods.addComment = async function (comment) {
+
+    let comments = this.comments
+
+    this.comments = [...comments, comment]
+
+    return await this.save()
+
+}
+
 
 
 blogSchema.index({ title: "text", text: "text" })

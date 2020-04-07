@@ -83,6 +83,7 @@
     }, {
         "path": "pages/blog/blog",
         "style": {
+            "enablePullDownRefresh": true,
             "navigationBarTitleText": ""
         }
     }],

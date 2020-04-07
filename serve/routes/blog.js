@@ -9,5 +9,6 @@ router.get('/get-my-blog', auth, blogController.getMyBlog);
 router.get('/get-index-blog', blogController.getIndexBlog);
 router.get('/search', blogController.search);
 router.get('/toggle-likes', auth, blogController.toggleLikes);
+router.post('/add-comment', auth, blogController.addComment);
 
 module.exports = router;

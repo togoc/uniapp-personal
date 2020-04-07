@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt')
 const crypto = require('crypto')
 const jwt = require('jsonwebtoken')
 const env = require('../enviroment/env')
+const ObjectID = require('mongodb').ObjectID
 
 const userSchema = mongoose.Schema({
 
@@ -87,6 +88,14 @@ userSchema.statics.findUser = async (password, email) => {
 
 }
 
+
+userSchema.statics.getAvatar = async function (userID) {
+
+    const user = await User.findOne(ObjectID(userID))
+
+    return user.avatar.split('/').pop()
+}
+
 userSchema.methods.createToken = async function () {
     const iv = crypto.randomBytes(16);
     const user = this;
@@ -100,6 +109,8 @@ userSchema.methods.createToken = async function () {
 
     return token
 }
+
+
 
 
 const User = mongoose.model("users", userSchema);

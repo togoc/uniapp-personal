@@ -1,4 +1,4 @@
-
+const User = require('../models/user')
 const FileService = require('../services/file')
 
 const fileService = new FileService()
@@ -23,10 +23,15 @@ class FileController {
 
     async img(req, res) {
         try {
-            let { w, h } = req.query
-            let id = req.params['0']
+            let { w, h, byuserid } = req.query;
 
-            await fileService.img(w, h, id, res)
+            let fileID = req.params.id;
+
+            byuserid && (fileID = await User.getAvatar(fileID));
+
+
+            await fileService.img(w, h, fileID, res);
+
 
         } catch (error) {
             res.status(500).send('图片获取错误' + error.toString());
@@ -35,5 +40,6 @@ class FileController {
 
 }
 
+console.log(process.env.DEV_HOST)
 
 module.exports = FileController

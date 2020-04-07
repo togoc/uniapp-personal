@@ -1,34 +1,42 @@
 <template>
-    <view class="blog">
-        <view class="head">
-            <view class="title"> {{ blog.title }}</view>
-            <view class="date">{{ blog.updatedAt | date1 }}</view>
-            <view class="user">
-                <view class="header-img"
-                    ><image :src="headIMGSrc" alt="头像"
-                /></view>
-                <view class="user-name">
-                    <text>{{ auth.name || blog.username }}</text>
-                    <text>{{ auth.name || blog.name }}</text>
-                </view>
-                <view class="focus">
-                    <text>私信</text>
-                    <text>关注</text>
+    <view class="blog-outer">
+        <scroll-view
+            scroll-y="true"
+            scroll-with-animation
+            :class="['blog', { isoninput: onInput }]"
+            :scroll-into-view="viewTarget"
+            @scroll="onScroll"
+        >
+            <view id="head" class="head">
+                <view class="title"> {{ blog.title }}</view>
+                <view class="date">{{ blog.updatedAt | date1 }}</view>
+                <view class="user">
+                    <view class="header-img"
+                        ><image :src="headIMGSrc" alt="头像"
+                    /></view>
+                    <view class="user-name">
+                        <text>{{ blog.username || "" }}</text>
+                        <text>{{ blog.username || "" }}</text>
+                    </view>
+                    <view class="focus">
+                        <text>私信</text>
+                        <text>关注</text>
+                    </view>
                 </view>
             </view>
-        </view>
-        <view class="preview">
-            <rich-text :nodes="htmlData" class="previewNodes"></rich-text>
-            <p>1</p>
-            <p>1</p>
-            <p>1</p>
-            <p>1</p>
-            <p>1</p>
-            <p>1</p>
-            <p>1</p>
-            <p>1</p>
-        </view>
-        <view :class="['foot', { 'on-input': onInput }]">
+            <view id="preview" class="preview">
+                <rich-text :nodes="htmlData" class="previewNodes"></rich-text>
+            </view>
+            <view id="comment" class="comment-container">
+                <comment-item
+                    v-for="(item, index) in comments"
+                    :commentItme="item"
+                    :key="index"
+                />
+            </view>
+            <view id="end"></view>
+        </scroll-view>
+        <view id="foot" :class="['foot', { 'on-input': onInput }]">
             <view :class="['input']">
                 <textarea
                     fixed
@@ -57,11 +65,11 @@
             </template>
             <template v-else>
                 <view class="handle">
-                    <view class="comments">
+                    <view class="comments" @tap.stop="linkToComments">
                         <text>评论</text>
                         <text>{{ commentsLength }}</text>
                     </view>
-                    <view class="like">
+                    <view class="like" @tap.stop="toggleLike">
                         <text class="iconfont icon-zannor">{{ likeNum }}</text>
                     </view>
                 </view>
@@ -74,14 +82,18 @@
 export default {
     data() {
         return {
-            blog: {},
-            auth: {},
+            blogID: "",
+            blog: {
+                likes: []
+            },
             commentValue: "",
-            onInput: false
+            onInput: false,
+            viewTarget: "head",
         };
     },
     onLoad(options) {
         let blogID = options.blogID;
+        this.blogID = blogID;
         this.getBlog(blogID);
     },
     computed: {
@@ -91,26 +103,57 @@ export default {
         commentsLength() {
             return this.blog.comments ? this.blog.comments.length : 0;
         },
+        comments() {
+            return this.blog.comments || [];
+        },
         likeNum() {
             return this.blog.likes ? this.blog.likes.length : 0;
         },
         headIMGSrc() {
-            return this.auth.avatar
-                ? this.auth.avatar + "?w=50&h=50"
-                : "../../static/default.png";
+            let url =
+                this.$store.state.baseAvatarURL +
+                this.blog.userid +
+                "?byuserid=1&w=50&h=50";
+            return this.blog.userid ? url : "../../static/default.png";
         }
     },
+    async onPullDownRefresh() {
+        await this.getBlog(this.blogID);
+        uni.stopPullDownRefresh();
+    },
     methods: {
+        onScroll(e) {
+            this.viewTarget = "";
+            console.log(e);
+        },
         async getBlog(id) {
             let data = await this.$store.dispatch("getItemBlogByID", id);
 
             this.blog = data;
-
-            this.auth = await this.$store.dispatch("getUser", data.userid);
         },
         async handleAddComment() {
-            console.log(1);
-            console.log(this.commentValue);
+            if (this.commentValue === "") {
+                return;
+            }
+            let body = { context: this.commentValue, blogID: this.blog._id };
+            this.blog = await this.$store.dispatch("addComment", body);
+            this.onInput = false;
+            this.commentValue = "";
+            this.viewTarget = "end";
+        },
+        async toggleLike() {
+            await this.$store.dispatch("toggleLike", this.blog._id);
+            let likes = this.blog.likes;
+            let userID = this.$store.state.user._id;
+            //更新视图
+            if (this.blog.likes.includes(userID)) {
+                this.blog.likes.splice(this.blog.likes.indexOf(userID), 1);
+            } else {
+                this.blog.likes.push(userID);
+            }
+        },
+        linkToComments() {
+            this.viewTarget = "comment";
         },
         handleBlur() {
             if (this.commentValue === "") {
@@ -129,89 +172,105 @@ export default {
 </script>
 
 <style lang="scss" scope>
-.blog {
-    width: 750rpx;
-    user-select: text;
-    padding-bottom: 2.5rem;
-    box-sizing: border-box;
-    .head {
-        width: 750rpx;
-        padding: 1rem;
-        box-sizing: border-box;
-        border-bottom: 2px solid #fbfbfc;
-
-        .title {
-            width: 100%;
-            font-weight: bold;
-            font-size: 1.125rem;
-        }
-
-        .date {
-            padding: 0.5rem 0;
-            font-size: 0.76rem;
-            line-height: 2rem;
-            padding: 0;
-            margin: 0;
-        }
-
-        .user {
-            display: flex;
-            flex-direction: row;
-            box-sizing: border-box;
-            align-items: center;
-            height: 2.91rem;
-            .header-img {
-                image {
-                    width: calc(2.91rem / 2);
-                    height: calc(2.91rem / 2);
-                    border-radius: 50%;
-                }
-            }
-
-            .user-name {
-                width: 100%;
-                display: flex;
-                max-width: 7.65rem;
-                box-sizing: border-box;
-                flex-direction: column;
-                padding-left: 0.5rem;
-                text {
-                    width: 100%;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    white-space: nowrap;
-                    font-size: 0.875rem;
-                }
-            }
-
-            .focus {
-                width: 100%;
-                text-align: center;
-                padding: 0.125rem 1rem;
-                display: flex;
-                white-space: nowrap;
-                flex-direction: row;
-                justify-content: space-around;
-                & > text {
-                    width: 3rem;
-                    border: 2px solid #cfcfcf;
-                    border-radius: 3px;
-                }
-            }
-        }
+.blog-outer {
+    height: 100%;
+    width: 100%;
+    .isoninput {
+        padding-bottom: 4.5rem !important;
     }
-    .preview {
+    .blog {
+        background-color: $uni-bg-color-grey;
+        height: 100%;
+        width: 100%;
+        user-select: text;
+        padding-bottom: 2.5rem;
         box-sizing: border-box;
-        padding: 1rem;
-        word-wrap: break-word;
-        letter-spacing: 1px;
-        font-size: 16px;
+
+        .head {
+            width: 750rpx;
+            padding: 1rem;
+            box-sizing: border-box;
+            background-color: #fff;
+            border-bottom: 2px solid #fbfbfc;
+
+            .title {
+                width: 100%;
+                font-weight: bold;
+                font-size: 1.125rem;
+            }
+
+            .date {
+                padding: 0.5rem 0;
+                font-size: 0.76rem;
+                line-height: 2rem;
+                padding: 0;
+                margin: 0;
+            }
+
+            .user {
+                display: flex;
+                flex-direction: row;
+                box-sizing: border-box;
+                align-items: center;
+                height: 2.91rem;
+                .header-img {
+                    image {
+                        width: calc(2.91rem / 2);
+                        height: calc(2.91rem / 2);
+                        border-radius: 50%;
+                    }
+                }
+
+                .user-name {
+                    width: 100%;
+                    display: flex;
+                    max-width: 7.65rem;
+                    box-sizing: border-box;
+                    flex-direction: column;
+                    padding-left: 0.5rem;
+                    text {
+                        width: 100%;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        font-size: 0.875rem;
+                    }
+                }
+
+                .focus {
+                    width: 100%;
+                    text-align: center;
+                    padding: 0.125rem 1rem;
+                    display: flex;
+                    white-space: nowrap;
+                    flex-direction: row;
+                    justify-content: space-around;
+                    & > text {
+                        width: 3rem;
+                        border: 2px solid #cfcfcf;
+                        border-radius: 3px;
+                    }
+                }
+            }
+        }
+        .preview {
+            box-sizing: border-box;
+            padding: 1rem;
+            word-wrap: break-word;
+            letter-spacing: 1px;
+            font-size: 16px;
+            // background-color: $uni-bg-color-grey;
+        }
+        .comment-container {
+            padding: 1rem;
+            // background-color: $uni-bg-color-grey;
+            box-sizing: border-box;
+        }
     }
     .on-input {
         height: 4.5rem !important;
         width: 100% !important;
     }
-
     .foot {
         width: 100%;
         position: fixed;
@@ -228,7 +287,7 @@ export default {
         & > button {
             width: 5rem;
             max-height: 2rem;
-            background-color: green;
+            background-color: $uni-color-error;
             line-height: 2rem;
             text-align: center;
             margin: 0.25rem;

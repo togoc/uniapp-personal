@@ -5,10 +5,15 @@
             item.text.replace(/\s/g, "")
         }}</view>
         <view class="nav">
-            <text data-type="user">{{ item.username }}</text>
-            <text data-type="like" class="last2 iconfont icon-zan">{{
-                item.likes ? item.likes.length : 0
+            <text :data-id="item._id" data-type="user">{{
+                item.username
             }}</text>
+            <text
+                :data-id="item._id"
+                data-type="like"
+                class="last2 iconfont icon-zan"
+                >{{ item.likes ? item.likes.length : 0 }}</text
+            >
             <text data-type="commont" class="last2 iconfont icon-pinglun">{{
                 item.comments ? item.comments.length : 0
             }}</text>
@@ -28,30 +33,8 @@ export default {
         return {};
     },
     methods: {
-        async handleClickItem(e) {
-            let { type, id } = e.target.dataset;
-            if (type === undefined && id) {
-
-                uni.navigateTo({
-                    url: "../blog/blog?blogID=" + id
-                });
-                
-            } else if (type) {
-                switch (type) {
-                    case "like":
-                        let id = this.item._id;
-                        let data = await this.$http(
-                            "/blog-service/toggle-likes?id=" + id,
-                            "GET"
-                        );
-
-                        return this.$store.commit("TOGGLELIKES", id);
-
-                    default:
-                        break;
-                }
-                console.log(type);
-            }
+        handleClickItem(e) {
+            this.$emit("handleClickItem", e);
         }
     }
 };
