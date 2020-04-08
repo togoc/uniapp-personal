@@ -17,5 +17,6 @@ page {
     font-family: Tahoma, "Microsoft Yahei", "Simsun";
     width: 100%;
     height: 100%;
+    color: $uni-text-color;
 }
 </style>

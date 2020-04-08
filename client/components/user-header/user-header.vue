@@ -99,7 +99,7 @@ export default {
     width: 750rpx;
     height: 100%;
     flex-direction: column;
-    background-color: #e9e9eb;
+    background-color: $uni-bg-color-grey-more;
     display: flex;
     margin-bottom: 0.5rem;
 
@@ -115,12 +115,12 @@ export default {
         }
     }
     view.content {
-        background-color: #fff;
+        background-color: $uni-bg-color;
         width: calc(750rpx - 2rem);
         height: 75%;
         box-sizing: border-box;
         display: flex;
-        border-radius: 6px;
+        border-radius: $uni-border-radius-base;
         align-items: center;
         margin: 0 1rem;
         transform: translateY(0.5rem);
@@ -159,8 +159,10 @@ export default {
             width: 100%;
             height: 100%;
             padding: 1rem;
+            background-color: $uni-bg-color-grey;
             box-sizing: border-box;
             display: flex;
+            border-radius: $uni-border-radius-base;
             flex-direction: column;
             justify-content: space-between;
             .user-name-img {

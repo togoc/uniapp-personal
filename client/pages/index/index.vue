@@ -1,12 +1,12 @@
 <template>
-    <view class="content">
+    <scroll-view :scroll-y="true" class="content">
         <index-list-item
             @handleClickItem="handleClickItem"
             v-for="(item, index) in indexBlogs"
             :item="item"
             :key="index"
         />
-    </view>
+    </scroll-view>
 </template>
 
 <script>
@@ -60,15 +60,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// 750/x= 360/15
+page {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    padding-top: 44px;
+}
 .content {
     width: 750rpx;
     /* #ifndef MP-WEIXIN */
-    padding-top: 44px;
     margin-top: var(--status-bar-height);
     /* #endif */
     display: flex;
+    padding: 0 $uni-spacing-col-base;
+    box-sizing: border-box;
+    background-color: $uni-bg-color;
     flex-direction: column;
+    height: 100%;
     align-items: center;
     justify-content: center;
 }

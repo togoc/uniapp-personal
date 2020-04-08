@@ -33,13 +33,13 @@ export default {
 
 <style lang="scss" scope>
 .comment-item {
-    border-radius: 0.5rem;
+    border-radius: $uni-border-radius-base;
     padding: 0.75rem 0;
     display: flex;
     flex-direction: row;
-    background-color: #fff;
+    background-color: $uni-bg-color-grey;
     box-sizing: border-box;
-    margin: 0.25rem 0;
+    margin: $uni-spacing-row-sm 0;
     .img-container {
         width: 12.5%;
         image {
@@ -60,11 +60,13 @@ export default {
 
         .context {
             margin-bottom: 0.25rem;
+            font-size: 0.853rem;
         }
 
         .data {
             height: 1rem;
-            font-size: 0.76rem;
+            font-size: 0.75rem;
+            color: $uni-text-color-grey;
         }
     }
 }

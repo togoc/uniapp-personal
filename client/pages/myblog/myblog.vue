@@ -1,22 +1,22 @@
 <template>
-    <view class="my-blog">
+    <scroll-view class="my-blog" scroll-y>
         <view class="btn-container">
             <button class="btn" @click.stop="handleBtn">
                 <text class="iconfont icon-bianji" />
                 写博客
             </button>
         </view>
-        <listItem v-for="(item, index) in myBlogs" :key="index" :item="item" />
-    </view>
+        <index-list-item
+            v-for="(item, index) in myBlogs"
+            :key="index"
+            :item="item"
+        />
+    </scroll-view>
 </template>
 
 <script>
-import listItem from "../../components/index-list-item/index-list-item";
 import { mapGetters, mapState, mapActions } from "vuex";
 export default {
-    components: {
-        listItem
-    },
     data() {
         return {
             pageIndex: 0,
@@ -56,8 +56,15 @@ export default {
 </script>
 
 <style lang="scss" scope>
-view.my-blog {
-    width: 750rpx;
+page {
+    width: 100%;
+    height: 100%;
+}
+.my-blog {
+    padding: 0 $uni-spacing-col-base;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
     .btn-container {
         width: 100%;
         height: 56px;
@@ -68,7 +75,7 @@ view.my-blog {
             height: 100%;
             line-height: 38px;
             white-space: nowrap;
-            background-color: #f8f8f8;
+            background-color: $uni-bg-color-grey;
             font-size: 16px;
             border: none;
             &::after {

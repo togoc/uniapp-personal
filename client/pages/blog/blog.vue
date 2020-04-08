@@ -88,7 +88,7 @@ export default {
             },
             commentValue: "",
             onInput: false,
-            viewTarget: "head",
+            viewTarget: "head"
         };
     },
     onLoad(options) {
@@ -124,7 +124,6 @@ export default {
     methods: {
         onScroll(e) {
             this.viewTarget = "";
-            console.log(e);
         },
         async getBlog(id) {
             let data = await this.$store.dispatch("getItemBlogByID", id);
@@ -179,7 +178,7 @@ export default {
         padding-bottom: 4.5rem !important;
     }
     .blog {
-        background-color: $uni-bg-color-grey;
+        background-color: $uni-bg-color;
         height: 100%;
         width: 100%;
         user-select: text;
@@ -187,10 +186,10 @@ export default {
         box-sizing: border-box;
 
         .head {
-            width: 750rpx;
-            padding: 1rem;
+            padding: $uni-spacing-col-base;
+            width: 100%;
             box-sizing: border-box;
-            background-color: #fff;
+            background-color: $uni-bg-color-grey;
             border-bottom: 2px solid #fbfbfc;
 
             .title {
@@ -201,10 +200,11 @@ export default {
 
             .date {
                 padding: 0.5rem 0;
-                font-size: 0.76rem;
+                font-size: 0.75rem;
                 line-height: 2rem;
                 padding: 0;
                 margin: 0;
+                color: $uni-text-color-grey;
             }
 
             .user {
@@ -212,8 +212,12 @@ export default {
                 flex-direction: row;
                 box-sizing: border-box;
                 align-items: center;
+                background-color: $uni-bg-color-grey-more;
+                border-radius: $uni-border-radius-base;
+                width: 100%;
                 height: 2.91rem;
                 .header-img {
+                    width: 12.5%;
                     image {
                         width: calc(2.91rem / 2);
                         height: calc(2.91rem / 2);
@@ -222,48 +226,59 @@ export default {
                 }
 
                 .user-name {
-                    width: 100%;
+                    width: 7.65rem;
                     display: flex;
                     max-width: 7.65rem;
                     box-sizing: border-box;
                     flex-direction: column;
-                    padding-left: 0.5rem;
-                    text {
+                    & > text {
                         width: 100%;
                         overflow: hidden;
                         text-overflow: ellipsis;
                         white-space: nowrap;
                         font-size: 0.875rem;
+                        &:first-of-type {
+                            font-size: 1rem;
+                        }
                     }
                 }
 
                 .focus {
-                    width: 100%;
+                    width: 7rem;
+                    position: absolute;
                     text-align: center;
-                    padding: 0.125rem 1rem;
+                    right: $uni-spacing-col-base;
+                    padding: 0.125rem $uni-spacing-col-base;
                     display: flex;
                     white-space: nowrap;
                     flex-direction: row;
                     justify-content: space-around;
                     & > text {
                         width: 3rem;
-                        border: 2px solid #cfcfcf;
-                        border-radius: 3px;
+                        color: #000000;
+                        padding: 0.125rem;
+                        font-weight: bold;
+                        font-size: 0.85rem;
+                        border-radius: $uni-border-radius-sm;
+                        border: 1px solid $uni-border-color;
+                        background-color: $uni-bg-color;
+                        &:last-of-type {
+                            color: red;
+                        }
                     }
                 }
             }
         }
         .preview {
             box-sizing: border-box;
-            padding: 1rem;
+            padding: $uni-spacing-col-lg;
             word-wrap: break-word;
             letter-spacing: 1px;
-            font-size: 16px;
-            // background-color: $uni-bg-color-grey;
+            background-color: $uni-bg-color-grey-more;
+            font-size: 0.85rem;
         }
         .comment-container {
-            padding: 1rem;
-            // background-color: $uni-bg-color-grey;
+            padding: 0 $uni-spacing-col-base;
             box-sizing: border-box;
         }
     }

@@ -40,6 +40,5 @@ class FileController {
 
 }
 
-console.log(process.env.DEV_HOST)
 
 module.exports = FileController

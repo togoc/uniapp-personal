@@ -30,6 +30,7 @@ $uni-text-color-disable:#c0c0c0;
 /* 背景颜色 */
 $uni-bg-color:#ffffff;
 $uni-bg-color-grey:#f8f8f8;
+$uni-bg-color-grey-more:#e7e7e7;
 $uni-bg-color-hover:#f1f1f1;//点击状态颜色
 $uni-bg-color-mask:rgba(0, 0, 0, 0.4);//遮罩颜色
 
@@ -49,9 +50,9 @@ $uni-img-size-base:52rpx;
 $uni-img-size-lg:80rpx;
 
 /* Border Radius */
-$uni-border-radius-sm: 4rpx;
-$uni-border-radius-base: 6rpx;
-$uni-border-radius-lg: 12rpx;
+$uni-border-radius-sm: 8rpx;
+$uni-border-radius-base: 12rpx;
+$uni-border-radius-lg: 16rpx;
 $uni-border-radius-circle: 50%;
 
 /* 水平间距 */
@@ -61,8 +62,8 @@ $uni-spacing-row-lg: 30rpx;
 
 /* 垂直间距 */
 $uni-spacing-col-sm: 8rpx;
-$uni-spacing-col-base: 16rpx;
-$uni-spacing-col-lg: 24rpx;
+$uni-spacing-col-base: 16rpx; //默认屏幕左右间距
+$uni-spacing-col-lg: 24rpx;// 默认blog 展示内容左右间距
 
 /* 透明度 */
 $uni-opacity-disabled: 0.3; // 组件禁用态的透明度

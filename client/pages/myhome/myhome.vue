@@ -5,7 +5,7 @@
             <!-- 这里是状态栏 -->
         </view>
         <!--  #endif  -->
-        <userHeader
+        <user-header
             class="user-header"
             :header="true"
             :quickLoginOptions="quickLoginOptions"
@@ -24,17 +24,14 @@
                     <text class="iconfont icon-setting"></text>
                 </view>
             </template>
-        </userHeader>
+        </user-header>
+        <p>1</p>
     </view>
 </template>
 
 <script>
-import userHeader from "../../components/user-header/user-header";
 import { mapState, mapGetters } from "vuex";
 export default {
-    components: {
-        userHeader
-    },
     computed: {
         ...mapState(["user"])
     },
@@ -133,8 +130,8 @@ export default {
     }
     /** #endif */
 
-    width: 750rpx;
-    background-color: #fafafc;
+    width: 100%;
+    background-color: $uni-bg-color;
     .user-header {
         width: 750rpx;
         height: 10rem;
