@@ -285,4 +285,28 @@
 .wrapper .ql-active.data-v-5810d8bf {
     color: #06c;
 }
+.wrapper .title1.data-v-5810d8bf {
+    height: 100%;
+    width: 50%;
+    position: absolute;
+    -webkit-transform: translateX(50%);
+            transform: translateX(50%);
+    text-align: center;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+            justify-content: center;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+            align-items: center;
+}
+.wrapper .title1 .input.data-v-5810d8bf {
+      outline: #666;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      height: 88%;
+      font-size: 1rem;
+}
 

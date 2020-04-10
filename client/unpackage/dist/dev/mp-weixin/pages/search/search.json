@@ -1,4 +1,7 @@
 {
   "navigationStyle": "custom",
-  "usingComponents": {}
+  "usingComponents": {
+    "search-bar": "/components/search-bar/search-bar",
+    "blog-item": "/components/blog-item/blog-item"
+  }
 }

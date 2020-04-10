@@ -8,21 +8,21 @@
     "pages/myblog/myblog",
     "pages/login/login",
     "pages/setting/setting",
-    "pages/blog/blog"
+    "pages/blog/blog",
+    "pages/mydrive/mydrive"
   ],
   "subPackages": [],
   "window": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "博客",
-    "navigationBarBackgroundColor": "#F8F8F8",
+    "navigationBarBackgroundColor": "#f8f8f8",
     "backgroundColor": "#F8F8F8"
   },
   "tabBar": {
     "color": "#515151",
     "selectedColor": "#d81e06",
-    "backgroundColor": "",
+    "backgroundColor": "#FFFFFF",
     "position": "bottom",
-    "borderStyle": "white",
     "list": [
       {
         "pagePath": "pages/index/index",
@@ -50,5 +50,6 @@
       }
     ]
   },
-  "usingComponents": {}
+  "usingComponents": {},
+  "sitemapLocation": "sitemap18.json"
 }

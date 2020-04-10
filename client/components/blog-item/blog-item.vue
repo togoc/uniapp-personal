@@ -44,13 +44,15 @@ export default {
 .blog-item {
     padding: 0.5rem;
     max-height: 8rem;
-    width: 750rpx;
     background-color: $uni-bg-color-grey;
     box-sizing: border-box;
     overflow: hidden;
     border-radius: $uni-border-radius-base;
     width: 100%;
-    margin: $uni-spacing-row-sm 0;
+    margin-top: $uni-spacing-row-sm;
+    &:last-of-type {
+        margin-bottom: $uni-spacing-row-sm;
+    }
     .title {
         height: 1.33rem;
         font-weight: bold;

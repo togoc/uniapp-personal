@@ -1,4 +1,7 @@
 {
+  "enablePullDownRefresh": true,
   "navigationBarTitleText": "",
-  "usingComponents": {}
+  "usingComponents": {
+    "comment-item": "/components/comment-item/comment-item"
+  }
 }

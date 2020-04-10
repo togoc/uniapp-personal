@@ -6,16 +6,7 @@
             "enablePullDownRefresh": true,
             "navigationStyle": "custom",
             "app-plus": {
-                "titleNView": {
-                    "type": "transparent",
-                    "searchInput": {
-                        "backgroundColor": "#f7f7fa",
-                        "borderRadius": "6px",
-                        "placeholder": "搜索帖子/标题/用户",
-                        "disabled": true,
-                        "placeholderColor": "#5e5e5e"
-                    }
-                },
+                "titleNView": false,
                 "pullToRefresh": {
                     "offset": "45px"
                 }
@@ -25,7 +16,7 @@
         "path": "pages/editor/editor",
         "style": {
             "navigationBarTitleText": "写文章",
-            "app-plus":{
+            "app-plus": {
                 "softinputMode": "adjustResize"
             }
         }
@@ -49,16 +40,7 @@
         "style": {
             "navigationStyle": "custom",
             "app-plus": {
-                "titleNView": {
-                    "type": "transparent",
-                    "searchInput": {
-                        "backgroundColor": "#f7f7fa",
-                        "borderRadius": "6px",
-                        "placeholderColor": "#5e5e5e",
-                        "placeholder": "搜索帖子/标题/用户",
-                        "autoFocus": true
-                    }
-                }
+                "titleNView": false
             }
         }
     }, {
@@ -85,6 +67,11 @@
         "style": {
             "enablePullDownRefresh": true,
             "navigationBarTitleText": ""
+        }
+    }, {
+        "path": "pages/mydrive/mydrive",
+        "style": {
+            "navigationBarTitleText": "我的文件"
         }
     }],
     "tabBar": {

@@ -1,9 +1,7 @@
 <template>
     <view class="my-home">
         <!--  #ifdef APP-PLUS  -->
-        <view class="status_bar">
-            <!-- 这里是状态栏 -->
-        </view>
+        <view class="status_bar"><!-- 这里是状态栏 --></view>
         <!--  #endif  -->
         <user-header
             class="user-header"
@@ -15,106 +13,102 @@
             :favoriteIfo="favoriteIfo"
         >
             <template v-slot:left>
-                <view @click.stop="handleAddFriend" class="head-top-item left">
-                    <text class="iconfont icon-AddFriend"></text>
-                </view>
+                <view @click.stop="handleAddFriend" class="head-top-item left"><text class="iconfont icon-AddFriend"></text></view>
             </template>
             <template v-slot:right>
-                <view @click.stop="handleSetting" class="head-top-item right">
-                    <text class="iconfont icon-setting"></text>
-                </view>
+                <view @click.stop="handleSetting" class="head-top-item right"><text class="iconfont icon-setting"></text></view>
             </template>
         </user-header>
-        <p>1</p>
+        <navigator url="../mydrive/mydrive" redirect hover-class="className">我的文件</navigator>
     </view>
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState, mapGetters } from 'vuex';
 export default {
     computed: {
-        ...mapState(["user"])
+        ...mapState(['user'])
     },
     data() {
         return {
             quickLoginOptions: [
                 {
-                    icon: "icon-shouji",
-                    handleClickMethod: "phoneLogin"
+                    icon: 'icon-shouji',
+                    handleClickMethod: 'phoneLogin'
                 },
                 {
-                    icon: "icon-qq",
-                    handleClickMethod: "qqLogin"
+                    icon: 'icon-qq',
+                    handleClickMethod: 'qqLogin'
                 },
                 {
-                    icon: "icon-weixin",
-                    handleClickMethod: "weixinLogin"
+                    icon: 'icon-weixin',
+                    handleClickMethod: 'weixinLogin'
                 }
             ],
             favoriteIfo: [
                 {
                     count: 0,
-                    title: "关注"
+                    title: '关注'
                 },
                 {
                     count: 0,
-                    title: "粉丝"
+                    title: '粉丝'
                 },
                 {
                     count: 0,
-                    title: "访问"
+                    title: '访问'
                 },
                 {
-                    count: "--",
-                    title: "排名"
+                    count: '--',
+                    title: '排名'
                 }
             ]
         };
     },
     methods: {
         changeAvatar() {
-            this.$store.dispatch("changeAvatar");
+            this.$store.dispatch('changeAvatar');
         },
         handleAddFriend() {
             uni.showToast({
-                title: "暂不支持",
-                icon: "none",
+                title: '暂不支持',
+                icon: 'none',
                 duration: 2000
             });
         },
         handleSetting() {
             uni.navigateTo({
-                url: "../setting/setting"
+                url: '../setting/setting'
             });
         },
         qqLogin() {
-            console.log("qqLogin");
+            console.log('qqLogin');
             uni.showToast({
-                title: "暂不支持",
-                icon: "none",
+                title: '暂不支持',
+                icon: 'none',
                 duration: 2000
             });
         },
         weixinLogin() {
-            console.log("weixinLogin");
+            console.log('weixinLogin');
             uni.showToast({
-                title: "暂不支持",
-                icon: "none",
+                title: '暂不支持',
+                icon: 'none',
                 duration: 2000
             });
         },
         phoneLogin() {
-            console.log("phoneLogin");
+            console.log('phoneLogin');
             uni.showToast({
-                title: "暂不支持",
-                icon: "none",
+                title: '暂不支持',
+                icon: 'none',
                 duration: 2000
             });
         },
         userMethod() {
-            console.log("login");
+            console.log('login');
             uni.navigateTo({
-                url: "../login/login"
+                url: '../login/login'
             });
         }
     }

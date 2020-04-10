@@ -1,7 +1,10 @@
 {
   "navigationBarTitleText": "我的博客",
   "enablePullDownRefresh": true,
+  "pullToRefresh": {
+    "offset": "56px"
+  },
   "usingComponents": {
-    "list-item": "/components/index-list-item/index-list-item"
+    "blog-item": "/components/blog-item/blog-item"
   }
 }

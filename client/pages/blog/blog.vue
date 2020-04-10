@@ -280,6 +280,7 @@ export default {
         .comment-container {
             padding: 0 $uni-spacing-col-base;
             box-sizing: border-box;
+            width: 100%;
         }
     }
     .on-input {

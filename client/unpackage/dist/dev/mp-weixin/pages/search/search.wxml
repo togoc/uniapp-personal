@@ -1,1 +1,1 @@
-<view></view>
+<view class="search"><view class="search-inner"><search-bar vue-id="50cad900-1" focus handleLeft="{{handleLeft}}" handleRight="{{handleRight}}" bind:__l="__l" vue-slots="{{['left','right']}}"><view slot="left"><text class="left-text iconfont icon-fanhui"></text></view><view slot="right"><view class="text">搜索</view></view></search-bar></view><block wx:for="{{blogs}}" wx:for-item="item" wx:for-index="index" wx:key="index"><blog-item vue-id="{{'50cad900-2-'+index}}" item="{{item}}" bind:__l="__l"></blog-item></block></view>

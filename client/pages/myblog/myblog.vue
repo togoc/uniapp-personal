@@ -1,17 +1,13 @@
 <template>
-    <scroll-view class="my-blog" scroll-y>
+    <view class="my-blog" scroll-y>
         <view class="btn-container">
             <button class="btn" @click.stop="handleBtn">
                 <text class="iconfont icon-bianji" />
                 写博客
             </button>
         </view>
-        <index-list-item
-            v-for="(item, index) in myBlogs"
-            :key="index"
-            :item="item"
-        />
-    </scroll-view>
+        <blog-item v-for="(item, index) in myBlogs" :key="index" :item="item" />
+    </view>
 </template>
 
 <script>

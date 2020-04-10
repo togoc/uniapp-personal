@@ -34,8 +34,8 @@
 .my-home {
   /** #ifdef APP-PLUS */
   /** #endif */
-  width: 750rpx;
-  background-color: #fafafc;
+  width: 100%;
+  background-color: #ffffff;
 }
 .my-home .status_bar {
     height: 25px;

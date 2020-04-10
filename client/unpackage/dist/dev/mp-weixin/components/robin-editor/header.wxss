@@ -58,28 +58,4 @@
 .head .btn.right.data-v-2ab409df {
       float: right;
 }
-.head .title.data-v-2ab409df {
-    height: 100%;
-    width: 50%;
-    position: absolute;
-    -webkit-transform: translateX(50%);
-            transform: translateX(50%);
-    text-align: center;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-box-pack: center;
-    -webkit-justify-content: center;
-            justify-content: center;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-            align-items: center;
-}
-.head .title .input.data-v-2ab409df {
-      outline: #666;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      height: 88%;
-      font-size: 1rem;
-}
 

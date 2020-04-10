@@ -130,11 +130,6 @@
 					this.timer = setTimeout(() => {
 						this.showTrans = true
 					}, 50);
-                    setTimeout(()=>{
-                        this.$emit('transed', {
-                        	show: true
-                        })
-                    },this.duration)
 				})
 				this.$emit('change', {
 					show: true
@@ -149,11 +144,6 @@
 							show: false
 						})
 						this.showPopup = false
-                        setTimeout(()=>{
-                            this.$emit('transed', {
-                            	show: false
-                            })
-                        },this.duration)
 					}, 300)
 				})
 			},

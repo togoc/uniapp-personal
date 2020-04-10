@@ -1,7 +1,7 @@
 <template>
     <view class="comment-item">
         <view class="img-container">
-            <image :src="headIMG" />
+            <image class="comment-item-image" :src="headIMG" />
         </view>
         <view class="name-container">
             <text class="user-name">{{ commentItme.username || "togoc" }}</text>
@@ -33,6 +33,7 @@ export default {
 
 <style lang="scss" scope>
 .comment-item {
+    width: 100%;
     border-radius: $uni-border-radius-base;
     padding: 0.75rem 0;
     display: flex;
@@ -42,7 +43,7 @@ export default {
     margin: $uni-spacing-row-sm 0;
     .img-container {
         width: 12.5%;
-        image {
+        .comment-item-image {
             width: calc(2.91rem / 2);
             height: calc(2.91rem / 2);
             border-radius: 50%;

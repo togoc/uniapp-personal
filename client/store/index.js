@@ -13,7 +13,6 @@ const types = {
   TOGGLELIKES: "TOGGLELIKES"
 }
 
-console.log(process.env)
 export default new Vuex.Store({
   state: {
     name: 'togoc',

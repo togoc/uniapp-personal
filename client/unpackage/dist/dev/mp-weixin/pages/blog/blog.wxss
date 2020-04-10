@@ -31,28 +31,167 @@
   -webkit-line-clamp: 2;
   overflow: hidden;
 }
-.blog {
-  width: 750rpx;
+.blog-outer {
+  height: 100%;
+  width: 100%;
 }
-.blog .head {
-    width: 750rpx;
-    padding: 1rem;
+.blog-outer .isoninput {
+    padding-bottom: 4.5rem !important;
+}
+.blog-outer .blog {
+    background-color: #ffffff;
+    height: 100%;
+    width: 100%;
+    -webkit-user-select: text;
+            user-select: text;
+    padding-bottom: 2.5rem;
     box-sizing: border-box;
-    border-bottom: 2px solid #fbfbfc;
 }
-.blog .head .title {
+.blog-outer .blog .head {
+      padding: 16rpx;
       width: 100%;
-      font-weight: bold;
-      font-size: 1.125rem;
+      box-sizing: border-box;
+      background-color: #f8f8f8;
+      border-bottom: 2px solid #fbfbfc;
 }
-.blog .head .date {
-      padding: 0.5rem 0;
-      font-size: 0.76rem;
+.blog-outer .blog .head .title {
+        width: 100%;
+        font-weight: bold;
+        font-size: 1.125rem;
+}
+.blog-outer .blog .head .date {
+        padding: 0.5rem 0;
+        font-size: 0.75rem;
+        line-height: 2rem;
+        padding: 0;
+        margin: 0;
+        color: #999;
+}
+.blog-outer .blog .head .user {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -webkit-flex-direction: row;
+                flex-direction: row;
+        box-sizing: border-box;
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+                align-items: center;
+        background-color: #e7e7e7;
+        border-radius: 12rpx;
+        width: 100%;
+        height: 2.91rem;
+}
+.blog-outer .blog .head .user .header-img {
+          width: 12.5%;
+}
+.blog-outer .blog .head .user .header-img image {
+            width: calc(2.91rem / 2);
+            height: calc(2.91rem / 2);
+            border-radius: 50%;
+}
+.blog-outer .blog .head .user .user-name {
+          width: 7.65rem;
+          display: -webkit-box;
+          display: -webkit-flex;
+          display: flex;
+          max-width: 7.65rem;
+          box-sizing: border-box;
+          -webkit-box-orient: vertical;
+          -webkit-box-direction: normal;
+          -webkit-flex-direction: column;
+                  flex-direction: column;
+}
+.blog-outer .blog .head .user .user-name > text {
+            width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 0.875rem;
+}
+.blog-outer .blog .head .user .user-name > text:first-of-type {
+              font-size: 1rem;
+}
+.blog-outer .blog .head .user .focus {
+          width: 7rem;
+          position: absolute;
+          text-align: center;
+          right: 16rpx;
+          padding: 0.125rem 16rpx;
+          display: -webkit-box;
+          display: -webkit-flex;
+          display: flex;
+          white-space: nowrap;
+          -webkit-box-orient: horizontal;
+          -webkit-box-direction: normal;
+          -webkit-flex-direction: row;
+                  flex-direction: row;
+          -webkit-justify-content: space-around;
+                  justify-content: space-around;
+}
+.blog-outer .blog .head .user .focus > text {
+            width: 3rem;
+            color: #000000;
+            padding: 0.125rem;
+            font-weight: bold;
+            font-size: 0.85rem;
+            border-radius: 8rpx;
+            border: 1px solid #c8c7cc;
+            background-color: #ffffff;
+}
+.blog-outer .blog .head .user .focus > text:last-of-type {
+              color: red;
+}
+.blog-outer .blog .preview {
+      box-sizing: border-box;
+      padding: 24rpx;
+      word-wrap: break-word;
+      letter-spacing: 1px;
+      background-color: #e7e7e7;
+      font-size: 0.85rem;
+}
+.blog-outer .blog .comment-container {
+      padding: 0 16rpx;
+      box-sizing: border-box;
+      width: 100%;
+}
+.blog-outer .on-input {
+    height: 4.5rem !important;
+    width: 100% !important;
+}
+.blog-outer .foot {
+    width: 100%;
+    position: fixed;
+    left: 0;
+    padding: 0.25rem 1rem;
+    bottom: 0;
+    height: 2.5rem;
+    background-color: #fff;
+    border-top: 1px solid #e6e6e6;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+            justify-content: center;
+    box-sizing: border-box;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+            align-items: center;
+}
+.blog-outer .foot > button {
+      width: 5rem;
+      max-height: 2rem;
+      background-color: #dd524d;
       line-height: 2rem;
-      padding: 0;
-      margin: 0;
+      text-align: center;
+      margin: 0.25rem;
 }
-.blog .head .user {
+.blog-outer .foot .input {
+      width: 100%;
+      height: 100%;
       display: -webkit-box;
       display: -webkit-flex;
       display: flex;
@@ -60,63 +199,72 @@
       -webkit-box-direction: normal;
       -webkit-flex-direction: row;
               flex-direction: row;
-      box-sizing: border-box;
-      border: 2px solid #fbfbfc;
-      -webkit-box-align: center;
-      -webkit-align-items: center;
-              align-items: center;
-      height: 2.91rem;
 }
-.blog .head .user .header-img image {
-        width: calc(2.91rem / 2);
-        height: calc(2.91rem / 2);
-        border-radius: 50%;
-}
-.blog .head .user .user-name {
-        width: 100%;
+.blog-outer .foot .input .clean {
+        height: 100%;
         display: -webkit-box;
         display: -webkit-flex;
         display: flex;
-        max-width: 7.65rem;
+        width: 1.75rem;
+        text-align: center;
+        background-color: #f1f0f5;
+        -webkit-box-pack: center;
+        -webkit-justify-content: center;
+                justify-content: center;
+        border-radius: 0 6px 6px 0px;
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+                align-items: center;
+        color: #ff4949;
+}
+.blog-outer .foot .input textarea {
+        border-radius: 6px 0 0 6px;
+        height: 100%;
+        width: 100%;
+        padding-left: 0.25rem;
         box-sizing: border-box;
+        background-color: #f1f0f5;
+}
+.blog-outer .foot .input .none {
+        border-radius: 6px !important;
+}
+.blog-outer .foot .input .placeholder {
+        line-height: 2rem;
+        text-indent: 6px;
+        font-size: 0.875rem;
+}
+.blog-outer .foot .handle {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      width: 50%;
+}
+.blog-outer .foot .handle .comments {
+        width: 50%;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: flex;
+        padding: 0.25rem 0rem;
+        box-sizing: border-box;
+        font-size: 0.75rem;
         -webkit-box-orient: vertical;
         -webkit-box-direction: normal;
         -webkit-flex-direction: column;
                 flex-direction: column;
-        padding-left: 0.5rem;
-}
-.blog .head .user .user-name text {
-          width: 100%;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          font-size: 0.875rem;
-}
-.blog .head .user .focus {
-        width: 100%;
         text-align: center;
-        padding: 0.125rem 1rem;
-        display: -webkit-box;
-        display: -webkit-flex;
-        display: flex;
-        white-space: nowrap;
-        -webkit-box-orient: horizontal;
-        -webkit-box-direction: normal;
-        -webkit-flex-direction: row;
-                flex-direction: row;
-        -webkit-justify-content: space-around;
-                justify-content: space-around;
 }
-.blog .head .user .focus > text {
-          width: 3rem;
-          border: 2px solid #cfcfcf;
-          border-radius: 3px;
+.blog-outer .foot .handle .comments text:last-of-type {
+          color: red;
+          font-weight: bold;
 }
-.blog .preview {
-    box-sizing: border-box;
-    padding: 1rem;
+.blog-outer .foot .handle .like {
+        width: 50%;
+        text-align: center;
+        padding: 0.25rem 0rem;
+        box-sizing: border-box;
+        line-height: 2rem;
 }
-.blog .preview text {
-      font-size: 0.875rem;
+.blog-outer .foot .handle .like .icon-zannor {
+          color: red;
 }
 
