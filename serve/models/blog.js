@@ -141,5 +141,4 @@ blogSchema.index({ title: "text", text: "text" })
 const Blog = mongoose.model('blogs', blogSchema)
 
 
-
 module.exports = Blog

@@ -21,6 +21,13 @@ export default async function (url, method = 'GET', data = {}) {
     return new Promise((resolve, reject) => {
 
         let token = uni.getStorageSync('BLOG_TOKEN')
+        let query = ''; //数据拼接字符串
+
+        if (method === "GET") {
+            Object.keys(data).forEach(key => {
+                query += key + '=' + data[key] + '&';
+            })
+        }
 
         uni.request({
             url: baseUrl + url,

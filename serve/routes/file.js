@@ -8,5 +8,8 @@ const fileController = new FileController()
 
 router.post('/upload', auth, fileController.upLoad);
 router.get('/img/:id', fileController.img);
+router.get('/video/:id', fileController.video);
+router.get('/add-folder', auth, fileController.addFolder);
+router.get('/get-folder-file', auth, fileController.getFolderAndFile);
 
 module.exports = router;

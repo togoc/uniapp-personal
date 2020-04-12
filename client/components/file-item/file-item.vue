@@ -1,14 +1,21 @@
 <template>
     <view class="file-item">
         <view class="file-head-img">
-            <text class="iconfont icon-wenjianjia"></text>
+            <text
+                :class="[
+                    'iconfont',
+                    { 'icon-wenjianjia': file.type === 'folder' },
+                    { 'icon-shipin-tianchong': file.type === 'video' },
+                    { 'icon-tupian': file.type === 'image' }
+                ]"
+            ></text>
         </view>
-        <view class="file-name-date">
+        <view class="file-name-date" @click.stop="handleFile">
             <view class="file-name">
-                $uni-border-color$uni-border-colo
+                {{ file.name || "" }}
             </view>
             <view class="file-date">
-                2020/22/22
+                {{ file.createdAt | date1 }}
             </view>
         </view>
         <view class="file-checked">
@@ -19,6 +26,9 @@
 
 <script>
 export default {
+    props: {
+        file: Object
+    },
     data() {
         return {
             checked: false
@@ -27,6 +37,9 @@ export default {
     methods: {
         longpress(e) {
             this.$showToast("1");
+        },
+        handleFile() {
+            this.$emit("handleFile", this.file);
         }
     }
 };

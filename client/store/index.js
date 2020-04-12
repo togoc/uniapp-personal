@@ -19,22 +19,23 @@ export default new Vuex.Store({
     baseAvatarURL: process.env.baseAvatarURL || 'http://192.168.3.3:3000/blog/file-service/img/',
     user: {},
     myBlogs: [],
-    indexBlogs: []
+    indexBlogs: [],
   },
   getters: {
     isLogin: state => Object.keys(state.user).length > 0
   },
   actions: {
 
-    async getUser({ state }, id) {
+    async getUser({ commit }, id) {
 
       if (id) {
 
-        let url = "/user-service/user?id=" + id
-        return await http(url, "GET");
+        let url = "/user-service/user"
+        return await http(url, "GET", { id });
 
       } else {
-        state.user = await http("/user-service/user");
+        let user = await http("/user-service/user");
+        commit('SETUSER', user)
       }
 
     },
@@ -45,8 +46,8 @@ export default new Vuex.Store({
         state.myBlogs = []
       }
 
-      let url = "/blog-service/get-my-blog?page=" + state.myBlogs.length
-      let blogs = await http(url, "GET");
+      let url = "/blog-service/get-my-blog"
+      let blogs = await http(url, "GET", { page: state.myBlogs.length });
 
       blogs.length < 1
         ?
@@ -62,8 +63,8 @@ export default new Vuex.Store({
         state.indexBlogs = []
       }
 
-      let url = "/blog-service/get-index-blog?page=" + state.indexBlogs.length
-      let blogs = await http(url, "GET");
+      let url = "/blog-service/get-index-blog"
+      let blogs = await http(url, "GET", { page: state.indexBlogs.length });
 
       blogs.length < 1
         ?
@@ -73,8 +74,8 @@ export default new Vuex.Store({
     },
 
     async getItemBlogByID({ state }, id) {
-      let url = "/blog-service/get-index-blog?id=" + id
-      return await http(url, "GET");
+      let url = "/blog-service/get-index-blog"
+      return await http(url, "GET", { id });
     },
 
     async signIn({ state }, body) {
@@ -122,7 +123,7 @@ export default new Vuex.Store({
           count: 1,
           success: res => {
             res.tempFilePaths.map(async path => {
-              let data = await upload(path, "avatar");
+              let data = await upload(path, { type: "avatar" });
               state.user.avatar = data.src;
             });
           },
@@ -147,11 +148,30 @@ export default new Vuex.Store({
 
     async uploadImg({ state }, path) {
       try {
-        return await upload(path, "blogIMG");
+        return await upload(path, { type: "blogIMG" });
       } catch (error) {
         showToast(error.toString())
       }
     },
+
+    async uploadFile({ state }, body = { folderpath: "", path: '' }) {
+      try {
+        return await upload(body.path, { type: 'file', ...body });
+      } catch (error) {
+        showToast(error.toString())
+      }
+    },
+
+    async addFolder({ state }, body) {
+      let url = '/file-service/add-folder'
+      return await http(url, "GET", body)
+    },
+
+    async getFolder({ state }, body) {
+      let url = '/file-service/get-folder-file'
+      return await http(url, "GET", body)
+    },
+
     /**
      *
      * @param {Object} body  { context , blogID }
@@ -162,14 +182,15 @@ export default new Vuex.Store({
     },
 
     async toggleLike({ commit }, blogID) {
-      let url = "/blog-service/toggle-likes?id=" + blogID
-      await http(url, "GET");
+      let url = "/blog-service/toggle-likes"
+      await http(url, "GET", { id: blogID });
       commit("TOGGLELIKES", blogID)
     }
   },
   mutations: {
     [types.SETUSER](state, body) {
       state.user = body
+      state.folderPath = "/"
     },
 
     [types.LOGOUT](state, body) {
@@ -179,6 +200,7 @@ export default new Vuex.Store({
         uni.removeStorageSync('BLOG_TOKEN');
         state.user = {}
         state.myBlogs = []
+        state.folderPath = "/"
 
 
       } catch (error) {

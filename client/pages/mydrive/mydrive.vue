@@ -9,21 +9,22 @@
             <view class="add-new-folder">
                 <view class="input-context">
                     <text>新建文件夹</text>
-                    <view class="input-container"
-                        ><input
+                    <view class="input-container">
+                        <input
                             type="text"
                             value=""
                             v-model.trim="folderName"
                             clean-abled
                             placeholder="请输入文件名称"
-                            :cursor-spacing="60"/>
+                            :cursor-spacing="60"
+                        />
                         <text class="blank"></text>
                         <text
                             v-if="folderName !== ''"
                             @click.stop="clear"
                             class="iconfont icon-qingchu"
-                        ></text
-                    ></view>
+                        ></text>
+                    </view>
                 </view>
                 <view class="add-btn" @click.stop="handleAddFolder">
                     <button class="add-folder-btn" data-type="cancel">
@@ -36,13 +37,31 @@
             </view>
         </uni-popup>
         <view class="files">
-            <file-item></file-item>
-            <file-item></file-item>
-            <file-item></file-item>
+            <template v-if="fileList.length">
+                <file-item
+                    v-for="(item, index) in filesList"
+                    :file="item"
+                    :key="index"
+                    @handleFile="handleFile"
+                ></file-item>
+            </template>
+            <template v-else>
+                <view class="emty">无文件</view>
+            </template>
         </view>
-        <tki-file-manager ref="filemanager" @result="resultPath"
-            >上传</tki-file-manager
-        >
+        <uni-popup ref="videoPopup">
+            <view class="video">
+                <video ref="video" autoplay :src="videoSrc"></video>
+            </view>
+        </uni-popup>
+        <uni-popup ref="imagePopup">
+            <view class="image">
+                <image :src="imageSrc" />
+            </view>
+        </uni-popup>
+        <!-- <tki-file-manager ref="filemanager" @result="resultPath">
+            暂时不支持对非媒体内容进行选择
+        </tki-file-manager> -->
     </view>
 </template>
 
@@ -54,30 +73,109 @@ export default {
                 color: ""
             },
             content: [
-                { iconPath: "", selectedIconPath: "", text: "上传文件" },
+                { iconPath: "", selectedIconPath: "", text: "上传图片" },
+                { iconPath: "", selectedIconPath: "", text: "上传视频" },
                 { iconPath: "", selectedIconPath: "", text: "新文件夹" }
             ],
             fileList: [],
-            folderName: ""
+
+            folderName: "新文件夹",
+            folderPath: "/",
+            folderID: "",
+            videoSrc: "",
+            imageSrc: ""
         };
     },
-    onLoad() {
+    computed: {
+        filesList() {
+            let arr = [];
+            let arr1 = [];
+            this.fileList.forEach((v, i) => {
+                if (v.type === "folder") {
+                    arr.push(v);
+                } else {
+                    arr1.push(v);
+                }
+            });
+            return arr.concat(arr1);
+        }
+    },
+    onLoad(options) {
+        let path = options.path;
+        if (path) {
+            this.folderPath = path;
+        }
         uni.setNavigationBarTitle({
-            title: "我的文件"
+            title: path ? path.slice(1) : "我的文件"
         });
     },
-    onReady() {},
+    onReady() {
+        this.getFolderFile();
+    },
     methods: {
+        handleFile(e) {
+            let { type, path, fileid } = e;
+            if (type === "folder") {
+                uni.navigateTo({
+                    url: "../mydrive/mydrive?path=" + path
+                });
+            }
+            if (type === "video") {
+                this.$refs.videoPopup.open();
+                this.videoSrc =
+                    "http://192.168.3.3:3000/blog/file-service/video/" + fileid;
+            }
+
+            if (type === "image") {
+                this.$refs.imagePopup.open();
+                this.imageSrc =
+                    "http://192.168.3.3:3000/blog/file-service/img/" + fileid;
+            }
+        },
+        async getFolderFile() {
+            let res = await this.$store.dispatch("getFolder", {
+                folderPath: this.folderPath
+            });
+            this.folderPath = res.folderpath;
+            this.fileList = res.files;
+            this.folderID = res._id;
+        },
         trigger(e) {
             let { index } = e;
-
+            //选图片
             if (index === 0) {
-                // #ifdef APP-PLUS
-                this.$refs.filemanager._openFile();
-                // #endif
+                uni.chooseImage({
+                    count: 1,
+                    success: async res => {
+                        let body = {
+                            path: res.tempFilePaths[0],
+                            folderpath: this.folderPath,
+                            folderID: this.folderID
+                        };
+
+                        await this.$store.dispatch("uploadFile", body);
+                        this.getFolderFile();
+                    }
+                });
             }
+            //选视频
             if (index === 1) {
-                this.show = false;
+                uni.chooseVideo({
+                    sourceType: ["camera", "album"],
+                    success: async res => {
+                        let body = {
+                            path: res.tempFilePath,
+                            folderpath: this.folderPath,
+                            folderID: this.folderID
+                        };
+
+                        await this.$store.dispatch("uploadFile", body);
+                        this.getFolderFile();
+                    }
+                });
+            }
+            //新建文件夹
+            if (index === 2) {
                 this.$refs.popup.open();
             }
             console.log(index);
@@ -91,7 +189,7 @@ export default {
         clear() {
             this.folderName = "";
         },
-        handleAddFolder(e) {
+        async handleAddFolder(e) {
             let { type } = e.target.dataset;
 
             if (type === "cancel") {
@@ -99,7 +197,12 @@ export default {
             }
 
             if (type === "build") {
-                console.log(type);
+                let res = await this.$store.dispatch("addFolder", {
+                    CurrentFolderName: this.folderPath,
+                    NewFolderName: this.folderName
+                });
+                this.$refs.popup.close();
+                this.getFolderFile();
             }
         }
     }

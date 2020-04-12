@@ -1,11 +1,11 @@
 import { showToast } from '../prompt'
 let baseUrl = null
 // #ifdef H5
-baseUrl = '/blog/file-service/upload?type='
+baseUrl = '/blog/file-service/upload'
 // #endif
 
 // #ifndef H5
-baseUrl = 'http://192.168.3.3:3000/blog/file-service/upload?type='
+baseUrl = 'http://192.168.3.3:3000/blog/file-service/upload'
 // #endif
 
 /**
@@ -14,14 +14,17 @@ baseUrl = 'http://192.168.3.3:3000/blog/file-service/upload?type='
  * @param {String} method 
  * @param {Object} data 
  */
-export default async function (path, type) {
+export default async function (path, queryData = {}) {
     start()
     return new Promise((resolve, reject) => {
 
         let token = uni.getStorageSync('BLOG_TOKEN')
-
+        let query = ''; //数据拼接字符串
+        Object.keys(queryData).forEach(key => {
+            query += key + '=' + queryData[key] + '&';
+        })
         uni.uploadFile({
-            url: baseUrl + type,
+            url: baseUrl + '?' + query,
             filePath: path,
             name: "file",
             header: {

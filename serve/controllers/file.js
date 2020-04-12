@@ -38,6 +38,47 @@ class FileController {
         }
     }
 
+    async video(req, res) {
+        try {
+
+            let fileID = req.params.id;
+            let headers = req.headers
+
+            await fileService.video(fileID, headers, res);
+
+
+        } catch (error) {
+            res.status(500).send('视频获取错误' + error.toString());
+        }
+    }
+
+    async addFolder(req, res) {
+        try {
+            let { user, query } = req
+
+
+            let folder = await fileService.addFolder(user, query)
+
+            res.send(folder);
+
+        } catch (error) {
+            res.status(500).send('新建文件夹错误' + error.toString());
+        }
+    }
+
+    async getFolderAndFile(req, res) {
+        try {
+            let { folderPath } = req.query
+
+            let folder = await fileService.getFolderAndFile(req.user, folderPath)
+
+            res.status(200).send(folder);
+
+        } catch (error) {
+            res.status(500).send('获取内容错误' + error.toString());
+        }
+    }
+
 }
 
 
