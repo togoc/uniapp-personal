@@ -29,9 +29,6 @@ function filter1(value) {
     return moment(value).format('lll')
 }
 
-let arr = [{ type: 'a' }, { type: 'c' }, { type: 'b' }]
-
-console.log(arr.sort(a => a.type==='b'))
 
 App.mpType = 'app'
 

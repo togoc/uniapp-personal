@@ -1,10 +1,29 @@
 <template>
     <view class="file">
-        <uni-fab
-            :content="content"
-            horizontal="right"
-            @trigger="trigger"
-        ></uni-fab>
+        <template v-if="selectedFiles.length">
+            <view class="edit-nav" @click.stop="handleEdit">
+                <view
+                    class="edit-item"
+                    hover-class="edit-btn"
+                    v-for="(item, index) in editFormat"
+                    :key="index"
+                >
+                    <view :class="['iconfont', item.icon]"></view>
+                    <view class="edit-context">{{ item.title }}</view>
+                    <button
+                        :data-value="item.value"
+                        class="edit-blank-btn"
+                    ></button>
+                </view>
+            </view>
+        </template>
+        <template v-else>
+            <uni-fab
+                :content="content"
+                horizontal="right"
+                @trigger="trigger"
+            ></uni-fab>
+        </template>
         <uni-popup ref="popup" type="center">
             <view class="add-new-folder">
                 <view class="input-context">
@@ -36,29 +55,37 @@
                 </view>
             </view>
         </uni-popup>
-        <view class="files">
+        <view class="files" :class="{ padding: selectedFiles.length }">
             <template v-if="fileList.length">
                 <file-item
                     v-for="(item, index) in filesList"
                     :file="item"
                     :key="index"
+                    @selected="selected"
                     @handleFile="handleFile"
                 ></file-item>
             </template>
+            <!-- 无文件 -->
             <template v-else>
-                <view class="emty">无文件</view>
+                <view class="emty">
+                    <image class="emty-img" src="/static/file/emty.png" />
+                    <text>空文件夹</text>
+                </view>
             </template>
         </view>
-        <uni-popup ref="videoPopup">
+        <!-- 视频层 -->
+        <uni-popup @change="popupChange" ref="videoPopup">
             <view class="video">
                 <video ref="video" autoplay :src="videoSrc"></video>
             </view>
         </uni-popup>
-        <uni-popup ref="imagePopup">
+        <!-- 图片层 -->
+        <uni-popup @change="popupChange" ref="imagePopup">
             <view class="image">
                 <image :src="imageSrc" />
             </view>
         </uni-popup>
+
         <!-- <tki-file-manager ref="filemanager" @result="resultPath">
             暂时不支持对非媒体内容进行选择
         </tki-file-manager> -->
@@ -73,9 +100,43 @@ export default {
                 color: ""
             },
             content: [
-                { iconPath: "", selectedIconPath: "", text: "上传图片" },
-                { iconPath: "", selectedIconPath: "", text: "上传视频" },
-                { iconPath: "", selectedIconPath: "", text: "新文件夹" }
+                {
+                    iconPath: "/static/file/image.png",
+                    selectedIconPath: "",
+                    text: "上传图片"
+                },
+                {
+                    iconPath: "/static/file/video.png",
+                    selectedIconPath: "",
+                    text: "上传视频"
+                },
+                {
+                    iconPath: "/static/file/folder.png",
+                    selectedIconPath: "",
+                    text: "新文件夹"
+                }
+            ],
+            editFormat: [
+                {
+                    title: "重命名",
+                    icon: "icon-chongmingming",
+                    value: "rename"
+                },
+                {
+                    title: "下载",
+                    icon: "icon-xiazai",
+                    value: "download"
+                },
+                {
+                    title: "分享",
+                    icon: "icon-fenxiang",
+                    value: "share"
+                },
+                {
+                    title: "删除",
+                    icon: "icon-shanchu",
+                    value: "delete"
+                }
             ],
             fileList: [],
 
@@ -83,7 +144,8 @@ export default {
             folderPath: "/",
             folderID: "",
             videoSrc: "",
-            imageSrc: ""
+            imageSrc: "",
+            selectedFiles: []
         };
     },
     computed: {
@@ -112,24 +174,56 @@ export default {
     onReady() {
         this.getFolderFile();
     },
+    async onPullDownRefresh() {
+        await this.getFolderFile();
+        uni.stopPullDownRefresh();
+    },
     methods: {
+        handleEdit(e) {
+            let { value } = e.target.dataset;
+            console.log(value)
+            switch (value) {
+                case "rename":
+                    break;
+                case "download":
+                    break;
+                case "share":
+                    break;
+                case "delete":
+                    break;
+                default:
+                    break;
+            }
+        },
+        //选择某一项
+        selected(e) {
+            let index = this.selectedFiles.indexOf(e);
+            if (index !== -1) {
+                this.selectedFiles.splice(index, 1);
+            } else {
+                this.selectedFiles.push(e);
+            }
+        },
+        //点击某一项
         handleFile(e) {
-            let { type, path, fileid } = e;
+            let { type, path, src } = e;
             if (type === "folder") {
+                if (this.selectedFiles.length) {
+                    this.$showToast("请先操作");
+                    return;
+                }
                 uni.navigateTo({
                     url: "../mydrive/mydrive?path=" + path
                 });
             }
             if (type === "video") {
                 this.$refs.videoPopup.open();
-                this.videoSrc =
-                    "http://192.168.3.3:3000/blog/file-service/video/" + fileid;
+                this.videoSrc = src;
             }
 
             if (type === "image") {
                 this.$refs.imagePopup.open();
-                this.imageSrc =
-                    "http://192.168.3.3:3000/blog/file-service/img/" + fileid;
+                this.imageSrc = src;
             }
         },
         async getFolderFile() {
@@ -204,6 +298,12 @@ export default {
                 this.$refs.popup.close();
                 this.getFolderFile();
             }
+        },
+        popupChange(e) {
+            if (!e.show) {
+                this.videoSrc = "";
+                this.imageSrc = "";
+            }
         }
     }
 };
@@ -212,6 +312,8 @@ export default {
 <style lang="scss" scope>
 .file {
     width: 100%;
+    height: 100%;
+    box-sizing: border-box;
     .add-new-folder {
         display: flex;
         flex-direction: column;
@@ -277,11 +379,73 @@ export default {
             }
         }
     }
+    .padding {
+        height: calc(100% - 50px) !important;
+    }
+    .emty {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-size: 0.85rem;
+        font-weight: bold;
+        width: 100%;
+        margin-top: 30%;
+        .emty-img {
+            width: 200rpx;
+            height: 200rpx;
+        }
+    }
     .files {
         padding: 0 $uni-spacing-col-base;
         box-sizing: border-box;
         width: 100%;
         height: 100%;
+        overflow: hidden;
+        overflow-y: auto;
+    }
+    .edit-nav {
+        position: fixed;
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        height: 50px;
+        text-align: center;
+        bottom: 0;
+        left: 0;
+        background-color: $uni-color-primary;
+        color: $uni-text-color-inverse;
+        .edit-item {
+            width: 100%;
+            font-size: 16px;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            flex-direction: column;
+            .iconfont {
+                font-size: 15px;
+                width: 100%;
+                height: calc(14px * 1.33);
+            }
+            .edit-context {
+                font-size: 12px;
+                height: calc(14px * 1.33);
+                width: 100%;
+            }
+            .edit-blank-btn {
+                width: 100%;
+                height: 100%;
+                position: absolute;
+                opacity: 0;
+            }
+        }
+        .edit-btn {
+            opacity: $uni-opacity-disabled;
+            background-color: $uni-bg-color-grey-more;
+            color: #000;
+        }
     }
 }
 </style>

@@ -1,5 +1,10 @@
 <template>
-    <view class="blog-item" @click.stop="handleClickItem" :data-id="item._id">
+    <view
+        class="blog-item"
+        hover-class="hover-item"
+        @click.stop="handleClickItem"
+        :data-id="item._id"
+    >
         <view :data-id="item._id" class="title f2">{{ item.title }}</view>
         <view :data-id="item._id" class="detail f2">{{
             item.text.replace(/\s/g, "")
@@ -41,7 +46,11 @@ export default {
 </script>
 
 <style lang="scss" >
+.hover-item {
+    transform: scale(1.025);
+}
 .blog-item {
+    transition: all 0.15s linear;
     padding: 0.5rem;
     max-height: 8rem;
     background-color: $uni-bg-color-grey;

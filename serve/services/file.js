@@ -88,11 +88,15 @@ class FileService {
                         if (videoChecker(filename)) {
                             type = 'video'
                         }
+
+                        let src = env.fullUrl + '/blog/file-service' + (type === 'image' ? '/img/' : '/video/') + bucketStream.id
+
                         let body = {
                             type,
                             path: path.join(folderpath, filename),
                             name: filename,
-                            fileid: bucketStream.id
+                            fileid: bucketStream.id,
+                            src
                         }
                         let foldersave = await folder.addFile(body)
 
@@ -143,6 +147,9 @@ class FileService {
 
         return new Promise(async (resolve, reject) => {
             let currentFile = await conn.db.collection("fs.files").findOne(ObjectID(id))
+            if (!currentFile) {
+                reject('无文件id:' + id)
+            }
             let bucket = new mongoose.mongo.GridFSBucket(conn.db, {
                 chunkSizeBytes: 1024 * 255
             });

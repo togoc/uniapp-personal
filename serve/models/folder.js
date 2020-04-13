@@ -23,11 +23,14 @@ const folderSchema = mongoose.Schema({
             path: {
                 type: String
             },
-            fileid: {
-                type: ObjectID
+            src: {
+                type: String
             },
             name: {
                 type: String
+            },
+            fileid: {
+                type: ObjectID
             },
             createdAt: {
                 type: Number,
@@ -68,8 +71,8 @@ folderSchema.methods.addFolder = async function (body) {
 
 folderSchema.methods.addFile = async function (body) {
 
-    this.files = [...this.files, { ...body }]
 
+    this.files = [...this.files, { ...body }]
 
     return await this.save()
 }

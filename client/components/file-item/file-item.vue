@@ -1,5 +1,5 @@
 <template>
-    <view class="file-item">
+    <view class="file-item" :class="{ checked: checked }">
         <view class="file-head-img">
             <text
                 :class="[
@@ -19,7 +19,9 @@
             </view>
         </view>
         <view class="file-checked">
-            <checkbox :checked="checked" />
+            <checkbox-group @change.stop="handleChangeCheckbox">
+                <checkbox :checked="checked" />
+            </checkbox-group>
         </view>
     </view>
 </template>
@@ -40,12 +42,19 @@ export default {
         },
         handleFile() {
             this.$emit("handleFile", this.file);
+        },
+        handleChangeCheckbox(e) {
+            this.checked = !this.checked;
+            this.$emit("selected", this.file);
         }
     }
 };
 </script>
 
 <style lang="scss" scope>
+.checked {
+    background-color: $uni-bg-color-grey-more;
+}
 .file-item {
     display: flex;
     position: relative;
