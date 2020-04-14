@@ -68,9 +68,9 @@ class FileController {
 
     async getFolderAndFile(req, res) {
         try {
-            let { folderPath } = req.query
+            let { folderID } = req.query
 
-            let folder = await fileService.getFolderAndFile(req.user, folderPath)
+            let folder = await fileService.getFolderAndFile(req.user, folderID)
 
             res.status(200).send(folder);
 
@@ -79,6 +79,28 @@ class FileController {
         }
     }
 
+    async deleteFolderAndFile(req, res) {
+        console.log(req.body)
+        try {
+            let body = req.body
+            await fileService.deleteFolderAndFile(body)
+            res.send('删除文件夹文件成功');
+        } catch (error) {
+            res.status(500).send('删除文件夹文件错误' + error.toString());
+        }
+
+    }
+
+    async renameFolderAndFile(req, res) {
+        try {
+            let body = req.body
+            await fileService.renameFolderAndFile(body)
+            res.send('重命名文件夹文件成功');
+        } catch (error) {
+            res.status(500).send('重命名文件夹文件错误' + error.toString());
+        }
+
+    }
 }
 
 

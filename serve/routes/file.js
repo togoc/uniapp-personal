@@ -11,7 +11,8 @@ router.get('/img/:id', fileController.img);
 router.get('/video/:id', fileController.video);
 router.get('/add-folder', auth, fileController.addFolder);
 router.get('/get-folder-file', auth, fileController.getFolderAndFile);
-// router.get('/delete', auth, fileController.delete);
+router.post('/delete-folder-file', auth, fileController.deleteFolderAndFile);
+router.post('/rename-folder-file', auth, fileController.renameFolderAndFile);
 
 module.exports = router;
 

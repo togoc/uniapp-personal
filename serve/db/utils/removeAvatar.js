@@ -17,7 +17,7 @@ const removeAvatar = async (ownerID, saveFileID) => {
 
     avatars.forEach(async v => {
         await conn.db.collection("fs.files").deleteOne({ _id: ObjectID(v._id) })
-        await conn.db.collection("fs.chunks").deleteOne({ files_id: ObjectID(v._id) })
+        await conn.db.collection("fs.chunks").deleteMany({ files_id: ObjectID(v._id) })
     })
 }
 

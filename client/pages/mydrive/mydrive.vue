@@ -24,6 +24,7 @@
                 @trigger="trigger"
             ></uni-fab>
         </template>
+        <!-- 新建文件夹 -->
         <uni-popup ref="popup" type="center">
             <view class="add-new-folder">
                 <view class="input-context">
@@ -31,10 +32,11 @@
                     <view class="input-container">
                         <input
                             type="text"
+                            focus
                             value=""
                             v-model.trim="folderName"
                             clean-abled
-                            placeholder="请输入文件名称"
+                            placeholder="请输入美丽的名称"
                             :cursor-spacing="60"
                         />
                         <text class="blank"></text>
@@ -50,7 +52,7 @@
                         取消
                     </button>
                     <button class="add-folder-btn" data-type="build">
-                        创建
+                        {{ addFolderNameType === "add" ? "创建 " : "重命名" }}
                     </button>
                 </view>
             </view>
@@ -58,9 +60,9 @@
         <view class="files" :class="{ padding: selectedFiles.length }">
             <template v-if="fileList.length">
                 <file-item
-                    v-for="(item, index) in filesList"
+                    v-for="item in filesList"
                     :file="item"
-                    :key="index"
+                    :key="item._id"
                     @selected="selected"
                     @handleFile="handleFile"
                 ></file-item>
@@ -145,6 +147,7 @@ export default {
             folderID: "",
             videoSrc: "",
             imageSrc: "",
+            addFolderNameType: "add",
             selectedFiles: []
         };
     },
@@ -165,11 +168,8 @@ export default {
     onLoad(options) {
         let path = options.path;
         if (path) {
-            this.folderPath = path;
+            this.folderID = path;
         }
-        uni.setNavigationBarTitle({
-            title: path ? path.slice(1) : "我的文件"
-        });
     },
     onReady() {
         this.getFolderFile();
@@ -179,17 +179,33 @@ export default {
         uni.stopPullDownRefresh();
     },
     methods: {
-        handleEdit(e) {
+        async handleEdit(e) {
             let { value } = e.target.dataset;
-            console.log(value)
+            console.log(value);
             switch (value) {
                 case "rename":
+                    if (this.selectedFiles.length > 1) {
+                        this.$showToast("无法进行多项重命名");
+                    } else {
+                        let body = this.selectedFiles[0];
+                        this.folderName = body.name;
+                        this.addFolderNameType = "rename";
+                        this.$refs.popup.open();
+                        //具体操作转到新建文件夹按钮事件
+                    }
                     break;
                 case "download":
                     break;
                 case "share":
                     break;
                 case "delete":
+                    this.selectedFiles.forEach(async v => {
+                        let res = await this.$store.dispatch(
+                            "deleteFolderAndFile",
+                            { ...v, CurrentFolderID: this.folderID }
+                        );
+                    });
+                    this.getFolderFile();
                     break;
                 default:
                     break;
@@ -206,14 +222,14 @@ export default {
         },
         //点击某一项
         handleFile(e) {
-            let { type, path, src } = e;
+            let { type, path, src, folderid } = e;
             if (type === "folder") {
                 if (this.selectedFiles.length) {
                     this.$showToast("请先操作");
                     return;
                 }
                 uni.navigateTo({
-                    url: "../mydrive/mydrive?path=" + path
+                    url: "../mydrive/mydrive?path=" + folderid
                 });
             }
             if (type === "video") {
@@ -228,11 +244,18 @@ export default {
         },
         async getFolderFile() {
             let res = await this.$store.dispatch("getFolder", {
-                folderPath: this.folderPath
+                folderID: this.folderID
             });
-            this.folderPath = res.folderpath;
+            this.folderPath = res.foldername;
             this.fileList = res.files;
             this.folderID = res._id;
+            this.selectedFiles = [];
+            this.addFolderNameType = "add";
+            this.folderName = "新文件夹";
+            this.$refs.popup.close();
+            uni.setNavigationBarTitle({
+                title: res.foldername
+            });
         },
         trigger(e) {
             let { index } = e;
@@ -243,7 +266,6 @@ export default {
                     success: async res => {
                         let body = {
                             path: res.tempFilePaths[0],
-                            folderpath: this.folderPath,
                             folderID: this.folderID
                         };
 
@@ -259,7 +281,6 @@ export default {
                     success: async res => {
                         let body = {
                             path: res.tempFilePath,
-                            folderpath: this.folderPath,
                             folderID: this.folderID
                         };
 
@@ -268,11 +289,10 @@ export default {
                     }
                 });
             }
-            //新建文件夹
+            //打开新建文件夹输入
             if (index === 2) {
                 this.$refs.popup.open();
             }
-            console.log(index);
         },
         resultPath(path) {
             console.log(path);
@@ -288,15 +308,28 @@ export default {
 
             if (type === "cancel") {
                 this.$refs.popup.close();
+                this.getFolderFile();
             }
 
             if (type === "build") {
-                let res = await this.$store.dispatch("addFolder", {
-                    CurrentFolderName: this.folderPath,
-                    NewFolderName: this.folderName
-                });
-                this.$refs.popup.close();
-                this.getFolderFile();
+                if (this.addFolderNameType === "add") {
+                    let res = await this.$store.dispatch("addFolder", {
+                        CurrentFolderID: this.folderID,
+                        NewFolderName: this.folderName
+                    });
+                    this.getFolderFile();
+                } else {
+                    let body = this.selectedFiles[0];
+                    let res = await this.$store.dispatch(
+                        "renameFolderAndFile",
+                        {
+                            ...body,
+                            CurrentFolderID: this.folderID,
+                            newName: this.folderName
+                        }
+                    );
+                    this.getFolderFile();
+                }
             }
         },
         popupChange(e) {
@@ -413,8 +446,8 @@ export default {
         text-align: center;
         bottom: 0;
         left: 0;
-        background-color: $uni-color-primary;
-        color: $uni-text-color-inverse;
+        background-color: $uni-bg-color-grey-more;
+        color: $uni-text-color;
         .edit-item {
             width: 100%;
             font-size: 16px;
@@ -444,7 +477,6 @@ export default {
         .edit-btn {
             opacity: $uni-opacity-disabled;
             background-color: $uni-bg-color-grey-more;
-            color: #000;
         }
     }
 }

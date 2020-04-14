@@ -14,14 +14,15 @@ const folderSchema = mongoose.Schema({
         trim: true,
         require: true
     },
+    root: {
+        type: Boolean,
+        default: false
+    },
     files: [
         {
             type: {
                 type: String,
                 default: "folder"
-            },
-            path: {
-                type: String
             },
             src: {
                 type: String
@@ -32,16 +33,19 @@ const folderSchema = mongoose.Schema({
             fileid: {
                 type: ObjectID
             },
+            folderid: {
+                type: ObjectID
+            },
             createdAt: {
                 type: Number,
                 default: Date.now
             },
         }
     ],
-    folderpath: {
+    foldername: {
         type: String,
         trim: true,
-        default: path.join("/")
+        default: "root"
     },
     createdAt: {
         type: Number
@@ -56,14 +60,15 @@ const folderSchema = mongoose.Schema({
 
 
 folderSchema.methods.addFolder = async function (body) {
-    let folder = await Folder.findOne({ "files.type": "folder", "files.path": body.folderpath })
+    let file = this.files.filter(v => v.name === body.foldername)
 
-    if (folder) {
+    if (file.length) {
         throw new Error('已存在相同目录')
     }
 
     let newFolder = new Folder(body)
-    this.files = [...this.files, { name: path.basename(body.folderpath), path: body.folderpath }]
+
+    this.files = [...this.files, { name: newFolder.foldername, folderid: newFolder._id }]
     await this.save()
 
     return await newFolder.save()

@@ -30,6 +30,8 @@ function filter1(value) {
 }
 
 
+
+
 App.mpType = 'app'
 
 const app = new Vue({

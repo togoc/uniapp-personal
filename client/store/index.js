@@ -154,7 +154,7 @@ export default new Vuex.Store({
       }
     },
 
-    async uploadFile({ state }, body = { folderpath: "", path: '' }) {
+    async uploadFile({ state }, body) {
       try {
         return await upload(body.path, { type: 'file', ...body });
       } catch (error) {
@@ -185,7 +185,17 @@ export default new Vuex.Store({
       let url = "/blog-service/toggle-likes"
       await http(url, "GET", { id: blogID });
       commit("TOGGLELIKES", blogID)
-    }
+    },
+
+    async deleteFolderAndFile({ state }, body) {
+      let url = '/file-service/delete-folder-file'
+      return await http(url, "POST", body)
+    },
+
+    async renameFolderAndFile({ state }, body) {
+      let url = '/file-service/rename-folder-file'
+      return await http(url, "POST", body)
+    },
   },
   mutations: {
     [types.SETUSER](state, body) {

@@ -9,8 +9,9 @@ const removeAvatar = require('../db/utils/removeAvatar')
 const Folder = require('../models/folder')
 const env = require('../enviroment/env')
 const path = require('path')
+const deleteMyFile = require('./fileUtils/removeMyfile')
 
-
+const pathSplit = path.join('/')
 
 class FileService {
 
@@ -22,14 +23,13 @@ class FileService {
                 });
 
                 let user = req.user
-                const { type, folderpath, folderID } = req.query //blogIMG
+                const { type, folderID } = req.query //blogIMG
 
                 const metadata = {
                     ownerID: user._id,
                     blogID: "",
                     type,
                     createdAt: Date.now,
-                    folderpath,
                     isVideo: videoChecker(filename),
                     isImg: imageCheck(filename),
                 }
@@ -80,7 +80,7 @@ class FileService {
                     }
 
                     if (type === 'file') {
-                        let folder = await Folder.findOne({ _id: ObjectID(folderID), folderpath })
+                        let folder = await Folder.findOne({ _id: ObjectID(folderID) })
                         let type = ""
                         if (imageCheck(filename)) {
                             type = 'image'
@@ -93,7 +93,6 @@ class FileService {
 
                         let body = {
                             type,
-                            path: path.join(folderpath, filename),
                             name: filename,
                             fileid: bucketStream.id,
                             src
@@ -191,10 +190,13 @@ class FileService {
     }
 
     async addFolder(user, query) {
+
         let { _id: userid, name: username } = user
-        let { CurrentFolderName, NewFolderName } = query
-        let body = { userid, username, folderpath: path.join(CurrentFolderName, NewFolderName) }
-        let folder = await Folder.findOne({ userid: ObjectID(userid), folderpath: CurrentFolderName })
+        let { CurrentFolderID, NewFolderName } = query
+        let body = { userid, username, foldername: NewFolderName }
+
+        let folder = await Folder.findOne({ userid: ObjectID(userid), _id: ObjectID(CurrentFolderID) })
+
         if (folder) {
             return await folder.addFolder(body)
         } else {
@@ -203,22 +205,60 @@ class FileService {
 
     }
 
-    async getFolderAndFile(user, folderPath) {
-        let folder = await Folder.findOne({ userid: ObjectID(user._id), folderpath: path.join("/") })
+    async getFolderAndFile(user, folderID) {
+        let folder = await Folder.findOne({ userid: ObjectID(user._id), root: true })
         //第一次没有目录
-        if (!folder) {
+        if (!folder && !folderID) {
             let newFolder = new Folder({
                 userid: user._id,
                 username: user.name,
+                root: true
             })
             return await newFolder.save()
+        } else if (folder && !folderID) {
+            return folder
+
         } else {
-            let folder = await Folder.findOne({ userid: ObjectID(user._id), folderpath: path.join(folderPath) })
+            let folder = await Folder.findOne({ userid: ObjectID(user._id), _id: folderID })
             if (folder) {
                 return folder
             } else {
                 throw new Error('目录有误')
             }
+        }
+    }
+
+    async deleteFolderAndFile(file) {
+        if (file.CurrentFolderID) {
+            await Folder.updateOne({ _id: ObjectID(file.CurrentFolderID) }, {
+                $pull: {
+                    files: { _id: ObjectID(file._id) }
+                }
+            })
+        }
+
+        if (file.type === 'folder') {
+            let deleteBack = await Folder.findOneAndDelete({ _id: ObjectID(file.folderid) })
+            if (deleteBack && deleteBack.files) {
+                deleteBack.files.forEach(async v => {
+                    await this.deleteFolderAndFile(v)
+                })
+            }
+        } else {
+            await deleteMyFile(file.fileid)
+        }
+    }
+
+    async renameFolderAndFile(file) {
+        let newName = file.newName
+        await Folder.updateOne({ _id: ObjectID(file.CurrentFolderID), 'files._id': ObjectID(file._id) }, {
+            $set: {
+                'files.$.name': newName
+            }
+        })
+        //未对文件重命名
+        if (file.type === 'folder') {
+            let folder = await Folder.updateOne({ _id: ObjectID(file.folderid) }, { foldername: newName })
         }
     }
 }
