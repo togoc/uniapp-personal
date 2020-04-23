@@ -13,6 +13,7 @@ router.get('/add-folder', auth, fileController.addFolder);
 router.get('/get-folder-file', auth, fileController.getFolderAndFile);
 router.post('/delete-folder-file', auth, fileController.deleteFolderAndFile);
 router.post('/rename-folder-file', auth, fileController.renameFolderAndFile);
+router.get('/download-file', fileController.downloadFile);
 
 module.exports = router;
 

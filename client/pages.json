@@ -74,7 +74,11 @@
             "enablePullDownRefresh": true,
             "navigationBarTitleText": "我的文件"
         }
-    }],
+    }    ,{
+            "path" : "pages/download/download",
+            "style" : {}
+        }
+    ],
     "tabBar": {
         "color": "#515151",
         "selectedColor": "#d81e06",

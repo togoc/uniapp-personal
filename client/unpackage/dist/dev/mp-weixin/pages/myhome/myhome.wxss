@@ -51,4 +51,61 @@
 .my-home .user-header .right {
       float: right;
 }
+.my-home .edit-nav {
+    margin-top: 30rpx;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
+            flex-direction: row;
+    width: 100%;
+    height: 50px;
+    background-color: #f8f8f8;
+    box-sizing: border-box;
+    padding: 0 16rpx;
+    text-align: center;
+}
+.my-home .edit-nav .edit-item {
+      width: 100%;
+      font-size: 16px;
+      height: 100%;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-pack: center;
+      -webkit-justify-content: center;
+              justify-content: center;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+              align-items: center;
+      position: relative;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: column;
+              flex-direction: column;
+      font-weight: bold;
+}
+.my-home .edit-nav .edit-item .iconfont {
+        font-size: 15px;
+        width: 100%;
+        height: calc(14px * 1.33);
+}
+.my-home .edit-nav .edit-item .edit-context {
+        font-size: 12px;
+        height: calc(14px * 1.33);
+        width: 100%;
+}
+.my-home .edit-nav .edit-item .edit-blank-btn {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        opacity: 0;
+}
+.my-home .edit-nav .edit-btn {
+      opacity: 0.3;
+      background-color: #e7e7e7;
+      color: #000;
+}
 

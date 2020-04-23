@@ -15,7 +15,7 @@ baseUrl = 'http://192.168.3.3:3000/blog/file-service/upload'
  * @param {Object} data 
  */
 export default async function (path, queryData = {}) {
-    start()
+    start('开始上传')
     return new Promise((resolve, reject) => {
 
         let token = uni.getStorageSync('BLOG_TOKEN')
@@ -23,7 +23,7 @@ export default async function (path, queryData = {}) {
         Object.keys(queryData).forEach(key => {
             query += key + '=' + queryData[key] + '&';
         })
-        uni.uploadFile({
+        const uploadTask = uni.uploadFile({
             url: baseUrl + '?' + query,
             filePath: path,
             name: "file",
@@ -40,14 +40,25 @@ export default async function (path, queryData = {}) {
                 reject(e);
             }
         });
+
+        uploadTask.onProgressUpdate((res) => {
+            start(`${res.progress}%`)
+            // console.log('已经上传的数据长度' + res.totalBytesSent);
+            // console.log('预期需要上传的数据总长度' + res.totalBytesExpectedToSend);
+
+            // 测试条件，取消上传任务。
+            // if (res.progress > 50) {
+            //     uploadTask.abort();
+            // }
+        });
     })
 
 }
 
 
-function start() {
+function start(title) {
     uni.showLoading({
-        title: '加载中',
+        title,
         mask: true
     });
 }
@@ -56,6 +67,7 @@ function start() {
 function end() {
     uni.hideLoading();
 }
+
 
 
 

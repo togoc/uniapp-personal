@@ -14,11 +14,10 @@ class FileController {
             let file = await fileService.upLoad(busboy, req)
 
             res.send(file);
-
         } catch (error) {
-
             res.status(500).send(error.toString());
         }
+
     }
 
     async img(req, res) {
@@ -43,8 +42,12 @@ class FileController {
 
             let fileID = req.params.id;
             let headers = req.headers
+            //有些设备可能会发送多个不带range的无效请求,不影响使用
+            if (!headers.range) {
+                return res.end()
+            }
 
-            await fileService.video(fileID, headers, res);
+            await fileService.video(fileID, headers, res)
 
 
         } catch (error) {
@@ -80,7 +83,6 @@ class FileController {
     }
 
     async deleteFolderAndFile(req, res) {
-        console.log(req.body)
         try {
             let body = req.body
             await fileService.deleteFolderAndFile(body)
@@ -101,7 +103,18 @@ class FileController {
         }
 
     }
-}
 
+    async downloadFile(req, res) {
+        try {
+            const { fileID } = req.query
+
+            await fileService.downloadFile(fileID, res)
+
+        } catch (error) {
+            console.log(error)
+            res.status(500).send('下载错误' + error.toString())
+        }
+    }
+}
 
 module.exports = FileController

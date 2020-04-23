@@ -6,13 +6,10 @@ mongoose.connect(env.mongoURL, {
     useUnifiedTopology: true,
     useFindAndModify: false
 })
-
-
 mongoose.connection.on('error', (err) => {
     console.error('数据库连接出错:' + err)
 })
 mongoose.connection.on('connected', () => {
     console.log('数据库已连接:' + env.mongoURL)
 })
-
 module.exports = mongoose

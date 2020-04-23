@@ -93,7 +93,8 @@ export default {
                 {
                     title: "下载",
                     icon: "icon-xiazai",
-                    value: "download"
+                    value: "download",
+                    url: "../download/download"
                 }
             ]
         };

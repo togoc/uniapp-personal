@@ -9,7 +9,8 @@
     "pages/login/login",
     "pages/setting/setting",
     "pages/blog/blog",
-    "pages/mydrive/mydrive"
+    "pages/mydrive/mydrive",
+    "pages/download/download"
   ],
   "subPackages": [],
   "window": {
@@ -51,5 +52,5 @@
     ]
   },
   "usingComponents": {},
-  "sitemapLocation": "sitemap18.json"
+  "sitemapLocation": "sitemap32.json"
 }

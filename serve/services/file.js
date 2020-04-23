@@ -8,10 +8,8 @@ const removeChunks = require('./fileUtils/removeChunks')
 const removeAvatar = require('../db/utils/removeAvatar')
 const Folder = require('../models/folder')
 const env = require('../enviroment/env')
-const path = require('path')
 const deleteMyFile = require('./fileUtils/removeMyfile')
 
-const pathSplit = path.join('/')
 
 class FileService {
 
@@ -146,8 +144,10 @@ class FileService {
 
         return new Promise(async (resolve, reject) => {
             let currentFile = await conn.db.collection("fs.files").findOne(ObjectID(id))
-            if (!currentFile) {
-                reject('无文件id:' + id)
+            if (!currentFile || !headers.range) {
+                console.log(1)
+                reject('无文件或者无效range\\id:' + id)
+                return
             }
             let bucket = new mongoose.mongo.GridFSBucket(conn.db, {
                 chunkSizeBytes: 1024 * 255
@@ -261,7 +261,26 @@ class FileService {
             let folder = await Folder.updateOne({ _id: ObjectID(file.folderid) }, { foldername: newName })
         }
     }
+
+    async downloadFile(fileID, res) {
+        let currentFile = await conn.db.collection("fs.files").findOne(ObjectID(fileID))
+
+        let bucket = new mongoose.mongo.GridFSBucket(conn.db, {
+            chunkSizeBytes: 1024 * 255
+        });
+        let head = {
+            'Content-Length': currentFile.length,
+        }
+
+        let readeStream = bucket.openDownloadStream(ObjectID(fileID))
+        res.set('Content-Type', 'application/octet-stream');
+        res.set('Content-Disposition', 'attachment; filename="' + 'index.mp4' + '"');
+        res.set('Content-Length', currentFile.length);
+        
+        readeStream.pipe(res)
+    }
 }
+
 
 
 

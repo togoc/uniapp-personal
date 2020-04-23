@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import http from '../utils/http'
 import upload from '../utils/upload'
+import download from '../utils/download/download'
 import { showToast } from '../utils/prompt'
 Vue.use(Vuex)
 
@@ -20,6 +21,7 @@ export default new Vuex.Store({
     user: {},
     myBlogs: [],
     indexBlogs: [],
+    downLoadStateArr: []
   },
   getters: {
     isLogin: state => Object.keys(state.user).length > 0
@@ -89,9 +91,9 @@ export default new Vuex.Store({
 
         state.user = user
 
-        uni.switchTab({
-          url: "../myhome/myhome"
-        });
+        uni.reLaunch({
+          url: '../myhome/myhome'
+        })
 
       } catch (error) {
         showToast('登录错误:' + error.toString())
@@ -196,6 +198,23 @@ export default new Vuex.Store({
       let url = '/file-service/rename-folder-file'
       return await http(url, "POST", body)
     },
+
+    async downloadFile({ state }, downloadArr) {
+      downloadArr.forEach(async v => {
+        let arr = state.downLoadStateArr.filter(v1 => v1._id === v._id).length
+        if (!arr) {
+          let downloadTask = await download({ fileID: v.fileid })
+          downloadTask.onProgressUpdate(res => {
+            state.downLoadStateArr.forEach(v1 => {
+              if (v._id === v1._id) {
+                v1.progress = res.progress;
+              }
+            })
+          })
+          state.downLoadStateArr.push({ progress: 0, fileName: v.name, type: v.type, _id: v._id })
+        }
+      })
+    }
   },
   mutations: {
     [types.SETUSER](state, body) {
@@ -244,9 +263,12 @@ export default new Vuex.Store({
         }
 
       })
-    }
+    },
+
+
   },
   modules: {
 
   }
 })
+
