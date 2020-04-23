@@ -6,7 +6,9 @@
         "start:prod": "cross-env NODE_ENV=production env-cmd -f ./config/prod.env node ./bin/www",
         "dev": "cross-env NODE_ENV=development env-cmd -f ./config/dev.env node ./bin/www",
         "init": "node utils/initServer.js",
-        "init:dev": "node utils/initDev.js"
+        "init:dev": "node utils/initDev.js",
+        "sharp:linux": "node  utils/sharpLinux.js",
+        "sharp:win": "node  utils/sharpWin.js"
     },
     "dependencies": {
         "bcrypt": "^4.0.1",
