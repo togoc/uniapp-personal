@@ -24,9 +24,10 @@
                     </view>
                 </view>
             </view>
-            <view id="preview" class="preview">
-                <rich-text :nodes="htmlData" class="previewNodes"></rich-text>
-            </view>
+            <!-- <view id="preview" class="preview" v-html="htmlData"> -->
+            <!-- <rich-text :nodes="htmlData" class="previewNodes"></rich-text> -->
+            <!-- </view> -->
+            <web-view :src="'http://192.168.3.3:8080/#/show-blog/' + blogID" />
             <view id="comment" class="comment-container">
                 <comment-item
                     v-for="(item, index) in comments"

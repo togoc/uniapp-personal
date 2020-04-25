@@ -22,7 +22,19 @@ class BlogController {
     }
 
     async editBlog(req, res) {
+        try {
+            let { body, user } = req
 
+
+            let blog = await blogService.editBlog(body, user)
+
+            res.status(200).send(blog);
+
+        } catch (error) {
+
+            res.status(500).send(error.toString());
+
+        }
     }
 
     async getMyBlog(req, res) {

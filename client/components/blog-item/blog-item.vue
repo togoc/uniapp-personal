@@ -7,7 +7,7 @@
     >
         <view :data-id="item._id" class="title f2">{{ item.title }}</view>
         <view :data-id="item._id" class="detail f2">{{
-            item.text.replace(/\s/g, "")
+            item.text ? item.text.replace(/\s/g, "") : ""
         }}</view>
         <view class="nav">
             <text :data-id="item._id" data-type="user">{{

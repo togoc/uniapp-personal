@@ -8,6 +8,10 @@ const blogSchema = mongoose.Schema({
         trim: true,
         require: true
     },
+    type: {
+        type: String,
+        trim: true,
+    },
     username: {
         type: String,
         trim: true,
@@ -26,12 +30,22 @@ const blogSchema = mongoose.Schema({
     html: {
         type: String,
         trim: true,
-        require: true
+        require: true,
+        validate(value) {
+            if (value.trim().length <= 0) {
+                throw new Error('内容无效("HTML" Is Not Valid)')
+            }
+        }
     },
     markdown: {
         type: String,
         trim: true,
-        require: true
+        require: true,
+        validate(value) {
+            if (value.trim().length <= 0) {
+                throw new Error('内容无效("markdown" Is Not Valid)')
+            }
+        }
     },
     text: {
         type: String,

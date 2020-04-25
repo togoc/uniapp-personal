@@ -5,6 +5,8 @@ const BlogController = require('../controllers/blog')
 const auth = require('../middleware/auth')
 const blogController = new BlogController()
 router.post('/add-blog', auth, blogController.addBlog);
+router.post('/edit-blog', auth, blogController.editBlog);
+
 router.get('/get-my-blog', auth, blogController.getMyBlog);
 router.get('/get-index-blog', blogController.getIndexBlog);
 router.get('/search', blogController.search);

@@ -3,6 +3,28 @@ const Blog = require('../models/blog')
 const ObjectID = require('mongodb').ObjectID
 const removeFile = require('../db/utils/removeFile')
 class BlogService {
+    async editBlog(body, user) {
+        let { context = {}, tags = [] } = body
+
+        let { name: username, _id: userid } = user
+        let { id, markdown, html, title, type } = context
+
+        let blog = await Blog.findOne({ _id: ObjectID(id) })
+
+
+        let thumbnails = await removeFile(context, tags, blog._id)
+
+
+        blog.thumbnails = thumbnails
+        blog.markdown = markdown
+        blog.html = html
+        blog.title = title
+        blog.type = type
+
+        return await blog.save()
+
+    }
+
     async addBlog(body, user) {
         let { context = {}, tags = [] } = body
 
