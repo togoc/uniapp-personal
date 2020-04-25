@@ -9,10 +9,9 @@ class BlogController {
             let { body, user } = req
 
 
+            let blog = await blogService.addBlog(body, user)
 
-            await blogService.addBlog(body, user)
-
-            res.send('保存成功(saved)!');
+            res.status(200).send(blog);
 
         } catch (error) {
 

@@ -25,12 +25,10 @@ class FileController {
             let { w, h, byuserid } = req.query;
 
             let fileID = req.params.id;
-
-            byuserid && (fileID = await User.getAvatar(fileID));
-
+            if (fileID != 'default.png')
+                byuserid && (fileID = await User.getAvatar(fileID));
 
             await fileService.img(w, h, fileID, res);
-
 
         } catch (error) {
             res.status(500).send('图片获取错误' + error.toString());

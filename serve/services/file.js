@@ -6,6 +6,8 @@ const imageCheck = require('./fileUtils/IMGChecker')
 const videoChecker = require('./fileUtils/videoChecker')
 const removeChunks = require('./fileUtils/removeChunks')
 const removeAvatar = require('../db/utils/removeAvatar')
+const fs = require('fs')
+const path = require('path')
 const Folder = require('../models/folder')
 const env = require('../enviroment/env')
 const deleteMyFile = require('./fileUtils/removeMyfile')
@@ -112,15 +114,23 @@ class FileService {
     async img(w, h, id, res) {
 
         return new Promise((resolve, reject) => {
-            let bucket = new mongoose.mongo.GridFSBucket(conn.db, {
-                chunkSizeBytes: 1024 * 255
-            });
+            let readeStream = null
+            console.log(id)
+            if (id === 'default.png') {
+                readeStream = fs.createReadStream(path.resolve(__dirname, '../public/images/default.png'))
+            } else {
+                let bucket = new mongoose.mongo.GridFSBucket(conn.db, {
+                    chunkSizeBytes: 1024 * 255
+                });
 
-            let readeStream = bucket.openDownloadStream(ObjectID(id))
+                readeStream = bucket.openDownloadStream(ObjectID(id))
+
+            }
+
 
             if (!(w && h)) {
-                w = 300
-                h = 300
+                w = 100
+                h = 100
             }
 
             const imageResize = sharp().resize(Number(w), Number(h)).on("error", (e) => {
@@ -276,7 +286,7 @@ class FileService {
         res.set('Content-Type', 'application/octet-stream');
         res.set('Content-Disposition', 'attachment; filename="' + 'index.mp4' + '"');
         res.set('Content-Length', currentFile.length);
-        
+
         readeStream.pipe(res)
     }
 }

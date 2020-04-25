@@ -100,7 +100,7 @@ userSchema.methods.createToken = async function () {
     const iv = crypto.randomBytes(16);
     const user = this;
 
-    let token = jwt.sign({ _id: user._id.toString(), iv }, env.password);
+    let token = jwt.sign({ _id: user._id.toString(), iv }, env.password, { expiresIn: 3600 * 2 });
 
     //未对token加密
     user.tokens = user.tokens.concat({ token: token });

@@ -4,7 +4,7 @@ const ObjectID = require('mongodb').ObjectID
 const removeFile = require('../db/utils/removeFile')
 class BlogService {
     async addBlog(body, user) {
-        let { context, tags } = body
+        let { context = {}, tags = [] } = body
 
         let { name: username, _id: userid } = user
 
@@ -14,7 +14,7 @@ class BlogService {
 
         blog.thumbnails = thumbnails
 
-        await blog.save()
+        return await blog.save()
 
     }
 
@@ -25,14 +25,14 @@ class BlogService {
             await targetBlog.addViews()
             return await targetBlog
         } else {
-            return await Blog.find({}, ['likes', 'comments', 'title', 'username', 'text', 'views', 'updatedAt']).skip(Number(page)).limit(pageSize)
+            return await Blog.find({}).skip(Number(page)).limit(pageSize)
         }
 
     }
 
     async getMyBlog(userID, page) {
         let pageSize = 10
-        return await Blog.find({ userid: userID }, ['likes', 'comments', 'title', 'username', 'text', 'updatedAt', 'views']).skip(Number(page)).limit(pageSize)
+        return await Blog.find({ userid: userID }).skip(Number(page)).limit(pageSize)
     }
 
     async search(keyword) {

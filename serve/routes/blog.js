@@ -11,4 +11,12 @@ router.get('/search', blogController.search);
 router.get('/toggle-likes', auth, blogController.toggleLikes);
 router.post('/add-comment', auth, blogController.addComment);
 
+
+router.get('/test', (req, res) => {
+    console.log(req.query)
+    console.log(req.body)
+    res.send('ok');
+});
+
+
 module.exports = router;

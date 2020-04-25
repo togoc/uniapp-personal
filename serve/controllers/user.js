@@ -88,13 +88,13 @@ class UserController {
 
         try {
             const { id } = req.query
-
+            
             const user = await userServices.getUser(id) || req.user
 
             res.status(200).send(user);
 
         } catch (error) {
-            res.status(500).send('获取用户信息失败' + '(' + e.toString() + ')');
+            res.status(500).send('获取用户信息失败' + '(' + error.toString() + ')');
         }
 
     }

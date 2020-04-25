@@ -28,10 +28,14 @@ const blogSchema = mongoose.Schema({
         trim: true,
         require: true
     },
+    markdown: {
+        type: String,
+        trim: true,
+        require: true
+    },
     text: {
         type: String,
         trim: true,
-        require: true,
         validate(value) {
             if (value.trim().length <= 0) {
                 throw new Error('内容无效("text" Is Not Valid)')
@@ -87,12 +91,13 @@ blogSchema.pre('save', async function (next) {
 
     const blog = this
 
-    if (blog.isModified('html')) {
-        blog.html = blog.html.replace(/\<img/gi,
-            '<img style="max-width:50%;height:auto"').replace(/```.*?```/ig, function (e) {
-                return '<div style="background-color:#f6f8fa;border: 5px solid #f1f8ff;padding: 3px;font-size: 14px;"><code>' + e.replace(/&nbsp;/ig, "").replace(/```|<p.*?>|<\/p>/ig, '').replace(/;/ig, ";<br>") + '</code></div>'
-            })
-    }
+    //手机替换用
+    // if (blog.isModified('html')) {
+    //     blog.html = blog.html.replace(/\<img/gi,
+    //         '<img style="max-width:50%;height:auto"').replace(/```.*?```/ig, function (e) {
+    //             return '<div style="background-color:#f6f8fa;border: 5px solid #f1f8ff;padding: 3px;font-size: 14px;"><code>' + e.replace(/&nbsp;/ig, "").replace(/```|<p.*?>|<\/p>/ig, '').replace(/;/ig, ";<br>") + '</code></div>'
+    //         })
+    // }
 
     if (blog.isModified('text')) {
         blog.text = nodejieba.cut((blog.text.trim().replace(/```/ig, "") + blog.title), true).join(' ')
