@@ -4,6 +4,21 @@ const BlogService = require('../services/blog')
 const blogService = new BlogService()
 
 class BlogController {
+
+
+
+    async getTypes(req, res) {
+        try {
+
+            let types = await blogService.getTypes()
+
+            res.status(200).send(types);
+
+        } catch (error) {
+            res.status(500).send(error.toString());
+        }
+    }
+
     async delete(req, res) {
         try {
             let { id } = req.params

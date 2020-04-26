@@ -16,6 +16,9 @@ router.get('/search', blogController.search);
 router.get('/toggle-likes', auth, blogController.toggleLikes);
 router.post('/add-comment', auth, blogController.addComment);
 
+router.get('/get-types', auth, blogController.getTypes);
+// router.get('/add-types', auth, blogController.addTypes);
+
 
 router.get('/test', (req, res) => {
     console.log(req.query)

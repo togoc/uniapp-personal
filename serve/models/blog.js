@@ -8,10 +8,12 @@ const blogSchema = mongoose.Schema({
         trim: true,
         require: true
     },
-    type: {
-        type: String,
-        trim: true,
+    privated: {
+        type: Boolean,
+        default: false
     },
+    types: [],  //分类
+    articleTags: [], //标签
     username: {
         type: String,
         trim: true,
