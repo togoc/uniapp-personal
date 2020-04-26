@@ -4,7 +4,11 @@ mongoose.connect(env.mongoURL, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,
-    useFindAndModify: false
+    useFindAndModify: false,
+    authSource: "personal-drive",
+    user: "blog-user",
+    pass: "123456"
+
 })
 mongoose.connection.on('error', (err) => {
     console.error('数据库连接出错:' + err)

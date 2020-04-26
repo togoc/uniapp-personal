@@ -4,6 +4,7 @@ const path = require('path');
 const busboy = require('connect-busboy');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const compression = require('compression')
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -13,6 +14,15 @@ const filesRouter = require('./routes/file')
 const app = express();
 
 
+//启用gzip
+function shouldCompress(req, res) {
+  if (req.headers['x-no-compression']) {
+    // 这里就过滤掉了请求头包含'x-no-compression'
+    return false
+  }
+  return compression.filter(req, res)
+}
+app.use(compression({ filter: shouldCompress }))
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
