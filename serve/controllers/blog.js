@@ -4,6 +4,33 @@ const BlogService = require('../services/blog')
 const blogService = new BlogService()
 
 class BlogController {
+    async delete(req, res) {
+        try {
+            let { id } = req.params
+            let { _id } = req.user
+
+            let msg = await blogService.delete(id, _id)
+
+            res.status(200).send(msg);
+
+        } catch (error) {
+            res.status(500).send(error.toString());
+        }
+    }
+
+    async getMyliked(req, res) {
+        try {
+            let { _id } = req.user
+
+            let blogs = await blogService.getMyliked(_id)
+
+            res.status(200).send(blogs);
+
+        } catch (error) {
+            res.status(500).send(error.toString());
+        }
+    }
+
     async addBlog(req, res) {
         try {
             let { body, user } = req
@@ -18,7 +45,6 @@ class BlogController {
             res.status(500).send(error.toString());
 
         }
-
     }
 
     async editBlog(req, res) {
@@ -100,9 +126,9 @@ class BlogController {
             let userID = req.user._id
             let blogID = req.query.id
 
-            await blogService.toggleLikes(userID, blogID)
+            let blog = await blogService.toggleLikes(userID, blogID)
 
-            res.status(200).send('toggleLikesOk');
+            res.status(200).send(blog.likes);
 
         } catch (error) {
             res.status(500).send('点赞失败' + error.toString());

@@ -3,6 +3,20 @@ const Blog = require('../models/blog')
 const ObjectID = require('mongodb').ObjectID
 const removeFile = require('../db/utils/removeFile')
 class BlogService {
+
+    async delete(blogId, userId) {
+
+        return await Blog.deleteOne({ _id: ObjectID(blogId), userid: ObjectID(userId) })
+
+    }
+
+
+    async getMyliked(id) {
+
+        return await Blog.find({ "likes": { "$in": [ObjectID(id)] } })
+    }
+
+
     async editBlog(body, user) {
         let { context = {}, tags = [] } = body
 
@@ -47,14 +61,16 @@ class BlogService {
             await targetBlog.addViews()
             return await targetBlog
         } else {
-            return await Blog.find({}).skip(Number(page)).limit(pageSize)
+            // return await Blog.find({}).skip(Number(page)).limit(pageSize)
+            return await Blog.find({})
         }
 
     }
 
     async getMyBlog(userID, page) {
         let pageSize = 10
-        return await Blog.find({ userid: userID }).skip(Number(page)).limit(pageSize)
+        // return await Blog.find({ userid: userID }).skip(Number(page)).limit(pageSize)
+        return await Blog.find({ userid: userID })
     }
 
     async search(keyword) {
@@ -66,7 +82,7 @@ class BlogService {
 
         let blog = await Blog.findOne({ _id: blogID })
 
-        await blog.toggleLikes(userID)
+        return await blog.toggleLikes(userID)
 
     }
 

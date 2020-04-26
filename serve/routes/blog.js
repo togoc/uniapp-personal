@@ -7,6 +7,9 @@ const blogController = new BlogController()
 router.post('/add-blog', auth, blogController.addBlog);
 router.post('/edit-blog', auth, blogController.editBlog);
 
+router.get('/delete/:id', auth, blogController.delete);
+
+router.get('/get-my-liked', auth, blogController.getMyliked);
 router.get('/get-my-blog', auth, blogController.getMyBlog);
 router.get('/get-index-blog', blogController.getIndexBlog);
 router.get('/search', blogController.search);
