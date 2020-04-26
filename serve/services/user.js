@@ -49,7 +49,7 @@ class UserServices {
 
     async getUser(id) {
 
-        return await User.findOne({ _id: ObjectID(id) })
+        return await User.findOne({ _id: ObjectID(id) }, { tokens: 0, password: 0 })
 
     }
 

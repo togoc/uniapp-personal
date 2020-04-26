@@ -88,8 +88,12 @@ class UserController {
 
         try {
             const { id } = req.query
-            
+
             const user = await userServices.getUser(id) || req.user
+
+            user.tokens = undefined
+            user.password = undefined
+            user.__v = undefined
 
             res.status(200).send(user);
 

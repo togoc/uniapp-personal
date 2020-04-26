@@ -28,6 +28,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
+
 app.use('/', indexRouter);
 app.use('/blog/user-service', usersRouter);
 app.use('/blog/blog-service', blogsRouter);
