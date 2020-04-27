@@ -4,9 +4,20 @@ const BlogService = require('../services/blog')
 const blogService = new BlogService()
 
 class BlogController {
+    // 首页分类列表
+    async getTypesList(req, res) {
+        try {
 
+            let types = await blogService.getTypesList()
 
+            res.status(200).send(types);
 
+        } catch (error) {
+            res.status(500).send(error.toString());
+        }
+    }
+
+    // 编辑页面 分类列表
     async getTypes(req, res) {
         try {
 
@@ -95,9 +106,8 @@ class BlogController {
 
     async getIndexBlog(req, res) {
         try {
-            let { page, id } = req.query
 
-            let blogs = await blogService.getIndexBlog(page, id)
+            let blogs = await blogService.getIndexBlog(req.query)
 
             res.status(200).send(blogs);
 

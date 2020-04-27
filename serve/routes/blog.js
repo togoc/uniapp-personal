@@ -17,6 +17,7 @@ router.get('/toggle-likes', auth, blogController.toggleLikes);
 router.post('/add-comment', auth, blogController.addComment);
 
 router.get('/get-types', auth, blogController.getTypes);
+router.get('/get-types/list', auth, blogController.getTypesList);
 // router.get('/add-types', auth, blogController.addTypes);
 
 

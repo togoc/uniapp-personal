@@ -6,6 +6,7 @@ const typeSchema = mongoose.Schema({
         type: String,
         require: true,
         unique: true,
+        lowercase: true,
         trim: true
     },
     userid: {
@@ -48,6 +49,7 @@ typeSchema.pre('save', function (next) {
     next()
 })
 
+typeSchema.index({ num: -1 })
 
 
 const Types = mongoose.model('articletypes', typeSchema)

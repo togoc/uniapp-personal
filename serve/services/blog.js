@@ -1,11 +1,19 @@
 
 const Blog = require('../models/blog')
+const SpecialInfo = require('../models/specialInfo')
 const Type = require('../models/articleType')
 const ObjectID = require('mongodb').ObjectID
 const removeFile = require('../db/utils/removeFile')
 
 
 class BlogService {
+
+    async getTypesList() {
+
+        return await Type.find({}, ['name', 'num']).sort({ num: -1 }).limit(10)
+
+    }
+
 
     async getTypes() {
 
@@ -24,7 +32,6 @@ class BlogService {
 
 
     async getMyliked(id) {
-
         return await Blog.find({ "likes": { "$in": [ObjectID(id)] } })
     }
 
@@ -72,12 +79,19 @@ class BlogService {
 
     }
 
-    async getIndexBlog(page, id) {
+    // 根据类名返回文章 / 根据 id 返回 
+    async getIndexBlog({ page, id, type }) {
+
         let pageSize = 10
         if (id) {
             let targetBlog = await Blog.findOne({ _id: id })
             await targetBlog.addViews()
             return await targetBlog
+        } else if (type) {
+            // 指定类名返回含有特殊信息的内容
+            let blogs = await Blog.find({ "types": { "$in": [type] } })
+            let specialInfo = await SpecialInfo.findOne({ name: type })
+            return { blogs, specialInfo }
         } else {
             // return await Blog.find({}).skip(Number(page)).limit(pageSize)
             return await Blog.find({})
@@ -116,4 +130,22 @@ class BlogService {
 
 module.exports = BlogService
 
+
+// let sp = new SpecialInfo({
+//     name: 'react',
+//     swipers: [
+//         {
+//             img_url: "https://img0.tuicool.com/INzy2y2.png!web",
+//             path: 'https://react.docschina.org/',
+//             tips: "react"
+//         },
+//         {
+//             img_url: "http://www.ruanyifeng.com/blogimg/asset/2016/bg2016092101.jpg",
+//             path: 'https://www.redux.org.cn/',
+//             tips: "redux"
+//         },
+//     ]
+// })
+
+// sp.save()
 
