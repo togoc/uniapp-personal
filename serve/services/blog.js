@@ -60,7 +60,7 @@ class BlogService {
     }
 
     async addBlog(body, user) {
-
+        //tags 包含了{src,file_id}
         let { context = {}, tags = [] } = body
 
         //文章类型引用标记

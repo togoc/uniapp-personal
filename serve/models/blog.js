@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const nodejieba = require("nodejieba");
+const ObjectID = require('mongodb').ObjectID
 
 
 const blogSchema = mongoose.Schema({
@@ -62,9 +63,12 @@ const blogSchema = mongoose.Schema({
         type: Object,
         require: true
     },
-    thumbnails: {
-        type: Array
-    },
+    thumbnails: [
+        {
+            src: String,
+            file_id: String
+        }
+    ],
     likes: [],
     views: {
         type: Number,

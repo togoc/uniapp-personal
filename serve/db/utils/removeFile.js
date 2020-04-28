@@ -5,11 +5,11 @@ const removeFile = async (context, tags, blogID) => {
     let thumbnails = []
     tags.forEach(async v => {
         if (context.html.indexOf(v.src) === -1) {
-            await conn.db.collection("fs.files").deleteOne({ _id: ObjectID(v._id) })
-            await conn.db.collection("fs.chunks").deleteMany({ files_id: ObjectID(v._id) })
+            await conn.db.collection("fs.files").deleteOne({ _id: ObjectID(v.file_id) })
+            await conn.db.collection("fs.chunks").deleteMany({ files_id: ObjectID(v.file_id) })
         } else {
-            thumbnails.push(v.src)
-            await conn.db.collection("fs.files").findOneAndUpdate({ _id: ObjectID(v._id) }, { "$set": { 'metadata.blogID': ObjectID(blogID) } })
+            thumbnails.push(v)
+            await conn.db.collection("fs.files").findOneAndUpdate({ _id: ObjectID(v.file_id) }, { "$set": { 'metadata.blogID': ObjectID(blogID) } })
         }
     })
 

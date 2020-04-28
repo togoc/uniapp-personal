@@ -73,7 +73,7 @@ class FileService {
                         }
 
                         resolve({
-                            _id,
+                            file_id: _id,
                             src
                         })
 
