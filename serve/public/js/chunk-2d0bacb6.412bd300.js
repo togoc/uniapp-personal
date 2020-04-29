@@ -1,2 +1,0 @@
-(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d0bacb6"],{3971:function(e,a,n){"use strict";n.r(a);var l=function(){var e=this,a=e.$createElement,n=e._self._c||a;return n("div",{staticClass:"download"},[n("HomeHeader",{attrs:{searchPage:"download",placeholder:"搜索下载信息"}}),e._v(" download ")],1)},o=[],t={},c=t,d=n("2877"),s=Object(d["a"])(c,l,o,!1,null,null,null);a["default"]=s.exports}}]);
-//# sourceMappingURL=chunk-2d0bacb6.412bd300.js.map
