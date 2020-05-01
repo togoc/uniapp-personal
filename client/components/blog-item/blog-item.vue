@@ -3,23 +3,25 @@
         class="blog-item"
         hover-class="hover-item"
         @click.stop="handleClickItem"
-        :data-id="item._id"
     >
-        <view :data-id="item._id" class="title f2">{{ item.title }}</view>
-        <view :data-id="item._id" class="detail f2">{{
-            item.text ? item.text.replace(/\s/g, "") : ""
-        }}</view>
+        <view class="title f2">{{ item.title }}</view>
+        <view class="detail f2">
+            {{ item.markdown ? item.markdown.replace(/\s/g, "") : "" }}
+        </view>
+        <view class="img-container" v-show="item.thumbnails.length">
+            <image
+                mode="aspectFit"
+                v-for="(item, index) in item.thumbnails"
+                :key="index"
+                :src="item.src"
+            />
+        </view>
         <view class="nav">
-            <text :data-id="item._id" data-type="user">{{
-                item.username
+            <text>{{ item.username }}</text>
+            <text @click.stop="handleLiked" class="last2 iconfont icon-zan">{{
+                item.likes ? item.likes.length : 0
             }}</text>
-            <text
-                :data-id="item._id"
-                data-type="like"
-                class="last2 iconfont icon-zan"
-                >{{ item.likes ? item.likes.length : 0 }}</text
-            >
-            <text data-type="commont" class="last2 iconfont icon-pinglun">{{
+            <text class="last2 iconfont icon-pinglun">{{
                 item.comments ? item.comments.length : 0
             }}</text>
             <text class="last2 iconfont icon-zhiboguankanshu">{{
@@ -39,7 +41,10 @@ export default {
     },
     methods: {
         handleClickItem(e) {
-            this.$emit("handleClickItem", e);
+            this.$emit("handleClickItem", this.item._id);
+        },
+        handleLiked() {
+            this.$emit("handleLiked", this.item._id);
         }
     }
 };
@@ -52,7 +57,6 @@ export default {
 .blog-item {
     transition: all 0.15s linear;
     padding: 0.5rem;
-    max-height: 8rem;
     background-color: $uni-bg-color-grey;
     box-sizing: border-box;
     overflow: hidden;
@@ -63,19 +67,33 @@ export default {
         margin-bottom: $uni-spacing-row-sm;
     }
     .title {
+        width: 100%;
         height: 1.33rem;
         font-weight: bold;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .img-container {
+        width: 100%;
+        padding: 3px;
+        z-index: -1;
+        image {
+            max-height: 2.25rem;
+            width: 2.25rem;
+            margin: 3px;
+            height: 2.25rem;
+            border-radius: $uni-border-radius-base;
+        }
     }
     .detail {
         font-size: 0.875rem;
         line-height: 1.115rem;
         max-height: 2.25rem;
-        min-height: 1.33rem;
         overflow: hidden;
         @extend .over2;
     }
     .f2 {
-        margin-bottom: 0.5rem;
     }
     .nav {
         height: 1rem;

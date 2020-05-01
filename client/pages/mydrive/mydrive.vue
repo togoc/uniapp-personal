@@ -195,17 +195,18 @@ export default {
                     }
                     break;
                 case "download":
+                    let downloadArr = null;
                     // #ifdef H5
-                    // let downloadArr = this.selectedFiles.filter(
-                    //     v => v.type !== "folder"
-                    // );
-                    // downloadArr.forEach(v => {
-                    //     this.$http("/file-service/download-file", "GET", {
-                    //         fileID: v.fileid
-                    //     });
-                    // });
+                    downloadArr = this.selectedFiles.filter(
+                        v => v.type !== "folder"
+                    );
+                    downloadArr.forEach(v => {
+                        this.$http("/file-service/download-file", "GET", {
+                            fileID: v.fileid
+                        });
+                    });
                     // #endif
-                    let downloadArr = this.selectedFiles.filter(
+                    downloadArr = this.selectedFiles.filter(
                         v => v.type !== "folder"
                     );
                     await this.$store.dispatch("downloadFile", downloadArr);

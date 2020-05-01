@@ -18,17 +18,17 @@
                         <text>{{ blog.username || "" }}</text>
                         <text>{{ blog.username || "" }}</text>
                     </view>
-                    <view class="focus">
+                    <!-- <view class="focus">
                         <text>私信</text>
                         <text>关注</text>
-                    </view>
+                    </view> -->
                 </view>
             </view>
-            <!-- <view id="preview" class="preview" v-html="htmlData"> -->
-            <!-- <rich-text :nodes="htmlData" class="previewNodes"></rich-text> -->
-            <!-- </view> -->
-            <web-view :src="'http://192.168.3.3:8080/#/show-blog/' + blogID" />
+            <view id="preview" class="preview" v-html="htmlData">
+                <rich-text :nodes="htmlData" class="previewNodes"></rich-text>
+            </view>
             <view id="comment" class="comment-container">
+                <view class="comment-title">评论</view>
                 <comment-item
                     v-for="(item, index) in comments"
                     :commentItme="item"
@@ -128,7 +128,6 @@ export default {
         },
         async getBlog(id) {
             let data = await this.$store.dispatch("getItemBlogByID", id);
-
             this.blog = data;
         },
         async handleAddComment() {
@@ -213,8 +212,8 @@ export default {
                 flex-direction: row;
                 box-sizing: border-box;
                 align-items: center;
-                background-color: $uni-bg-color-grey-more;
                 border-radius: $uni-border-radius-base;
+                box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
                 width: 100%;
                 height: 2.91rem;
                 .header-img {
@@ -275,10 +274,14 @@ export default {
             padding: $uni-spacing-col-lg;
             word-wrap: break-word;
             letter-spacing: 1px;
-            background-color: $uni-bg-color-grey-more;
             font-size: 0.85rem;
         }
         .comment-container {
+            .comment-title {
+                font-size: 0.875rem;
+                padding: 0.25rem 0;
+                border-top: 1px solid $uni-bg-color-grey-more;
+            }
             padding: 0 $uni-spacing-col-base;
             box-sizing: border-box;
             width: 100%;

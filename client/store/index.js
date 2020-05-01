@@ -243,11 +243,11 @@ export default new Vuex.Store({
     },
 
     [types.SETMYBLOGS](state, blogs) {
-      state.myBlogs = state.myBlogs.concat(blogs)
+      state.myBlogs = blogs
     },
 
     [types.SETBLOGS](state, blogs) {
-      state.indexBlogs = state.indexBlogs.concat(blogs)
+      state.indexBlogs = blogs
     },
 
     [types.TOGGLELIKES](state, blogID) {

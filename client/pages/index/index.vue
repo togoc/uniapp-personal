@@ -14,15 +14,10 @@
                     ></text>
                 </template>
             </search-bar>
-            <!-- <view
-                ref="title"
-                :style="{ opacity: opacity, backgroundColor: 'red' }"
-                class="title"
-                >title</view
-            > -->
         </view>
         <blog-item
             @handleClickItem="handleClickItem"
+            @handleLiked="handleLiked"
             v-for="(item, index) in indexBlogs"
             :item="item"
             :key="index"
@@ -58,25 +53,17 @@ export default {
             animationType: "fade-in"
         });
     },
-    onReachBottom() {
-        this.$store.dispatch("getIndexBlog");
-    },
+    // onReachBottom() {
+    //     this.$store.dispatch("getIndexBlog");
+    // },
     methods: {
-        async handleClickItem(e) {
-            let { type, id } = e.target.dataset;
-            if (type === undefined && id) {
-                uni.navigateTo({
-                    url: "../blog/blog?blogID=" + id
-                });
-            } else if (type) {
-                switch (type) {
-                    case "like":
-                        let data = await this.$store.dispatch("toggleLike", id);
-                    default:
-                        break;
-                }
-                console.log(type);
-            }
+        async handleClickItem(id) {
+            uni.navigateTo({
+                url: "../blog/blog?blogID=" + id
+            });
+        },
+        async handleLiked(id) {
+            let data = await this.$store.dispatch("toggleLike", id);
         },
         handleSearch() {
             uni.navigateTo({
@@ -121,6 +108,7 @@ page {
     .search {
         width: 100%;
         position: fixed;
+        z-index: 5;
         top: 0;
         height: 50px;
         /* #ifndef H5 */

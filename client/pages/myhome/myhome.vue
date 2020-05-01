@@ -90,12 +90,12 @@ export default {
                     value: "rename",
                     url: "../mydrive/mydrive"
                 },
-                {
-                    title: "下载",
-                    icon: "icon-xiazai",
-                    value: "download",
-                    url: "../download/download"
-                }
+                // {
+                //     title: "下载",
+                //     icon: "icon-xiazai",
+                //     value: "download",
+                //     url: "../download/download"
+                // }
             ]
         };
     },

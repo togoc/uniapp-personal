@@ -2,19 +2,17 @@
 export default {
     onLaunch: function() {},
     onShow: function() {
-        this.$store.dispatch('getUser');
+        this.$store.dispatch("getUser");
     },
-    onHide: function() {
-        console.log('App Hide');
-    }
+    onHide: function() {}
 };
 </script>
 
 <style lang="scss">
-@import './static/css/icons.scss';
+@import "./static/css/icons.scss";
 
 page {
-    font-family: Tahoma, 'Microsoft Yahei', 'Simsun';
+    font-family: Tahoma, "Microsoft Yahei", "Simsun";
     width: 100%;
     height: 100%;
     color: $uni-text-color;
