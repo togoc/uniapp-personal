@@ -124,6 +124,16 @@ class BlogService {
         return await blog.addComment(context)
 
     }
+
+    async delComment({ id, userid }) {
+        let blog = await Blog.findOne({
+            "comments._id": ObjectID(id),
+            "comments.userid": ObjectID(userid),
+        })
+
+        return await blog.delComment(id)
+
+    }
 }
 
 

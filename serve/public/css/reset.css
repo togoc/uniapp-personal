@@ -112,6 +112,9 @@ body {
     background-color: #f5f6f7;
 }
 
+html {
+    scroll-behavior: smooth;
+}
 
 
 blockquote,
@@ -135,4 +138,3 @@ table {
 a {
     text-decoration: none;
 }
-

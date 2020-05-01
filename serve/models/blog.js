@@ -160,6 +160,16 @@ blogSchema.methods.addComment = async function (comment) {
 }
 
 
+blogSchema.methods.delComment = async function (id) {
+
+    let comments = this.comments.filter(v => String(v._id) !== id)
+
+    this.comments = comments
+
+    return await this.save()
+
+}
+
 
 blogSchema.index({ title: "text", text: "text" })
 

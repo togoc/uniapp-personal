@@ -174,6 +174,21 @@ class BlogController {
         }
 
     }
+
+    async delComment(req, res) {
+        try {
+            let { _id: userid } = req.user
+            let { id } = req.body
+
+            let comment = await blogService.delComment({ id, userid })
+
+            res.status(200).send(comment);
+
+        } catch (error) {
+            res.status(500).send('留言失败' + error.toString());
+        }
+
+    }
 }
 
 

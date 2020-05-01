@@ -15,6 +15,7 @@ router.get('/get-index-blog', blogController.getIndexBlog);
 router.get('/search', blogController.search);
 router.get('/toggle-likes', auth, blogController.toggleLikes);
 router.post('/add-comment', auth, blogController.addComment);
+router.post('/del-comment', auth, blogController.delComment);
 
 router.get('/get-types', blogController.getTypes);
 router.get('/get-types/list', blogController.getTypesList);
