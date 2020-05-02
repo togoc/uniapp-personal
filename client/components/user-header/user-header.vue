@@ -53,7 +53,13 @@
                             <text class="count">{{ item.count }}</text>
                             <text class="title">{{ item.title }}</text>
                         </view>
-                        <text class="iconfont icon-jiantouarrow487">主页</text>
+                        <navigator
+                            class="iconfont icon-jiantouarrow487"
+                            url="../../pages/await/await"
+                            redirect
+                            hover-class="className"
+                            >主页</navigator
+                        >
                     </view>
                 </view>
             </template>

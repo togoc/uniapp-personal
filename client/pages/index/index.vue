@@ -3,15 +3,10 @@
         <view class="search">
             <search-bar ref="search" @click.native="handleSearch" disabled>
                 <template v-slot:middle>
-                    <view>
-                        middle
-                    </view>
+                    <view>middle</view>
                 </template>
                 <template v-slot:right>
-                    <text
-                        class="iconfont icon-add"
-                        @click.stop="handleAdd"
-                    ></text>
+                    <text class="iconfont icon-add" @click.stop="handleAdd"></text>
                 </template>
             </search-bar>
         </view>
@@ -50,23 +45,23 @@
 export default {
     data() {
         return {
-            title: "Hello",
-            text: "text",
+            title: 'Hello',
+            text: 'text',
             opacity: 1
         };
     },
     onReady() {
-        this.$store.dispatch("getIndexBlog", {});
+        this.$store.dispatch('getIndexBlog', {});
     },
     async onPullDownRefresh() {
         this.lastPage = false;
-        await this.$store.dispatch("getIndexBlog");
+        await this.$store.dispatch('getIndexBlog');
         uni.stopPullDownRefresh();
     },
     onNavigationBarSearchInputClicked() {
         uni.navigateTo({
-            url: "../search/search",
-            animationType: "fade-in"
+            url: '../search/search',
+            animationType: 'fade-in'
         });
     },
     // onReachBottom() {
@@ -75,19 +70,21 @@ export default {
     methods: {
         async handleClickItem(id) {
             uni.navigateTo({
-                url: "../blog/blog?blogID=" + id
+                url: '../blog/blog?blogID=' + id
             });
         },
         async handleLiked(id) {
-            let data = await this.$store.dispatch("toggleLike", id);
+            let data = await this.$store.dispatch('toggleLike', id);
         },
         handleSearch() {
             uni.navigateTo({
-                url: "../search/search"
+                url: '../search/search'
             });
         },
         handleAdd() {
-            console.log(2);
+            uni.navigateTo({
+                url: '../await/await'
+            });
         }
     },
     onPageScroll(e) {

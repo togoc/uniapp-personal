@@ -70,13 +70,18 @@
     }, {
         "path": "pages/download/download",
         "style": {}
+    }, {
+        "path": "pages/await/await",
+        "style": {
+            "navigationBarTitleText": "敬请期待"
+        }
     }],
     "tabBar": {
         "color": "#515151",
         "selectedColor": "#d81e06",
         "backgroundColor": "#f8f8f8",
         "borderStyle": "white",
-        "blurEffect":"none",
+        "blurEffect": "none",
         "position": "bottom",
         "list": [{
                 "pagePath": "pages/index/index",
@@ -91,7 +96,7 @@
             },
             {
                 "pagePath": "pages/message/message",
-                "text": "消息",
+                "text": "消息",  
                 "iconPath": "static/tabbar/_message.png",
                 "selectedIconPath": "static/tabbar/message.png"
             },
