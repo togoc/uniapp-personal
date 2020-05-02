@@ -129,6 +129,9 @@ export default {
         async getBlog(id) {
             let data = await this.$store.dispatch("getItemBlogByID", id);
             this.blog = data;
+            uni.setNavigationBarTitle({
+                title: this.blog.title
+            });
         },
         async handleAddComment() {
             if (this.commentValue === "") {

@@ -13,6 +13,7 @@ export default {
 
 page {
     font-family: Tahoma, "Microsoft Yahei", "Simsun";
+    background-color: $uni-bg-color-grey;
     width: 100%;
     height: 100%;
     color: $uni-text-color;

@@ -1,12 +1,17 @@
 <template>
     <view class="my-blog" scroll-y>
-        <view class="btn-container">
+        <!-- <view class="btn-container">
             <button class="btn" @click.stop="handleBtn">
                 <text class="iconfont icon-bianji" />
                 写博客
             </button>
-        </view>
-        <blog-item v-for="(item, index) in myBlogs" :key="index" :item="item" />
+        </view> -->
+        <blog-item
+            v-for="(item, index) in myBlogs"
+            @handleClickItem="handleClickItem"
+            :key="index"
+            :item="item"
+        />
     </view>
 </template>
 
@@ -20,11 +25,15 @@ export default {
         };
     },
     computed: {
-        ...mapGetters(["isLogin"]),
         ...mapState(["myBlogs"])
     },
     methods: {
         ...mapActions(["getMyBlog"]),
+        async handleClickItem(id) {
+            uni.navigateTo({
+                url: "../blog/blog?blogID=" + id
+            });
+        },
         handleBtn() {
             if (this.isLogin) {
                 uni.navigateTo({
@@ -40,9 +49,7 @@ export default {
     },
     async onPullDownRefresh() {
         this.lastPage = false;
-
         await this.$store.dispatch("getMyBlog", "REFRESHMYBLOGS");
-
         uni.stopPullDownRefresh();
     },
     onReachBottom() {

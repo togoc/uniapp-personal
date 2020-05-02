@@ -1,5 +1,7 @@
 <template>
-    <view> </view>
+    <view> 
+        暂无内容
+    </view>
 </template>
 
 <script>

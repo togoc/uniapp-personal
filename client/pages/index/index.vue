@@ -1,5 +1,5 @@
 <template>
-    <view :scroll-y="true" class="content">
+    <view class="content">
         <view class="search">
             <search-bar ref="search" @click.native="handleSearch" disabled>
                 <template v-slot:middle>
@@ -15,19 +15,38 @@
                 </template>
             </search-bar>
         </view>
-        <blog-item
-            @handleClickItem="handleClickItem"
-            @handleLiked="handleLiked"
-            v-for="(item, index) in indexBlogs"
-            :item="item"
-            :key="index"
-            class="blog-item"
-        ></blog-item>
+        <index-slide-nav class="slider-nav">
+            <template v-slot:item>
+                <swiper-item>
+                    <scroll-view scroll-y class="swiper-item swiper-item-1">
+                        <blog-item
+                            @handleClickItem="handleClickItem"
+                            @handleLiked="handleLiked"
+                            v-for="(item, index) in $store.state.indexBlogs"
+                            :item="item"
+                            :key="index"
+                            class="blog-item"
+                        ></blog-item>
+                    </scroll-view>
+                </swiper-item>
+                <swiper-item>
+                    <scroll-view scroll-y class="swiper-item swiper-item-2">
+                        <blog-item
+                            @handleClickItem="handleClickItem"
+                            @handleLiked="handleLiked"
+                            v-for="(item, index) in $store.state.hotBlogs"
+                            :item="item"
+                            :key="index"
+                            class="blog-item"
+                        ></blog-item>
+                    </scroll-view>
+                </swiper-item>
+            </template>
+        </index-slide-nav>
     </view>
 </template>
 
 <script>
-import { mapState } from "vuex";
 export default {
     data() {
         return {
@@ -36,11 +55,8 @@ export default {
             opacity: 1
         };
     },
-    computed: {
-        ...mapState(["indexBlogs"])
-    },
     onReady() {
-        this.$store.dispatch("getIndexBlog");
+        this.$store.dispatch("getIndexBlog", {});
     },
     async onPullDownRefresh() {
         this.lastPage = false;
@@ -90,18 +106,32 @@ page {
 .content {
     width: 750rpx;
     display: flex;
-    padding: 0px $uni-spacing-col-base 50px $uni-spacing-col-base;
+    padding: 0px $uni-spacing-col-base 0 $uni-spacing-col-base;
+    padding-top: 50px;
     /* #ifndef H5 */
-    margin-top: var(--status-bar-height);
+    padding-top: calc(var(--status-bar-height) + 50px);
     padding-bottom: 0;
     /* #endif */
-    padding-top: 50px;
-
     box-sizing: border-box;
-    background-color: $uni-bg-color;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    height: 100%;
+    .slider-nav {
+        width: 100%;
+        height: 100%;
+        .swiper-item {
+            padding-top: 40px;
+            height: calc(100% - 50px);
+            .uni-bg-red {
+                height: 100%;
+            }
+            .uni-bg-green {
+                height: 100%;
+            }
+        }
+    }
+
     .blog-item {
         width: 100%;
     }

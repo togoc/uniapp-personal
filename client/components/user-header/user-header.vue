@@ -1,5 +1,8 @@
 <template>
     <view class="head">
+        <!--  #ifdef APP-PLUS  -->
+        <view class="status_bar"><!-- 这里是状态栏 --></view>
+        <!--  #endif  -->
         <view class="header" v-if="header">
             <view class="left head-item">
                 <slot name="left"> </slot>
@@ -32,13 +35,13 @@
                     <view class="user-name-img">
                         <image
                             @tap.stop="changeAvatar"
-                            :src="user.avatar + '?w=70&h=70'"
+                            :src="user1.avatar + '?w=70&h=70'"
                         />
                         <view class="user-name-data">
                             <view class="username">
-                                {{ user.name || "togoc" }}
+                                {{ user1.name || "togoc" }}
                             </view>
-                            <text>注册时间:{{ user.data | date }}</text>
+                            <text>注册时间:{{ user1.data | date }}</text>
                         </view>
                     </view>
                     <view class="user-favorite-info">
@@ -63,16 +66,11 @@ export default {
     props: {
         header: Boolean,
         quickLoginOptions: Array,
-        user: Object,
+        user1: Object,
         favoriteIfo: Array
     },
     data() {
         return {};
-    },
-    computed: {
-        isLogin() {
-            return Object.keys(this.user).length > 0;
-        }
     },
     methods: {
         handleOptions(e) {
@@ -96,6 +94,12 @@ export default {
 
 <style lang="scss">
 .head {
+    /** #ifdef APP-PLUS */
+    .status_bar {
+        height: var(--status-bar-height);
+        width: 100%;
+    }
+    /** #endif */
     width: 750rpx;
     height: 100%;
     flex-direction: column;
@@ -107,11 +111,17 @@ export default {
         display: flex;
         flex-direction: row;
         width: 750rpx;
+        padding: calc((2.25rem - 1.3333rem) / 2) 1rem;
         height: 25%;
         box-sizing: border-box;
-        padding: calc((2.25rem - 1.3333rem) / 2) 1rem;
         .head-item {
             width: 100%;
+        }
+        .middle {
+            text-align: center;
+            color: #fff;
+            font-weight: bold;
+            font-size: 16px;
         }
     }
     view.content {
@@ -159,7 +169,7 @@ export default {
             width: 100%;
             height: 100%;
             padding: 1rem;
-            background-color: $uni-bg-color-grey;
+            background-color: $uni-bg-color;
             box-sizing: border-box;
             display: flex;
             border-radius: $uni-border-radius-base;

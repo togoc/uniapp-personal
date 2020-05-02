@@ -1,21 +1,21 @@
 <template>
     <view class="my-home">
-        <!--  #ifdef APP-PLUS  -->
-        <view class="status_bar"><!-- 这里是状态栏 --></view>
-        <!--  #endif  -->
         <user-header
             class="user-header"
             :header="true"
             :quickLoginOptions="quickLoginOptions"
             @userMethod="userMethod"
             @changeAvatar="changeAvatar"
-            :user="user"
+            :user1="user"
             :favoriteIfo="favoriteIfo"
         >
             <template v-slot:left>
                 <view @click.stop="handleAddFriend" class="head-top-item left"
                     ><text class="iconfont icon-AddFriend"></text
                 ></view>
+            </template>
+            <template v-slot:middle>
+                <text>我的</text>
             </template>
             <template v-slot:right>
                 <view @click.stop="handleSetting" class="head-top-item right"
@@ -44,11 +44,8 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapGetters } from "vuex";
 export default {
-    computed: {
-        ...mapState(["user"])
-    },
     data() {
         return {
             quickLoginOptions: [
@@ -89,7 +86,7 @@ export default {
                     icon: "icon-wenjianjia",
                     value: "rename",
                     url: "../mydrive/mydrive"
-                },
+                }
                 // {
                 //     title: "下载",
                 //     icon: "icon-xiazai",
@@ -151,18 +148,11 @@ export default {
 
 <style lang="scss">
 .my-home {
-    /** #ifdef APP-PLUS */
-    .status_bar {
-        height: var(--status-bar-height);
-        width: 100%;
-    }
-    /** #endif */
-
     width: 100%;
-    background-color: $uni-bg-color;
     .user-header {
         width: 750rpx;
         height: 10rem;
+        background-image: linear-gradient($uni-color-primary, #fff);
         .head-top-item {
             .iconfont::before {
                 font-size: 1.333rem;

@@ -5,10 +5,13 @@ import http from './utils/http';
 import upload from './utils/upload';
 import download from './utils/download/download';
 import { showToast } from './utils/prompt'
+import globalMixIn from './utils/globalMixIn'
 import moment from 'moment';
 Vue.config.productionTip = false;
 moment.locale(['zh-cn'])
 
+
+Vue.use(globalMixIn)
 
 Vue.prototype.$http = http;
 Vue.prototype.$upload = upload;

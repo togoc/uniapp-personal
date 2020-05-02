@@ -63,14 +63,14 @@ export default {
     .blank {
         height: var(--status-bar-height);
         width: 100%;
-        background-color: #fff;
+        background-color: $uni-color-primary;
     }
 
     .search-bar {
         width: 100%;
         height: 100%;
         display: flex;
-        background-color: $uni-bg-color-grey-more;
+        background-color: $uni-color-primary;
         flex-direction: row;
         align-items: center;
         justify-content: flex-end;
@@ -106,6 +106,7 @@ export default {
             display: flex;
             justify-content: center;
             align-items: center;
+            color: #fff;
         }
     }
 }

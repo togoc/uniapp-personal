@@ -51,21 +51,19 @@ export default {
 </script>
 
 <style lang="scss" >
-.hover-item {
-    transform: scale(1.025);
-}
+// .hover-item {
+//     transform: scale(1.025);
+// }
 .blog-item {
     transition: all 0.15s linear;
     padding: 0.5rem;
-    background-color: $uni-bg-color-grey;
+    background-color: $uni-bg-color;
     box-sizing: border-box;
     overflow: hidden;
     border-radius: $uni-border-radius-base;
     width: 100%;
-    margin-top: $uni-spacing-row-sm;
-    &:last-of-type {
-        margin-bottom: $uni-spacing-row-sm;
-    }
+    margin-top: 2px;
+
     .title {
         width: 100%;
         height: 1.33rem;

@@ -10,6 +10,7 @@ const types = {
   SETUSER: "SETUSER",
   LOGOUT: "LOGOUT",
   SETMYBLOGS: "SETMYBLOGS",
+  isLogin: false,
   SETBLOGS: "SETBLOGS",
   TOGGLELIKES: "TOGGLELIKES"
 }
@@ -21,13 +22,13 @@ export default new Vuex.Store({
     user: {},
     myBlogs: [],
     indexBlogs: [],
+    hotBlogs: [],
     downLoadStateArr: []
   },
   getters: {
     isLogin: state => Object.keys(state.user).length > 0
   },
   actions: {
-
     async getUser({ commit }, id) {
 
       if (id) {
@@ -44,9 +45,9 @@ export default new Vuex.Store({
 
     async getMyBlog({ commit, state }, type) {
 
-      if (type === 'REFRESHMYBLOGS') {
-        state.myBlogs = []
-      }
+      // if (type === 'REFRESHMYBLOGS') {
+      //   state.myBlogs = []
+      // }
 
       let url = "/blog-service/get-my-blog"
       let blogs = await http(url, "GET", { page: state.myBlogs.length });
@@ -59,14 +60,15 @@ export default new Vuex.Store({
 
     },
 
-    async getIndexBlog({ commit, state }, type) {
-
-      if (type === "REFRESHBLOGS") {
-        state.indexBlogs = []
-      }
+    async getIndexBlog({ commit, state }, { reset, type }) {
+      console.log(1)
+      // if (reset) {
+      //   state.indexBlogs = []
+      // }
 
       let url = "/blog-service/get-index-blog"
-      let blogs = await http(url, "GET", { page: state.indexBlogs.length });
+
+      let blogs = await http(url, "GET", { page: state.indexBlogs.length, });
 
       blogs.length < 1
         ?
@@ -220,6 +222,7 @@ export default new Vuex.Store({
     [types.SETUSER](state, body) {
       state.user = body
       state.folderPath = "/"
+      state.isLogin = true
     },
 
     [types.LOGOUT](state, body) {
@@ -248,6 +251,7 @@ export default new Vuex.Store({
 
     [types.SETBLOGS](state, blogs) {
       state.indexBlogs = blogs
+      state.hotBlogs = blogs.map(v => v).sort((a, b) => b.views - a.views)
     },
 
     [types.TOGGLELIKES](state, blogID) {

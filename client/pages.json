@@ -2,15 +2,8 @@
     "pages": [{
         "path": "pages/index/index",
         "style": {
-            "navigationBarTitleText": "首页",
-            "enablePullDownRefresh": true,
             "navigationStyle": "custom",
-            "app-plus": {
-                "titleNView": false,
-                "pullToRefresh": {
-                    "offset": "45px"
-                }
-            }
+            "navigationBarTitleText": "首页"
         }
     }, {
         "path": "pages/editor/editor",
@@ -28,8 +21,8 @@
     }, {
         "path": "pages/myhome/myhome",
         "style": {
-            "navigationBarTitleText": "我的",
             "navigationStyle": "custom",
+            "navigationBarTitleText": "我的",
             "mp-weixin": {
                 "navigationStyle": "default"
 
@@ -74,15 +67,16 @@
             "enablePullDownRefresh": true,
             "navigationBarTitleText": "我的文件"
         }
-    }    ,{
-            "path" : "pages/download/download",
-            "style" : {}
-        }
-    ],
+    }, {
+        "path": "pages/download/download",
+        "style": {}
+    }],
     "tabBar": {
         "color": "#515151",
         "selectedColor": "#d81e06",
-        "backgroundColor": "#FFFFFF",
+        "backgroundColor": "#f8f8f8",
+        "borderStyle": "white",
+        "blurEffect":"none",
         "position": "bottom",
         "list": [{
                 "pagePath": "pages/index/index",
@@ -110,9 +104,9 @@
         ]
     },
     "globalStyle": {
-        "navigationBarTextStyle": "black",
         "navigationBarTitleText": "博客",
-        "navigationBarBackgroundColor": "#f8f8f8",
+        "navigationBarBackgroundColor": "#109d58",
+        "navigationBarTextStyle": "white",
         "backgroundColor": "#F8F8F8"
     }
 }
