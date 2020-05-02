@@ -4,13 +4,13 @@ import http from '../utils/http'
 import upload from '../utils/upload'
 import download from '../utils/download/download'
 import { showToast } from '../utils/prompt'
+import config from '../config/config'
 Vue.use(Vuex)
 
 const types = {
   SETUSER: "SETUSER",
   LOGOUT: "LOGOUT",
   SETMYBLOGS: "SETMYBLOGS",
-  isLogin: false,
   SETBLOGS: "SETBLOGS",
   TOGGLELIKES: "TOGGLELIKES"
 }
@@ -18,18 +18,22 @@ const types = {
 export default new Vuex.Store({
   state: {
     name: 'togoc',
-    baseAvatarURL: process.env.baseAvatarURL || 'http://192.168.3.3:3000/blog/file-service/img/',
+    baseAvatarURL: config.baseAvatarURL,
     user: {},
     myBlogs: [],
     indexBlogs: [],
     hotBlogs: [],
     downLoadStateArr: []
   },
-  getters: {
-    isLogin: state => Object.keys(state.user).length > 0
-  },
   actions: {
-    async getUser({ commit }, id) {
+    async getUserCount({ commit }, { id }) {
+
+
+      let url = "/user-service/get-user-count"
+      return await http(url, "GET", { id });
+    },
+
+    async getUser({ commit, dispatch }, id) {
 
       if (id) {
 
@@ -38,7 +42,8 @@ export default new Vuex.Store({
 
       } else {
         let user = await http("/user-service/user");
-        commit('SETUSER', user)
+        let count = await dispatch('getUserCount', { id: user._id })
+        commit('SETUSER', { ...user, ...count })
       }
 
     },
@@ -60,11 +65,7 @@ export default new Vuex.Store({
 
     },
 
-    async getIndexBlog({ commit, state }, { reset, type }) {
-      console.log(1)
-      // if (reset) {
-      //   state.indexBlogs = []
-      // }
+    async getIndexBlog({ commit, state }) {
 
       let url = "/blog-service/get-index-blog"
 
@@ -82,7 +83,7 @@ export default new Vuex.Store({
       return await http(url, "GET", { id });
     },
 
-    async signIn({ state }, body) {
+    async signIn({ dispatch, commit }, body) {
       try {
 
         let data = await http("/user-service/login", "POST", body);
@@ -91,7 +92,8 @@ export default new Vuex.Store({
 
         uni.setStorageSync("BLOG_TOKEN", token);
 
-        state.user = user
+        let count = await dispatch('getUserCount', { id: user._id })
+        commit('SETUSER', { ...user, ...count })
 
         uni.reLaunch({
           url: '../myhome/myhome'
@@ -222,7 +224,6 @@ export default new Vuex.Store({
     [types.SETUSER](state, body) {
       state.user = body
       state.folderPath = "/"
-      state.isLogin = true
     },
 
     [types.LOGOUT](state, body) {
@@ -233,7 +234,6 @@ export default new Vuex.Store({
         state.user = {}
         state.myBlogs = []
         state.folderPath = "/"
-
 
       } catch (error) {
 

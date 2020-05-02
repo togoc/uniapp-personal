@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt = require('bcrypt')
 const crypto = require('crypto')
+const Counts = require('../models/usercount')
 const jwt = require('jsonwebtoken')
 const env = require('../enviroment/env')
 const ObjectID = require('mongodb').ObjectID
@@ -111,6 +112,15 @@ userSchema.methods.createToken = async function () {
 }
 
 
+
+userSchema.methods.addCounts = async function () {
+    let id = this._id
+    let newCount = new Counts({
+        userid: id
+    })
+
+    return await newCount.save()
+}
 
 
 const User = mongoose.model("users", userSchema);

@@ -6,8 +6,8 @@
             :quickLoginOptions="quickLoginOptions"
             @userMethod="userMethod"
             @changeAvatar="changeAvatar"
-            :user1="user"
-            :favoriteIfo="favoriteIfo"
+            :user="user"
+            :favoriteIfo="favorite"
         >
             <template v-slot:left>
                 <view @click.stop="handleAddFriend" class="head-top-item left"
@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapState } from "vuex";
 export default {
     data() {
         return {
@@ -65,18 +65,22 @@ export default {
             favoriteIfo: [
                 {
                     count: 0,
+                    value: "focus",
                     title: "关注"
                 },
                 {
                     count: 0,
+                    value: "fans",
                     title: "粉丝"
                 },
                 {
                     count: 0,
+                    value: "blog_read_count",
                     title: "访问"
                 },
                 {
-                    count: "--",
+                    count: 0,
+                    value: "rank",
                     title: "排名"
                 }
             ],
@@ -95,6 +99,17 @@ export default {
                 // }
             ]
         };
+    },
+    computed: {
+        ...mapState(["user"]),
+        favorite() {
+            return this.favoriteIfo.map(v => {
+                v.count = Array.isArray(this.user[v.value])
+                    ? this.user[v.value].length
+                    : this.user[v.value];
+                return v;
+            });
+        }
     },
     methods: {
         changeAvatar() {

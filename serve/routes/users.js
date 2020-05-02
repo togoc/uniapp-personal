@@ -11,5 +11,6 @@ router.post('/create-user', userController.createUser);
 router.get('/user', auth, userController.getUser);
 router.get('/logout', auth, userController.logout);
 router.get('/logout-all', auth, userController.logoutAll);
+router.get('/get-user-count', auth, userController.getUserBlogViewsCount);
 
 module.exports = router;

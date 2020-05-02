@@ -4,6 +4,7 @@ const BlogService = require('../services/blog')
 const blogService = new BlogService()
 
 class BlogController {
+    
     // 首页分类列表
     async getTypesList(req, res) {
         try {

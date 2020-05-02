@@ -1,13 +1,23 @@
 const ObjectID = require('mongodb').ObjectID
 const User = require('../models/user')
+const Counts = require('../models/usercount')
 
 class UserServices {
     constructor() {
 
     }
 
+    // 获取用户排名关注粉丝信息
+    async getUserBlogViewsCount(userID) {
+        let count = await (await Counts.findOne({ userid: ObjectID(userID) })).toObject()
+        let rank = await Counts.find({ blog_read_count: { $gt: count.blog_read_count } }).count() + 1
+
+        count.userid = undefined
+        count._id = undefined
+        return { ...count, rank }
+    }
+
     async login(body) {
-        console.log('login')
 
         const user = await User.findUser(body.password, body.email)
 
@@ -43,6 +53,9 @@ class UserServices {
         const token = await user.createToken()
 
         if (!user || !token) throw new InternalServerError("Could Not Create New User Error");
+
+        //创建统计列表
+        await user.addCounts()
 
         return { token, user }
     }

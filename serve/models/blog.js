@@ -1,3 +1,4 @@
+const Counts = require('../models/usercount')
 const mongoose = require('mongoose')
 const nodejieba = require("nodejieba");
 const ObjectID = require('mongodb').ObjectID
@@ -130,7 +131,7 @@ blogSchema.pre('save', async function (next) {
 blogSchema.methods.addViews = async function () {
 
     this.views = this.views + 1
-
+    await Counts.addReadCount(this.userid)
     await this.save()
 
 }

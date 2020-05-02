@@ -7,8 +7,21 @@ const userServices = new UserServices()
 
 class UserController {
     constructor() {
-        console.log('create')
     }
+
+    // 获取用户排名关注粉丝信息
+    async getUserBlogViewsCount(req, res) {
+        try {
+            let { id } = req.query
+            let count = await userServices.getUserBlogViewsCount(id)
+
+            res.status(200).send(count);
+
+        } catch (error) {
+            res.status(500).send(error.toString());
+        }
+    }
+
 
     async login(req, res) {
         try {

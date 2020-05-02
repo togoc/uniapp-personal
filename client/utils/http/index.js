@@ -1,13 +1,7 @@
 
 import { showToast } from '../prompt'
-let baseUrl = null
-// #ifdef H5
-baseUrl = '/blog'
-// #endif
+import config from '../../config/config'
 
-// #ifndef H5
-baseUrl = 'http://192.168.3.3:3000/blog'
-// #endif
 
 /**
  * 
@@ -30,7 +24,7 @@ export default async function (url, method = 'GET', data = {}) {
         }
 
         uni.request({
-            url: baseUrl + url,
+            url: config.baseUrl + url,
 
             data,
 

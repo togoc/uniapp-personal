@@ -1,12 +1,5 @@
 import { showToast } from '../prompt'
-let baseUrl = null
-// #ifdef H5
-baseUrl = '/blog/file-service/upload'
-// #endif
-
-// #ifndef H5
-baseUrl = 'http://192.168.3.3:3000/blog/file-service/upload'
-// #endif
+import config from '../../config/config'
 
 /**
  * 
@@ -23,8 +16,8 @@ export default async function (path, queryData = {}) {
         Object.keys(queryData).forEach(key => {
             query += key + '=' + queryData[key] + '&';
         })
-        const uploadTask = uni.uploadFile({
-            url: baseUrl + '?' + query,
+        uni.uploadFile({
+            url: config.baseUrl + '/file-service/upload' + '?' + query,
             filePath: path,
             name: "file",
             header: {
@@ -41,16 +34,18 @@ export default async function (path, queryData = {}) {
             }
         });
 
-        uploadTask.onProgressUpdate((res) => {
-            start(`${res.progress}%`)
-            // console.log('已经上传的数据长度' + res.totalBytesSent);
-            // console.log('预期需要上传的数据总长度' + res.totalBytesExpectedToSend);
-
-            // 测试条件，取消上传任务。
-            // if (res.progress > 50) {
-            //     uploadTask.abort();
-            // }
-        });
+        // uploadTask.onProgressUpdate((res) => {
+        //     start(`${res.progress}%`)
+        //     // console.log('已经上传的数据长度' + res.totalBytesSent);
+        //     // console.log('预期需要上传的数据总长度' + res.totalBytesExpectedToSend);
+        //     // if (res.progress >= 100) {
+        //     //     end()
+        //     // }
+        //     // 测试条件，取消上传任务。
+        //     // if (res.progress > 50) {
+        //     //     uploadTask.abort();
+        //     // }
+        // });
     })
 
 }

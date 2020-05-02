@@ -11,10 +11,9 @@ class GlobalMixIn {
 
         Vue.mixin({
             computed: {
-                ...mapState({
-                    isLogin: state => state.isLogin,
-                    user: state => state.user,
-                })
+                isLogin() {
+                    return Object.keys(this.$store.state.user).length > 3;
+                }
             },
         })
 

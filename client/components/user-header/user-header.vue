@@ -35,13 +35,13 @@
                     <view class="user-name-img">
                         <image
                             @tap.stop="changeAvatar"
-                            :src="user1.avatar + '?w=70&h=70'"
+                            :src="user.avatar + '?w=70&h=70'"
                         />
                         <view class="user-name-data">
                             <view class="username">
-                                {{ user1.name || "togoc" }}
+                                {{ user.name || "togoc" }}
                             </view>
-                            <text>注册时间:{{ user1.data | date }}</text>
+                            <text>注册时间:{{ user.data | date }}</text>
                         </view>
                     </view>
                     <view class="user-favorite-info">
@@ -66,7 +66,7 @@ export default {
     props: {
         header: Boolean,
         quickLoginOptions: Array,
-        user1: Object,
+        user: Object,
         favoriteIfo: Array
     },
     data() {
