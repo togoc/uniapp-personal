@@ -28,7 +28,7 @@ class BlogService {
 
     async delete(blogId, userId) {
 
-        return await Blog.deleteOne({ _id: ObjectID(blogId), userid: ObjectID(userId) })
+        return await Blog.delete(blogId, userId)
 
     }
 

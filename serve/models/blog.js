@@ -1,6 +1,7 @@
 const Counts = require('../models/usercount')
 const mongoose = require('mongoose')
 const nodejieba = require("nodejieba");
+const removeFile = require('../services/fileUtils/removeMyfile')
 const ObjectID = require('mongodb').ObjectID
 
 
@@ -149,6 +150,25 @@ blogSchema.methods.toggleLikes = async function (userID) {
     }
 
 }
+
+// 同时图片
+blogSchema.statics.delete = async function (blogId, userID) {
+
+    let blog = await Blog.findOneAndDelete({ _id: ObjectID(blogId), userid: ObjectID(userID) })
+
+    if (!blog) {
+        throw new Error('没有找到内容')
+    }
+
+    let thumbnails = blog.thumbnails
+
+    for (let i = 0; i < thumbnails.length; i++) {
+        await removeFile(thumbnails[i].file_id)
+    }
+    return { ok: 1 }
+
+}
+
 
 blogSchema.methods.addComment = async function (comment) {
 
