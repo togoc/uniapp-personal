@@ -82,9 +82,7 @@ class BlogService {
     }
 
     // 根据类名返回文章 / 根据 id 返回 
-    async getIndexBlog({ page, id, type }) {
-
-        let pageSize = 10
+    async getIndexBlog({ id, type }) {
         if (id) {
             let targetBlog = await Blog.findOne({ _id: id })
             await targetBlog.addViews()
