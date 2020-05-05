@@ -33,7 +33,6 @@ class UserController {
             user.tokens = undefined
             user.password = undefined
 
-
             res.status(200).send({ user, token });
 
         } catch (e) {
