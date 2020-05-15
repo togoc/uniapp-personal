@@ -17,7 +17,9 @@ router.get('/toggle-likes', auth, blogController.toggleLikes);
 router.post('/add-comment', auth, blogController.addComment);
 router.post('/del-comment', auth, blogController.delComment);
 
+// 编辑页面 分类列表
 router.get('/get-types', blogController.getTypes);
+// 首页分类列表
 router.get('/get-types/list', blogController.getTypesList);
 // router.get('/add-types', auth, blogController.addTypes);
 
