@@ -82,7 +82,8 @@ class BlogService {
     }
 
     // 根据类名返回文章 / 根据 id 返回 
-    async getIndexBlog({ id, type }) {
+    async getIndexBlog({ id, type, key }) {
+
         if (id) {
             let targetBlog = await Blog.findOne({ _id: id })
             await targetBlog.addViews()
@@ -92,7 +93,19 @@ class BlogService {
             let blogs = await Blog.find({ "types": { "$in": [type] } })
             let specialInfo = await SpecialInfo.findOne({ name: type })
             return { blogs, specialInfo }
-        } else {
+        } else if (key) {
+            // 根据其他特殊获取
+            const KEYFORM = {
+                async hot() {
+                    return await Blog.find({}, { views: -1 }).limit(8)
+                },
+                async new() {
+                    return await Blog.find({}, { createdAt: -1 }).limit(8)
+                },
+            }
+            return KEYFORM[key] ? await KEYFORM[key]() : await Blog.find({})
+        }
+        else {
             // return await Blog.find({}).skip(Number(page)).limit(pageSize)
             return await Blog.find({})
         }
