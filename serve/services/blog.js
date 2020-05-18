@@ -90,24 +90,24 @@ class BlogService {
             return await targetBlog
         } else if (type) {
             // 指定类名返回含有特殊信息的内容
-            let blogs = await Blog.find({ "types": { "$in": [type] } })
+            let blogs = await Blog.find({ "types": { "$in": [type] } }, { updatedAt: 0, thumbnails: 0, delta: 0, delta: 0 })
             let specialInfo = await SpecialInfo.findOne({ name: type })
             return { blogs, specialInfo }
         } else if (key) {
             // 根据其他特殊获取
             const KEYFORM = {
                 async hot() {
-                    return await Blog.find({}, { views: -1 }).limit(8)
+                    return await Blog.find({}, { updatedAt: 0, thumbnails: 0, delta: 0, delta: 0 }).sort({ "views": -1 }).limit(8)
                 },
                 async new() {
-                    return await Blog.find({}, { createdAt: -1 }).limit(8)
+                    return await Blog.find({}, { updatedAt: 0, thumbnails: 0, delta: 0, delta: 0 }).sort({ "createdAt": -1 }).limit(8)
                 },
             }
             return KEYFORM[key] ? await KEYFORM[key]() : await Blog.find({})
         }
         else {
             // return await Blog.find({}).skip(Number(page)).limit(pageSize)
-            return await Blog.find({})
+            return await Blog.find({}, { updatedAt: 0, thumbnails: 0, delta: 0, delta: 0 })
         }
 
     }
