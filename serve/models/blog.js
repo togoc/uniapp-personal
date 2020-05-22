@@ -153,18 +153,20 @@ blogSchema.methods.toggleLikes = async function (userID) {
 
 // 同时图片
 blogSchema.statics.delete = async function (blogId, userID) {
-
+    // 删除内容
     let blog = await Blog.findOneAndDelete({ _id: ObjectID(blogId), userid: ObjectID(userID) })
 
     if (!blog) {
         throw new Error('没有找到内容')
     }
 
+    // 删除内容图片
     let thumbnails = blog.thumbnails
-
     for (let i = 0; i < thumbnails.length; i++) {
         await removeFile(thumbnails[i].file_id)
     }
+
+    // 删除
     return { ok: 1 }
 
 }
