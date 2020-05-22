@@ -110,13 +110,40 @@ class UserController {
             res.status(200).send(user);
 
         } catch (error) {
-            res.status(500).send('获取用户信息失败' + '(' + error.toString() + ')');
+            res.status(500).send('获取用户信息失败!' + '(' + error.toString() + ')');
         }
 
     }
 
     async changePassword(req, res) {
+        try {
+            let user = req.user
+            let { prevpassword, newpasswprd } = req.body
+            let newUser = await userServices.changePassword(user, prevpassword, newpasswprd)
 
+            res.status(200).send({ message: '修改成功!' });
+            
+        } catch (error) {
+            res.status(500).send('(' + error.toString() + ')');
+        }
+    }
+
+
+
+    async changeUser(req, res) {
+        try {
+            let user = req.user
+            let body = req.body
+            let newUser = await userServices.changeUser(user, body)
+
+            newUser.tokens = undefined
+            newUser.password = undefined
+            newUser.__v = undefined
+
+            res.status(200).send(newUser);
+        } catch (error) {
+            res.status(500).send('(' + error.toString() + ')');
+        }
     }
 }
 

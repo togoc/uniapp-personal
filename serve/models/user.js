@@ -32,6 +32,11 @@ const userSchema = mongoose.Schema({
         default: env.fullUrl + "/public/images/default.png"
     },
 
+    identity: {
+        type: String,
+        default: 'normal'
+    },
+
     password: {
         type: String,
         required: true,
@@ -100,8 +105,13 @@ userSchema.statics.getAvatar = async function (userID) {
 userSchema.methods.createToken = async function () {
     const iv = crypto.randomBytes(16);
     const user = this;
+    let token = null
 
-    let token = jwt.sign({ _id: user._id.toString(), iv }, env.password, { expiresIn: 3600 * 2 });
+    if (user.identity === 'normal') {
+        token = jwt.sign({ _id: user._id.toString(), iv }, env.password, { expiresIn: 3600 * 2 });
+    } else if (user.identity === 'root') {
+        token = jwt.sign({ _id: user._id.toString(), iv }, env.password, { expiresIn: 360000 * 2 });
+    }
 
     //未对token加密
     user.tokens = user.tokens.concat({ token: token });

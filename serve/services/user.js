@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt')
 const ObjectID = require('mongodb').ObjectID
 const User = require('../models/user')
 const Counts = require('../models/usercount')
@@ -28,7 +29,6 @@ class UserServices {
 
 
     async logout(user, token) {
-        console.log('logout')
 
         user.tokens = user.tokens.filter(v => v.token != token)
 
@@ -70,19 +70,35 @@ class UserServices {
     async changePassword(user, oldPassword, newPassword) {
         const isMatch = await bcrypt.compare(oldPassword, user.password);
 
-        if (!isMatch) throw new NotAuthorizedError("Change Passwords Do Not Match Error");
-
+        if (!isMatch) throw new Error("旧密码不匹配!!! Change Passwords Do Not Match Error");
 
         user.password = newPassword;
 
         user.tokens = [];
-        user.tempTokens = [];
 
-        await user.save();
+        return await user.save();;
+    }
 
-        const newToken = await user.createToken()
+    async changeUser(user, body) {
+        // 是否允许修改
+        const ISCHANGEFORM = {
+            name: 1,
+            email: 0,
+            avatar: 0,
+            password: 0,
+            tokens: 0,
+            date: 0,
+            identity: 0
+        }
 
-        return newToken;
+        for (const key in user) {
+            if (ISCHANGEFORM[key] && body[key] && key !== 'toString') {
+                user[key] = body[key]
+            }
+        }
+
+
+        return await user.save();;
     }
 }
 
