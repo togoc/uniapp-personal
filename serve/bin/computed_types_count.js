@@ -19,6 +19,6 @@ const mongoose = require('../db/mongoose');
     }
 
     
-    process.exit(1)
+    // process.exit(1)
 
 }());
