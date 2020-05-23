@@ -95,19 +95,19 @@ function onListening() {
  * 每次启动都要开启另外一个线程去计算所有博客分类信息
  */
 // 每次启动的时候(使用子进程线程) 重新计算一次 分类 如果分类没有内容 删除该分类
-// let filePath = path.resolve(__dirname, './computed_types_count.js')
-// const bat = spawn('node', [filePath]);
-// bat.stdout.on('data', (data) => {
-//   console.log(data.toString());
-// });
+let filePath = path.resolve(__dirname, './computed_types_count.js')
+const bat = spawn('node', [filePath]);
+bat.stdout.on('data', (data) => {
+  console.log(data.toString());
+});
 
-// bat.stderr.on('data', (data) => {
-//   console.error(data.toString());
-// });
+bat.stderr.on('data', (data) => {
+  console.error(data.toString());
+});
 
-// bat.on('exit', (code) => {
-//   console.log(`子进程退出，退出码 ${code}`);
-//   if (code === 1) {
-//     console.log('清理types成功!')
-//   }
-// });
+bat.on('exit', (code) => {
+  console.log(`子进程退出，退出码 ${code}`);
+  if (code === 1) {
+    console.log('清理types成功!')
+  }
+});
