@@ -2,7 +2,9 @@ const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt = require('bcrypt')
 const crypto = require('crypto')
-const Counts = require('../models/usercount')
+const Counts = require('./usercount')
+const Folder = require('./folder')
+const Blog = require('./blog')
 const jwt = require('jsonwebtoken')
 const env = require('../enviroment/env')
 const ObjectID = require('mongodb').ObjectID
@@ -69,9 +71,19 @@ userSchema.pre('save', async function (next) {
         user.password = bcrypt.hashSync(user.password, 8)
     }
 
+
+    // 修改name的时候 同步修改到blog
+    if (user.isModified('name') && (user.name !== "")) {
+        await Folder.updateMany({ userid: ObjectID(user._id) }, { username: user.name })
+        await Blog.updateMany({ userid: ObjectID(user._id) }, { username: user.name })
+        await Blog.updateMany({ "comments.userid": ObjectID(user._id) }, { $set: { "comments.$[element].username": user.name } }, { arrayFilters: [{ "element.userid": ObjectID(user._id) }] })
+    }
+
+    // 初始化name
     if (user.isModified('name') && (user.name === "")) {
         user.name = user.email
     }
+
 
     next()
 })
