@@ -16,6 +16,7 @@
         "concat-stream": "^2.0.0",
         "connect-busboy": "0.0.2",
         "cookie-parser": "~1.4.4",
+        "cpu-stat": "^2.0.1",
         "cross-env": "^7.0.2",
         "debug": "~2.6.9",
         "env-cmd": "^10.1.0",
@@ -29,6 +30,9 @@
         "nodejieba": "^2.4.1",
         "prompts": "^2.3.2",
         "sharp": "^0.25.2",
+        "socket.io": "^2.3.0",
+        "ssh2": "^0.8.9",
+        "utf8": "^3.0.0",
         "validator": "^13.0.0"
     }
 }
