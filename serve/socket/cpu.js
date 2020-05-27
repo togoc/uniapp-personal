@@ -1,15 +1,21 @@
 const os = require('os')
 const cpuStat = require('cpu-stat');
-
+let platform = os.platform()
+const plat = {
+    linux() {
+        return
+    },
+    win32() {
+        return 100 * (os.totalmem() - os.freemem()) / os.totalmem();
+    }
+}
 module.exports = (data, socket) => {
     let { id } = data
+
     let timer = setInterval(() => {
-        let mem = 100 * (os.totalmem() - os.freemem()) / os.totalmem();
+        let mem = 100 * (process.memoryUsage().rss / os.totalmem());
         cpuStat.usagePercent((err, percent, seconds) => {
             socket.emit(id + '_cpu', { CpuPercent: percent, MenPercent: mem })
-            // cpuStat = null
-            // mem = null
-            // clearInterval(timer)
         });
     }, 1000);
     let foo = function (data) {
@@ -18,7 +24,6 @@ module.exports = (data, socket) => {
     }
     socket.on(id + '_cpu_remove', foo)
     // socket.removeListener(id + '_cpu_remove', foo)
-
 }
 
 
