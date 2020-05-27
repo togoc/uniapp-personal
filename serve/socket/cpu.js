@@ -16,7 +16,7 @@ module.exports = (data, socket) => {
 
     let timer = setInterval(() => {
         if (platform === 'linux') {
-            let free = spawn('free',['-m']);
+            let free = spawn('free', ['-m']);
             free.stdout.on('data', function (data) {
                 let mem = data.toString().split('\n')[1].match(/(?<=\s)[0-9]+/ig)
                 cpuStat.usagePercent((err, percent, seconds) => {
@@ -30,12 +30,9 @@ module.exports = (data, socket) => {
         }
     }, 1000);
 
-    let foo = function (data) {
+    socket.once(id + '_cpu_remove', function (data) {
         clearInterval(timer)
-        console.log(socket.eventNames())
-    }
-    socket.on(id + '_cpu_remove', foo)
-    // socket.removeListener(id + '_cpu_remove', foo)
+    })
 }
 
 

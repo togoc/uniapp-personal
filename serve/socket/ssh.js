@@ -4,17 +4,17 @@ module.exports = (data, socket) => {
     const ssh = new SSHClient();
     let { id, ip, username, password
     } = data;
-    console.log(data)
     ssh.on('ready', function () {
-        socket.emit(id + '_ssh', '\r\n***' + ip + ' SSH CONNECTION ESTABLISHED ***\r\n');
+        socket.emit(id + '_ssh', '\r\n***' + ip + ' SSH 尝试连接 ***\r\n');
         ssh.shell(function (err, stream) {
             if (err) {
-                return socket.emit(id + '_ssh', '\r\n*** SSH SHELL ERROR: ' + err.message + ' ***\r\n');
+                // socket.emit(id + '_ssh', id + '_ssh_logout');
+                return socket.emit(id + '_ssh', '\r\n*** SSH SHELL 错误: ' + err.message + ' ***\r\n');
             }
             socket.on(id + '_ssh', function (data) {
                 stream.write(data);
-                console.log(data)
             });
+
             stream.on('data', function (d) {
                 socket.emit(id + '_ssh', utf8.decode(d.toString('binary')));
             }).on('close', function () {
@@ -22,14 +22,16 @@ module.exports = (data, socket) => {
             });
         })
     }).on('close', function () {
-        socket.emit(id + '_ssh', '\r\n*** SSH CONNECTION CLOSED ***\r\n');
+        socket.emit(id + '_ssh', '\r\n*** SSH 已经断开连接 ***\r\n');
+        socket.emit(id + '_ssh', id + '_ssh_logout');
+        socket.removeAllListeners(id + '_ssh')
     }).on('error', function (err) {
-        console.log(err);
-        socket.emit(id + '_ssh', '\r\n*** SSH CONNECTION ERROR: ' + err.message + ' ***\r\n');
+        socket.emit(id + '_ssh', '\r\n*** SSH 连接错误: ' + err.message + ' ***\r\n');
     }).connect({
         host: ip,
         port: 22,
         username,
-        password
+        password,
+        readyTimeout: 15000
     });
 }

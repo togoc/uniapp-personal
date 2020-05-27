@@ -44,7 +44,10 @@ io.on('connection', function (socket) {
     console.log('user disconnected');
   });
 
-
+  socket.on("rmListener", function (data) {
+    let { key } = data
+    socket.removeAllListeners(key)
+  });
 })
 /**
  * Listen on provided port, on all network interfaces.
