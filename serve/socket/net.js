@@ -23,7 +23,7 @@ module.exports = (data, socket) => {
             backData += data
         })
         free.on('exit', function () {
-            netForm = backData.toString().match(/tcp6.*/ig).map(v => {
+            netForm = backData.toString().match(/tcp.*/ig).map(v => {
                 v = v.replace(/\s+/ig, " ").split(' ')
                 v.splice(1, 2)
                 return v
