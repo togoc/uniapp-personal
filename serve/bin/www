@@ -25,6 +25,7 @@ var server = http.createServer(app);
 var io = require('socket.io')(server);
 var createCpuServer = require('../socket/cpu')
 var createSSHServer = require('../socket/ssh')
+var createNetServer = require('../socket/net')
 
 
 
@@ -38,6 +39,10 @@ io.on('connection', function (socket) {
   // 返回cpu使用信息
   socket.on('cpu', function (data) {//新建一个ssh连接
     createCpuServer(data, socket);
+  })
+  // 网络端口信息
+  socket.on('nets', function (data) {//新建一个ssh连接
+    createNetServer(data, socket);
   })
 
   socket.on('disconnect', function () {

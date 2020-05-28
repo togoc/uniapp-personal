@@ -2,14 +2,7 @@ const spawn = require('child_process').spawn;
 const os = require('os')
 const cpuStat = require('cpu-stat');
 let platform = os.platform()
-const plat = { //简单内存占用
-    linux() {
-        return 100 * (process.memoryUsage().rss / os.totalmem());
-    },
-    win32() {
-        return 100 * (os.totalmem() - os.freemem()) / os.totalmem();
-    }
-}
+
 
 module.exports = (data, socket) => {
     let { id } = data
