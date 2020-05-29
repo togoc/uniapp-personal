@@ -1,0 +1,1 @@
+> window 需要安装jdk 然后 `npm install --global --production windows-build-tools` 失败的话尝试先安装python.
