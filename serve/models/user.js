@@ -10,138 +10,142 @@ const env = require('../enviroment/env')
 const ObjectID = require('mongodb').ObjectID
 
 const userSchema = mongoose.Schema({
+  blog_count: {
+    type: Number,
+    default: 0
+  },
 
-    name: {
-        type: String,
-        trim: true
-    },
+  name: {
+    type: String,
+    trim: true
+  },
 
-    email: {
-        type: String,
-        unique: true,
-        required: true,
-        trim: true,
-        lowercase: true,
-        validate(value) {
-            if (!validator.isEmail(value)) {
-                throw new Error('邮箱非法!')
-            }
-        }
-    },
-
-    avatar: {
-        type: String,
-        default: env.fullUrl + "/public/images/default.png"
-    },
-
-    identity: {
-        type: String,
-        default: 'normal'
-    },
-
-    password: {
-        type: String,
-        required: true,
-        trim: true,
-        validate(value) {
-            if (value.length < 6) {
-                throw new Error('密码长度小于6!')
-            }
-        }
-    },
-    tokens: [{
-        token: {
-            type: String,
-            required: true
-        }
-    }],
-
-    date: {
-        type: Number,
-        default: Date.now
+  email: {
+    type: String,
+    unique: true,
+    required: true,
+    trim: true,
+    lowercase: true,
+    validate(value) {
+      if (!validator.isEmail(value)) {
+        throw new Error('邮箱非法!')
+      }
     }
+  },
+
+  avatar: {
+    type: String,
+    default: env.fullUrl + "/public/images/default.png"
+  },
+
+  identity: {
+    type: String,
+    default: 'normal'
+  },
+
+  password: {
+    type: String,
+    required: true,
+    trim: true,
+    validate(value) {
+      if (value.length < 6) {
+        throw new Error('密码长度小于6!')
+      }
+    }
+  },
+  tokens: [{
+    token: {
+      type: String,
+      required: true
+    }
+  }],
+
+  date: {
+    type: Number,
+    default: Date.now
+  }
 
 })
 
-userSchema.pre('save', async function (next) {
+userSchema.pre('save', async function(next) {
 
-    const user = this;
+  const user = this;
 
-    if (user.isModified('password')) {
-        user.password = bcrypt.hashSync(user.password, 8)
-    }
-
-
-    // 修改name的时候 同步修改到blog
-    if (user.isModified('name') && (user.name !== "")) {
-        await Folder.updateMany({ userid: ObjectID(user._id) }, { username: user.name })
-        await Blog.updateMany({ userid: ObjectID(user._id) }, { username: user.name })
-        await Blog.updateMany({ "comments.userid": ObjectID(user._id) }, { $set: { "comments.$[element].username": user.name } }, { arrayFilters: [{ "element.userid": ObjectID(user._id) }] })
-    }
-
-    // 初始化name
-    if (user.isModified('name') && (user.name === "")) {
-        user.name = user.email
-    }
+  if (user.isModified('password')) {
+    user.password = bcrypt.hashSync(user.password, 8)
+  }
 
 
-    next()
+  // 修改name的时候 同步修改到blog
+  if (user.isModified('name') && (user.name !== "")) {
+    await Folder.updateMany({ userid: ObjectID(user._id) }, { username: user.name })
+    await Blog.updateMany({ userid: ObjectID(user._id) }, { username: user.name })
+    await Blog.updateMany({ "comments.userid": ObjectID(user._id) }, { $set: { "comments.$[element].username": user.name } }, { arrayFilters: [{ "element.userid": ObjectID(user._id) }] })
+  }
+
+  // 初始化name
+  if (user.isModified('name') && (user.name === "")) {
+    user.name = user.email
+  }
+
+
+  next()
 })
 
-userSchema.statics.findUser = async (password, email) => {
+userSchema.statics.findUser = async(password, email) => {
 
-    const user = await User.findOne({ email })
+  const user = await User.findOne({ email })
 
-    if (!user) {
-        throw new Error("用户不存在(User not found)!")
-    }
+  if (!user) {
+    throw new Error("用户不存在(User not found)!")
+  }
 
-    const isMatch = await bcrypt.compare(password, user.password);
+  const isMatch = await bcrypt.compare(password, user.password);
 
-    if (!isMatch) {
-        throw new Error("密码错误(Incorrect password)!");
-    }
+  if (!isMatch) {
+    throw new Error("密码错误(Incorrect password)!");
+  }
 
-    return user;
+  return user;
 
 }
 
 
-userSchema.statics.getAvatar = async function (userID) {
+userSchema.statics.getAvatar = async function(userID) {
 
-    const user = await User.findOne(ObjectID(userID))
+  const user = await User.findOne(ObjectID(userID))
 
-    return user.avatar.split('/').pop()
+  return user.avatar.split('/').pop()
 }
 
-userSchema.methods.createToken = async function () {
-    const iv = crypto.randomBytes(16);
-    const user = this;
-    let token = null
+userSchema.methods.createToken = async function() {
+  const iv = crypto.randomBytes(16);
+  const user = this;
+  let token = null
 
-    if (user.identity === 'normal') {
-        token = jwt.sign({ _id: user._id.toString(), iv }, env.password, { expiresIn: 3600 * 2 });
-    } else if (user.identity === 'root') {
-        token = jwt.sign({ _id: user._id.toString(), iv }, env.password, { expiresIn: 360000 * 2 });
-    }
+  if (user.identity === 'normal') {
+    token = jwt.sign({ _id: user._id.toString(), iv }, env.password, { expiresIn: 3600 * 2 });
+  } else if (user.identity === 'root') {
+    token = jwt.sign({ _id: user._id.toString(), iv }, env.password, { expiresIn: 360000 * 2 });
+  }
 
-    //未对token加密
-    user.tokens = user.tokens.concat({ token: token });
+  //未对token加密
+  user.tokens = user.tokens.concat({ token: token });
 
-    await user.save();
+  await user.save();
 
-    return token
+  return token
 }
 
 
 
-userSchema.methods.addCounts = async function () {
-    let id = this._id
-    let newCount = new Counts({
-        userid: id
-    })
+userSchema.methods.addCounts = async function() {
+  let id = this._id
+  let newCount = new Counts({
+    userid: id
+  })
 
-    return await newCount.save()
+  return await newCount.save()
 }
 
 

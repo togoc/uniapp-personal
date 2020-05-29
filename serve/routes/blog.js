@@ -17,6 +17,10 @@ router.get('/toggle-likes', auth, blogController.toggleLikes);
 router.post('/add-comment', auth, blogController.addComment);
 router.post('/del-comment', auth, blogController.delComment);
 
+// 管理 获取博客统计信息
+router.get('/blog-statistics', blogController.getStatistics);
+
+
 // 编辑页面 分类列表
 router.get('/get-types', blogController.getTypes);
 // 首页分类列表
@@ -25,9 +29,9 @@ router.get('/get-types/list', blogController.getTypesList);
 
 
 router.get('/test', (req, res) => {
-    console.log(req.query)
-    console.log(req.body)
-    res.send('ok');
+  console.log(req.query)
+  console.log(req.body)
+  res.send('ok');
 });
 
 
