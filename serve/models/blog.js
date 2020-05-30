@@ -1,6 +1,6 @@
 const Counts = require('../models/usercount')
 const mongoose = require('mongoose')
-const nodejieba = require("nodejieba");
+// const nodejieba = require("nodejieba");
 const removeFile = require('../services/fileUtils/removeMyfile')
 const ObjectID = require('mongodb').ObjectID
 
@@ -109,9 +109,9 @@ const blogSchema = mongoose.Schema({
 
 
 
-blogSchema.pre('save', async function(next) {
+// blogSchema.pre('save', async function(next) {
 
-  const blog = this
+  // const blog = this
 
   //手机替换用
   // if (blog.isModified('html')) {
@@ -121,12 +121,12 @@ blogSchema.pre('save', async function(next) {
   //         })
   // }
 
-  if (blog.isModified('text')) {
-    blog.text = nodejieba.cut((blog.text.trim().replace(/```/ig, "") + blog.title), true).join(' ')
-  }
+  // if (blog.isModified('text')) {
+  //   blog.text = nodejieba.cut((blog.text.trim().replace(/```/ig, "") + blog.title), true).join(' ')
+  // }
 
-  next()
-})
+  // next()
+// })
 
 
 blogSchema.methods.addViews = async function() {
