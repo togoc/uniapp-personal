@@ -8,6 +8,23 @@ const Blog = require('./blog')
 const jwt = require('jsonwebtoken')
 const env = require('../enviroment/env')
 const ObjectID = require('mongodb').ObjectID
+  // 用于修改后期数据
+// async function foo() {
+//   let users = await User.find({})
+//   let counts = await Counts.find({})
+//   counts.forEach(async(v) => {
+//     for (let i = 0; i < users.length; i++) {
+//       if (String(v.userid) === String(users[i]._id)) {
+//         v.username = users[i].name
+//         await v.save()
+//       }
+//     }
+//   })
+// }
+
+// setTimeout(() => {
+//   foo()
+// }, 2000);
 
 const userSchema = mongoose.Schema({
   blog_count: {
@@ -76,11 +93,12 @@ userSchema.pre('save', async function(next) {
   }
 
 
-  // 修改name的时候 同步修改到blog
+  // 修改name的时候 同步修改到blog counts
   if (user.isModified('name') && (user.name !== "")) {
     await Folder.updateMany({ userid: ObjectID(user._id) }, { username: user.name })
     await Blog.updateMany({ userid: ObjectID(user._id) }, { username: user.name })
     await Blog.updateMany({ "comments.userid": ObjectID(user._id) }, { $set: { "comments.$[element].username": user.name } }, { arrayFilters: [{ "element.userid": ObjectID(user._id) }] })
+    await Counts.updateMany({ userid: ObjectID(user._id) }, { username: user.name })
   }
 
   // 初始化name
@@ -141,8 +159,10 @@ userSchema.methods.createToken = async function() {
 
 userSchema.methods.addCounts = async function() {
   let id = this._id
+  let name = this.name
   let newCount = new Counts({
-    userid: id
+    userid: id,
+    username: name
   })
 
   return await newCount.save()

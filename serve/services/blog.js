@@ -4,15 +4,47 @@ const Counts = require('../models/usercount')
 const Type = require('../models/articleType')
 const ObjectID = require('mongodb').ObjectID
 const removeFile = require('../db/utils/removeFile')
+  // 用于修改后期数据
+  // async function foo() {
+  //   let data = await Blog.find({})
+  //   data.forEach(async v => {
+  //     v.likes_length = v.likes.length
+  //     await v.save()
+  //   })
+  // }
 
+// setTimeout(() => {
+//   foo()
+// }, 2000);
 
 class BlogService {
   // 管理 获取博客统计信息
   async getStatistics() {
-    let createdAt = await Blog.find({}, ['createdAt']).limit(100)
-    let views = await Blog.find({}, { likes: 1 }).limit(100)
-
-    return { createdAt, views }
+    //  随时间新建博客数量
+    let createdAt = await Blog.find({}, { createdAt: -1 }).limit(50)
+      // 用户收藏排行
+    let likes = await Blog.find({
+        likes_length: {
+          $gt: 0
+        }
+      }, {
+        likes_length: 1,
+        title: 1
+      }).limit(100).sort({ likes_length: -1 })
+      // 博客观看排行
+    let views = await Blog.find({
+        views: {
+          $gt: 0
+        }
+      }, { views: -1, title: 1 }).limit(10).sort({ views: -1 })
+      // 用户发布排行
+    let counts = await Counts.find({
+      // 用户太少暂时不做筛选
+      blog_count: {
+        $gt: -1
+      }
+    }, { blog_count: -1, username: 1 }).limit(10).sort({ blog_count: -1 })
+    return { createdAt, likes, views, counts }
 
   }
 
@@ -78,7 +110,7 @@ class BlogService {
 
     let { name: username, _id: userid } = user
 
-    let blog = new Blog({...context, username, userid })
+    let blog = await Blog.add({...context, username, userid })
 
     let thumbnails = await removeFile(context, tags, blog._id)
 
