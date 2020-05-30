@@ -29,6 +29,7 @@ async function reComputedLikesCount() {
   counts.forEach(async(v) => {
     for (let i = 0; i < users.length; i++) {
       if (String(v.userid) === String(users[i]._id)) {
+        v.username = users[i].name
         v.blog_count = users[i].blog_count
         await v.save()
       }

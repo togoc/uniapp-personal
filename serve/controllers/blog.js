@@ -19,7 +19,9 @@ class BlogController {
         }
         res.status(200).send({ ok: 1 });
       });
-
+      // bat.stdout.on('data', function(data) {
+      //   console.log(data.toString())
+      // })
     } catch (error) {
       res.status(500).send(error.toString());
     }
