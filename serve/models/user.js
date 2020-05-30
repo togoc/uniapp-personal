@@ -8,23 +8,7 @@ const Blog = require('./blog')
 const jwt = require('jsonwebtoken')
 const env = require('../enviroment/env')
 const ObjectID = require('mongodb').ObjectID
-  // 用于修改后期数据
-// async function foo() {
-//   let users = await User.find({})
-//   let counts = await Counts.find({})
-//   counts.forEach(async(v) => {
-//     for (let i = 0; i < users.length; i++) {
-//       if (String(v.userid) === String(users[i]._id)) {
-//         v.username = users[i].name
-//         await v.save()
-//       }
-//     }
-//   })
-// }
 
-// setTimeout(() => {
-//   foo()
-// }, 2000);
 
 const userSchema = mongoose.Schema({
   blog_count: {

@@ -20,6 +20,8 @@ router.post('/del-comment', auth, blogController.delComment);
 // 管理 获取博客统计信息
 router.get('/blog-statistics', blogController.getStatistics);
 
+//刷新统计数据
+router.get('/refresh-statistics', blogController.refreshStatistics);
 
 // 编辑页面 分类列表
 router.get('/get-types', blogController.getTypes);

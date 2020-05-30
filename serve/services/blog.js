@@ -2,14 +2,20 @@ const Blog = require('../models/blog')
 const SpecialInfo = require('../models/specialInfo')
 const Counts = require('../models/usercount')
 const Type = require('../models/articleType')
+const User = require('../models/user')
 const ObjectID = require('mongodb').ObjectID
 const removeFile = require('../db/utils/removeFile')
-  // 用于修改后期数据
+  //   // 用于修改后期数据
   // async function foo() {
-  //   let data = await Blog.find({})
-  //   data.forEach(async v => {
-  //     v.likes_length = v.likes.length
-  //     await v.save()
+  //   let users = await User.find({})
+  //   let counts = await Counts.find({})
+  //   counts.forEach(async(v) => {
+  //     for (let i = 0; i < users.length; i++) {
+  //       if (String(v.userid) === String(users[i]._id)) {
+  //         v.blog_count = users[i].blog_count
+  //         await v.save()
+  //       }
+  //     }
   //   })
   // }
 
@@ -18,6 +24,11 @@ const removeFile = require('../db/utils/removeFile')
 // }, 2000);
 
 class BlogService {
+  //刷新统计数据
+  async refreshStatistics(res) {
+    return { ok: 1 }
+  }
+
   // 管理 获取博客统计信息
   async getStatistics() {
     //  随时间新建博客数量

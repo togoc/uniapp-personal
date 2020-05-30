@@ -1,8 +1,30 @@
 const BlogService = require('../services/blog')
-
 const blogService = new BlogService()
+const { spawn } = require('child_process');
+const path = require('path')
+
 
 class BlogController {
+  //刷新统计数据
+  async refreshStatistics(req, res) {
+    try {
+      /**
+       * 开启另外一个线程去计算所有博客分类信息
+       */
+      let filePath = path.resolve(__dirname, '../bin/computed_types_count.js')
+      const bat = spawn(process.env.NODE_PATH, [filePath]);
+      bat.on('exit', (code) => {
+        if (code === 1) {
+          console.log(`初始化数据成功! 子进程退出，退出码 ${code}`)
+        }
+        res.status(200).send({ ok: 1 });
+      });
+
+    } catch (error) {
+      res.status(500).send(error.toString());
+    }
+  }
+
   // 管理 获取博客统计信息
   async getStatistics(req, res) {
     try {
