@@ -16,6 +16,7 @@ const CountSchema = mongoose.Schema({
   username: {
     type: String,
     require: true,
+    default: "",
     unique: true
   },
 

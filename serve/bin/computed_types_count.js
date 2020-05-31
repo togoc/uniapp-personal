@@ -18,24 +18,23 @@ const mongoose = require('../db/mongoose');
 // 收藏排行 为Counts 加发布数量
 async function reComputedLikesCount() {
   let data = await Blog.find({})
-  data.forEach(async v => {
-    v.likes_length = v.likes.length
-    await v.save();
-  });
+  for (let i = 0; i < data.length; i++) {
+    data[i].likes_length = data[i].likes.length
+    await data[i].save()
+  }
+
   // 为Counts 加发布数量
   let users = await User.find({})
   let counts = await Counts.find({})
-  counts.forEach(async(v) => {
+  for (let j = 0; j < counts.length; j++) {
     for (let i = 0; i < users.length; i++) {
-      console.log(String(v.userid) === String(users[i]._id))
-      if (String(v.userid) === String(users[i]._id)) {
-        v.username = users[i].name
-        v.blog_count = users[i].blog_count
-        console.log(v)
-        await v.save()
+      if (String(counts[j].userid) === String(users[i]._id)) {
+        counts[j].username = users[i].name
+        counts[j].blog_count = users[i].blog_count
+        await counts[j].save()
       }
     }
-  })
+  }
 }
 
 // 重新计算分类数量 与分类收藏数量
