@@ -8,6 +8,7 @@
 const app = require('../app');
 const debug = require('debug')('serve:server');
 const http = require('http');
+const createSocket = require('../socket/socket')
 
 /**
  * Get port from environment and store in Express.
@@ -17,46 +18,16 @@ var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 /**
- * Create HTTP server.
+ * Create HTTP server. socket
  */
 
 var server = http.createServer(app);
-var io = require('socket.io')(server);
-var createCpuServer = require('../socket/cpu')
-var createSSHServer = require('../socket/ssh')
-var createNetServer = require('../socket/net')
+
+createSocket(server)
 
 /**
- * socket listeners
+ * Listen on provided port, on all network interfaces.
  */
-io.on('connection', function(socket) {
-    socket.on('createNewSSH', function(data) { //新建一个ssh连接
-      createSSHServer(data, socket);
-    })
-
-    // 返回cpu使用信息
-    socket.on('cpu', function(data) { //新建一个ssh连接
-        createCpuServer(data, socket);
-      })
-      // 网络端口信息
-    socket.on('nets', function(data) { //新建一个ssh连接
-      createNetServer(data, socket);
-    })
-
-
-    socket.on("rmListener", function(data) {
-      let { key } = data
-      socket.removeAllListeners(key)
-    });
-
-
-    // socket.on('disconnect', function() {
-    //   console.log('user disconnected');
-    // });
-  })
-  /**
-   * Listen on provided port, on all network interfaces.
-   */
 
 server.listen(port);
 server.on('error', onError);
@@ -121,4 +92,3 @@ function onListening() {
     'port ' + addr.port;
   debug('Listening on ' + bind);
 }
-
