@@ -18,7 +18,6 @@ const removeFile = require('../db/utils/removeFile')
   //     }
   //   })
   // }
-console.log(ObjectID('5ea570439839bf5fa40c7ec9') == ObjectID('5ea570439839bf5fa40c7ec9'))
   // setTimeout(() => {
   //   foo()
   // }, 2000);
