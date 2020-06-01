@@ -3,7 +3,13 @@
 /**
  * Module dependencies.
  */
-
+const cluster = require('cluster');
+if (cluster.isMaster) {
+  for (let i = 0; i < 2; i++) {
+    cluster.fork();
+  }
+  return
+}
 
 const app = require('../app');
 const debug = require('debug')('serve:server');
@@ -13,6 +19,7 @@ const createSocket = require('../socket/socket')
 /**
  * Get port from environment and store in Express.
  */
+
 
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
