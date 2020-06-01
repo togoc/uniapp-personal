@@ -11,15 +11,15 @@ module.exports = (server) => {
     })
 
     // 返回cpu使用信息
-    socket.on('cpu', function(data) { //新建一个ssh连接
+    socket.on('cpu', function(data) { // 获取cpu 内存使用信息
         createCpuServer(data, socket);
       })
       // 网络端口信息
-    socket.on('nets', function(data) { //新建一个ssh连接
+    socket.on('nets', function(data) { // 获取端口信息
       createNetServer(data, socket);
     })
 
-    socket.on("rmListener", function(data) {
+    socket.on("rmListener", function(data) { //清除监听专用
       let { key } = data
       socket.removeAllListeners(key)
     });
