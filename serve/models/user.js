@@ -126,9 +126,9 @@ userSchema.methods.createToken = async function() {
   let token = null
 
   if (user.identity === 'normal') {
-    token = jwt.sign({ _id: user._id.toString(), iv }, env.password, { expiresIn: 3600 * 2 });
+    token = jwt.sign({ _id: user._id.toString(), iv }, env.jwtKey, { expiresIn: 3600 * 2 });
   } else if (user.identity === 'root') {
-    token = jwt.sign({ _id: user._id.toString(), iv }, env.password, { expiresIn: 360000 * 2 });
+    token = jwt.sign({ _id: user._id.toString(), iv }, env.jwtKey, { expiresIn: 360000 * 2 });
   }
 
   //未对token加密
