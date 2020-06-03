@@ -11,5 +11,7 @@ module.exports = {
   root: process.env.ROOT || path.resolve(__dirname, '../'),
   url: process.env.URL || 'localhost',
   fullUrl: process.env.FULLURL || 'http://localhost',
-  mongoURL: process.env.MONGODB_URL
+  mongoURL: process.env.MONGODB_URL,
+  mongoUser: process.env.DBUSER,
+  mongoPass: process.env.DBPASS,
 }
