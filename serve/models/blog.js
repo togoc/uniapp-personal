@@ -1,6 +1,6 @@
 const Counts = require('../models/usercount')
 const mongoose = require('mongoose')
-// const nodejieba = require("nodejieba");
+  // const nodejieba = require("nodejieba");
 const removeFile = require('../services/fileUtils/removeMyfile')
 const ObjectID = require('mongodb').ObjectID
 
@@ -74,6 +74,11 @@ const blogSchema = mongoose.Schema({
     type: Number,
     default: 0
   },
+  thumbs_ups: [],
+  thumbs_up_length: {
+    type: Number,
+    default: 0
+  },
   views: {
     type: Number,
     default: 0
@@ -111,21 +116,21 @@ const blogSchema = mongoose.Schema({
 
 // blogSchema.pre('save', async function(next) {
 
-  // const blog = this
+// const blog = this
 
-  //手机替换用
-  // if (blog.isModified('html')) {
-  //     blog.html = blog.html.replace(/\<img/gi,
-  //         '<img style="max-width:50%;height:auto"').replace(/```.*?```/ig, function (e) {
-  //             return '<div style="background-color:#f6f8fa;border: 5px solid #f1f8ff;padding: 3px;font-size: 14px;"><code>' + e.replace(/&nbsp;/ig, "").replace(/```|<p.*?>|<\/p>/ig, '').replace(/;/ig, ";<br>") + '</code></div>'
-  //         })
-  // }
+//手机替换用
+// if (blog.isModified('html')) {
+//     blog.html = blog.html.replace(/\<img/gi,
+//         '<img style="max-width:50%;height:auto"').replace(/```.*?```/ig, function (e) {
+//             return '<div style="background-color:#f6f8fa;border: 5px solid #f1f8ff;padding: 3px;font-size: 14px;"><code>' + e.replace(/&nbsp;/ig, "").replace(/```|<p.*?>|<\/p>/ig, '').replace(/;/ig, ";<br>") + '</code></div>'
+//         })
+// }
 
-  // if (blog.isModified('text')) {
-  //   blog.text = nodejieba.cut((blog.text.trim().replace(/```/ig, "") + blog.title), true).join(' ')
-  // }
+// if (blog.isModified('text')) {
+//   blog.text = nodejieba.cut((blog.text.trim().replace(/```/ig, "") + blog.title), true).join(' ')
+// }
 
-  // next()
+// next()
 // })
 
 
@@ -137,18 +142,38 @@ blogSchema.methods.addViews = async function() {
 
 }
 
-blogSchema.methods.toggleLikes = async function(userID) {
-
-  let likes = this.likes
-
-  if (likes.includes(userID)) {
-    this.likes.splice(likes.indexOf(userID), 1)
-  } else {
-    this.likes = [...this.likes, userID]
+/**
+ * key:likes=>收藏 thumbs=>赞
+ */
+blogSchema.methods.toggleLikes_thumbs = async function(userID, key) {
+  const toggleDir = {
+    async thumbs(userID) {
+      let thumbs_ups = this.thumbs_ups
+      if (thumbs_ups.includes(userID)) {
+        this.thumbs_ups.splice(thumbs_ups.indexOf(userID), 1)
+      } else {
+        this.thumbs_ups = [...this.thumbs_ups, userID]
+      }
+      this.thumbs_up_length = this.thumbs_ups.length
+      return await this.save()
+    },
+    async likes(userID) {
+      let likes = this.likes
+      if (likes.includes(userID)) {
+        this.likes.splice(likes.indexOf(userID), 1)
+      } else {
+        this.likes = [...this.likes, userID]
+      }
+      this.likes_length = this.likes.length
+      return await this.save()
+    }
   }
-  this.likes_length = this.likes.length
-  return await this.save()
+
+  return toggleDir[key] ? await toggleDir[key].call(this, userID) : new Error('没指定key操作!')
+
 }
+
+
 
 // 同时图片
 blogSchema.statics.delete = async function(blogId, userID) {

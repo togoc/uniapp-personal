@@ -170,11 +170,11 @@ class BlogService {
     return await Blog.find({ $text: { $search: keyword } }, { score: { $meta: "textScore" } }).sort({ score: { $meta: "textScore" } }).limit(100)
   }
 
-  async toggleLikes(userID, blogID) {
+  async toggleLikes(userID, blogID, key) {
 
     let blog = await Blog.findOne({ _id: blogID })
 
-    return await blog.toggleLikes(userID)
+    return await blog.toggleLikes_thumbs(userID, key)
 
   }
 

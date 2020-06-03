@@ -185,11 +185,11 @@ class BlogController {
     try {
 
       let userID = req.user._id
-      let blogID = req.query.id
+      let { id, key } = req.query
 
-      let blog = await blogService.toggleLikes(userID, blogID)
-
-      res.status(200).send(blog.likes);
+      let blog = await blogService.toggleLikes(userID, id, key)
+      
+      res.status(200).send(blog);
 
     } catch (error) {
       res.status(500).send('点赞失败' + error.toString());
