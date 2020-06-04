@@ -129,9 +129,9 @@ class BlogController {
     try {
 
       let { _id } = req.user
-      let { page } = req.query
+      console.log(req.query)
 
-      let blogs = await blogService.getMyBlog(_id, page)
+      let blogs = await blogService.getMyBlog(_id, req.query)
 
       res.status(200).send(blogs);
 
@@ -188,7 +188,7 @@ class BlogController {
       let { id, key } = req.query
 
       let blog = await blogService.toggleLikes(userID, id, key)
-      
+
       res.status(200).send(blog);
 
     } catch (error) {

@@ -160,10 +160,27 @@ class BlogService {
 
   }
 
-  async getMyBlog(userID, page) {
-    let pageSize = 10
-      // return await Blog.find({ userid: userID }).skip(Number(page)).limit(pageSize)
-    return await Blog.find({ userid: userID })
+  /**
+   * 
+   * @param { ObjectID } userID 用户的id
+   * @param { Object } param rs:是否重置  l:已有长度   n:需要加载几条 ob:{key:排序的参数,o:1升序}排序方式 
+   */
+  async getMyBlog(userID, query) {
+    if (Object.keys(query).length > 0) {
+      // 带参数
+      let { rs, l, n, ob = {} } = query
+      let { key, o } = ob
+      return rs ?
+        await Blog.find({ userid: userID }).sort({
+          [key]: o
+        }).skip(0).limit(Number(n)) :
+        await Blog.find({ userid: userID }).sort({
+          [key]: o
+        }).skip(Number(l)).limit(Number(n))
+    } else {
+      // 不带参数
+      return await Blog.find({ userid: userID })
+    }
   }
 
   async search(keyword) {
