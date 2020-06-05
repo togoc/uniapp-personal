@@ -129,7 +129,6 @@ class BlogController {
     try {
 
       let { _id } = req.user
-      console.log(req.query)
 
       let blogs = await blogService.getMyBlog(_id, req.query)
 
