@@ -170,13 +170,16 @@ class BlogService {
       // 带参数
       let { rs, l, n, ob = {} } = query
       let { key, o } = ob
-      return rs ?
+
+      return Number(rs) || Number(l) === 0 ?
+        // 重置
         await Blog.find({ userid: userID }).sort({
           [key]: o
-        }).skip(0).limit(Number(n)) :
+        }).skip(0).limit(Number(n) || 10) :
+        // 非重置
         await Blog.find({ userid: userID }).sort({
-          [key]: o
-        }).skip(Number(l)).limit(Number(n))
+          [key]: Number(o)
+        }).skip(Number(l)).limit(Number(n) || 10)
     } else {
       // 不带参数
       return await Blog.find({ userid: userID })
