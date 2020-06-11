@@ -153,7 +153,6 @@ class BlogController {
 
   async getThumbnails(req, res) {
     try {
-      console.log(req.params)
       let blogID = req.params.id
 
       let thumbnails = await blogService.getThumbnails(blogID)
