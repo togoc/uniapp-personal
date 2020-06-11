@@ -1,6 +1,0 @@
-{
-  "navigationBarTitleText": "写文章",
-  "usingComponents": {
-    "myeditor": "/components/robin-editor/editor"
-  }
-}

@@ -1,1 +1,0 @@
-<view data-event-opts="{{[['tap',[['handle',['$event']]]]]}}" class="setting" catchtap="__e"><button data-type="exit" type="warn">退出登录</button><button data-type="exchange" type="warn">切换账号</button><button data-type="clean" type="warn">清除所有token</button></view>
